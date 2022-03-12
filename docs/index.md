@@ -10,6 +10,7 @@
 
 * Clean API to extract execution frames.
 * Global python exception hook.
+* Endless recursion detection.
 * Local error reporting.
 * Configurable fail-fast behavior.
 * Configurable error-reporting formats.
