@@ -1,0 +1,44 @@
+site_name: Gufo Labs Err
+site_description: Gufo Labs Err Documentation
+site_author: Gufo Labs
+site_url: "https://docs.gufolabs.com/gufo_err/"
+copyright: "&copy; 2022, Gufo Labs"
+site_dir: dist/docs/
+repo_url: https://github.com/gufolabs/gufo_err/
+repo_name: GitHub
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Reference: reference.md
+  - Developers' Guide:
+      - Code Base: codebase.md
+      - Contributing Guide: CONTRIBUTING.md
+      - Code of Conduct: CODE_OF_CONDUCT.md
+  - FAQ: faq.md
+  - Changes: changes.md
+  - License: license.md
+  # Users
+theme:
+  name: material
+  logo: assets/logo.png
+  favicon: assets/logo.png
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          rendering:
+            show_source: false
+      watch:
+        - src/gufo/
+        - examples/
+markdown_extensions:
+  - toc:
+      permalink: True
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: True
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
