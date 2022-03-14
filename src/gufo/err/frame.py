@@ -52,6 +52,7 @@ def iter_frames(
         )
         yield FrameInfo(
             name=frame.f_code.co_name,
+            module=frame.f_globals.get("__name__"),
             source=src,
             locals=current.tb_frame.f_locals,
         )
@@ -73,7 +74,7 @@ def __source_from_file(file_name: str) -> Optional[str]:
     try:
         with open(file_name) as f:
             return f.read()
-    except (OSError, IOError):
+    except OSError:
         return None
 
 

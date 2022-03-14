@@ -25,10 +25,11 @@ def to_full_path(*args) -> str:
 SAMPLE_FRAMES = [
     FrameInfo(
         name="test_iter_frames",
+        module="tests.test_frames",
         source=SourceInfo(
             file_name=to_full_path("tests", "test_frames.py"),
-            current_line=121,
-            first_line=114,
+            current_line=125,
+            first_line=118,
             lines=[
                 "",
                 "",
@@ -48,6 +49,7 @@ SAMPLE_FRAMES = [
     ),
     FrameInfo(
         name="entry",
+        module="tests.sample.trace",
         source=SourceInfo(
             file_name=to_full_path("tests", "sample", "trace.py"),
             current_line=14,
@@ -67,6 +69,7 @@ SAMPLE_FRAMES = [
     ),
     FrameInfo(
         name="to_oops",
+        module="tests.sample.trace",
         source=SourceInfo(
             file_name=to_full_path("tests", "sample", "trace.py"),
             current_line=8,
@@ -92,6 +95,7 @@ SAMPLE_FRAMES = [
     ),
     FrameInfo(
         name="oops",
+        module="tests.sample.trace",
         source=SourceInfo(
             file_name=to_full_path("tests", "sample", "trace.py"),
             current_line=2,
