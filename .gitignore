@@ -1,6 +1,7 @@
 syntax: glob
 .*
 !.gitignore
+!.gitkeep
 !.devcontainer/
 !.github/
 !.requirements/
