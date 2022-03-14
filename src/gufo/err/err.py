@@ -35,7 +35,7 @@ class Err(object):
         ```
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.__name = DEFAULT_NAME
         self.__version = DEFAULT_VERSION
         self.__hash_fn = hashlib.sha1
@@ -43,7 +43,7 @@ class Err(object):
         self.__failfast_chain: List[
             Callable[[Type[BaseException], BaseException, TracebackType], bool]
         ] = []
-        self.__response_chain = []
+        self.__response_chain: List[Callable[[Err, ErrorInfo], None]] = []
         self.__failfast_code = DEFAULT_EXIT_CODE
         self.__root_module: Optional[str] = None
 
@@ -125,7 +125,7 @@ class Err(object):
         response: Optional[
             Iterable[Callable[["Err", ErrorInfo], None]]
         ] = None,
-    ):
+    ) -> "Err":
         """
         Setup error handling singleton. Must be called
         only once. Raises RuntimeError when called twice.
@@ -152,6 +152,9 @@ class Err(object):
             response: Iterable of callable for error response.
                 Callables are evaluated in the order of appearance
                 and accept Err and ErrorInfo instance as arguments.
+
+        Returns:
+            Err instance.
         """
         if self.__initialized:
             raise RuntimeError("Already initialized")
@@ -179,6 +182,7 @@ class Err(object):
             self.__response_chain = []
         # Mark as initialized
         self.__initialized = True
+        return self
 
     def __must_die(
         self,
