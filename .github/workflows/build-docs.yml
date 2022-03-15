@@ -9,6 +9,7 @@ on:
       - ".requirements/docs.txt"
       - "docs/**"
       - "examples/**"
+      - "src/**"
     branches:
       - master
 jobs:
