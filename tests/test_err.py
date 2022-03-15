@@ -14,8 +14,15 @@ import os
 import pytest
 
 # Gufo Labs modules
-from gufo.err import Err, FrameInfo, SourceInfo
-from gufo.err.types import ErrorInfo
+from gufo.err import (
+    Err,
+    FrameInfo,
+    SourceInfo,
+    ErrorInfo,
+    BaseResponse,
+)
+from gufo.err.failfast.always import AlwaysFailFast
+from gufo.err.failfast.never import NeverFailFast
 
 
 def test_unitialized():
@@ -228,10 +235,10 @@ def test_must_die_no_tb():
 @pytest.mark.parametrize(
     ["chain", "expected"],
     [
-        ([lambda _t, _v, _tb: False], False),
-        ([lambda _t, _v, _tb: True], True),
-        ([lambda _t, _v, _tb: False, lambda _t, _v, _tb: False], False),
-        ([lambda _t, _v, _tb: False, lambda _t, _v, _tb: True], True),
+        ([NeverFailFast()], False),
+        ([AlwaysFailFast()], True),
+        ([NeverFailFast(), NeverFailFast()], False),
+        ([NeverFailFast(), AlwaysFailFast()], True),
     ],
 )
 def test_must_die(chain, expected):
@@ -292,7 +299,7 @@ def test_failfast_exit(code):
         exit_code = c
 
     err = Err()
-    err.setup(fail_fast_code=code, fail_fast=[lambda _t, _v, _tb: True])
+    err.setup(fail_fast_code=code, fail_fast=[AlwaysFailFast()])
     exit_code = 0
     prev_exit = os._exit
     os._exit = _exit
@@ -305,61 +312,67 @@ def test_failfast_exit(code):
 
 
 def test_add_fail_fast():
-    def f1(t, v, tb) -> bool:
-        return False
-
-    def f2(t, v, tb) -> bool:
-        return False
-
-    def f3(t, v, tb) -> bool:
-        return False
-
-    def f4(t, v, tb) -> bool:
-        return False
+    class NamedFailFast(NeverFailFast):
+        def __init__(self, name: str) -> None:
+            super().__init__()
+            self.name = name
 
     err = Err()
-    err.setup(fail_fast=[f1, f2])
-    err.add_fail_fast(f3)
-    err.add_fail_fast(f4)
-    chain = [f.__name__ for f in err._Err__failfast_chain]
+    err.setup(fail_fast=[NamedFailFast("f1"), NamedFailFast("f2")])
+    err.add_fail_fast(NamedFailFast("f3"))
+    err.add_fail_fast(NamedFailFast("f4"))
+    chain = [f.name for f in err._Err__failfast_chain]
     assert chain == ["f1", "f2", "f3", "f4"]
 
 
 def test_response():
-    def r1(err: Err, error: ErrorInfo) -> None:
-        nonlocal r1_passed
-        assert not r1_passed
-        r1_passed = True
+    class NamedResponse(BaseResponse):
+        def __init__(self, name: str, fail: bool = False) -> None:
+            super().__init__()
+            self.name = name
+            self.fail = fail
 
-    def r2(err: Err, error: ErrorInfo) -> None:
-        nonlocal r2_passed
-        assert not r2_passed
-        r2_passed = True
+        def respond(self, err: Err, info: ErrorInfo) -> None:
+            nonlocal passed
+            passed[self.name] = True
+            if self.fail:
+                raise ValueError("test")
 
-    def r3(err: Err, error: ErrorInfo) -> None:
-        nonlocal r3_passed
-        assert not r3_passed
-        r3_passed = True
-        raise ValueError("test")
+    passed = {}
 
-    def r4(err: Err, error: ErrorInfo) -> None:
-        nonlocal r4_passed
-        assert not r4_passed
-        r4_passed = True
-
-    r1_passed = False
-    r2_passed = False
-    r3_passed = False
-    r4_passed = False
     err = Err()
-    err.setup(response=[r1, r2])
-    err.add_response(r3)
-    err.add_response(r4)
+    err.setup(response=[NamedResponse("r1"), NamedResponse("r2")])
+    err.add_response(NamedResponse("r3", fail=True))
+    err.add_response(NamedResponse("r4"))
     try:
         raise RuntimeError("test")
     except Exception:
         err.process()
-    assert r1_passed
-    assert r2_passed
-    assert r3_passed
-    assert r4_passed
+    for i in ("r1", "r2", "r3", "r4"):
+        assert passed.get(i) is True
+
+
+def test_failfast_type_setup():
+    err = Err()
+    with pytest.raises(ValueError):
+        err.setup(fail_fast=[1])
+
+
+def test_failfast_type_add():
+    err = Err()
+    err.setup()
+    with pytest.raises(ValueError):
+        err.add_fail_fast(1)
+
+
+def test_response_type_setup():
+    err = Err()
+    with pytest.raises(ValueError):
+        err.setup(response=[1])
+
+
+def test_response_type_add():
+    err = Err()
+    err.setup()
+    with pytest.raises(ValueError):
+        err.add_response(1)

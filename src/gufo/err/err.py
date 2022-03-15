@@ -7,7 +7,7 @@
 # Python modules
 import sys
 import os
-from typing import Optional, Type, List, Iterable, Callable
+from typing import Optional, Type, List, Iterable
 from types import TracebackType
 from uuid import UUID
 import hashlib
@@ -15,6 +15,9 @@ import hashlib
 # Gufo Labs modules
 from .types import ErrorInfo, FrameInfo
 from .frame import iter_frames
+from .abc.failfast import BaseFailFast
+from .abc.response import BaseResponse
+
 
 DEFAULT_NAME = "unknown"
 DEFAULT_VERSION = "unknown"
@@ -40,10 +43,8 @@ class Err(object):
         self.__version = DEFAULT_VERSION
         self.__hash_fn = hashlib.sha1
         self.__initialized = False
-        self.__failfast_chain: List[
-            Callable[[Type[BaseException], BaseException, TracebackType], bool]
-        ] = []
-        self.__response_chain: List[Callable[[Err, ErrorInfo], None]] = []
+        self.__failfast_chain: List[BaseFailFast] = []
+        self.__response_chain: List[BaseResponse] = []
         self.__failfast_code = DEFAULT_EXIT_CODE
         self.__root_module: Optional[str] = None
 
@@ -114,17 +115,9 @@ class Err(object):
         name: str = DEFAULT_NAME,
         version: str = DEFAULT_VERSION,
         hash: str = DEFAULT_HASH,
-        fail_fast: Optional[
-            Iterable[
-                Callable[
-                    [Type[BaseException], BaseException, TracebackType], bool
-                ]
-            ]
-        ] = None,
+        fail_fast: Optional[Iterable[BaseFailFast]] = None,
         fail_fast_code: int = DEFAULT_EXIT_CODE,
-        response: Optional[
-            Iterable[Callable[["Err", ErrorInfo], None]]
-        ] = None,
+        response: Optional[Iterable[BaseResponse]] = None,
     ) -> "Err":
         """
         Setup error handling singleton. Must be called
@@ -142,16 +135,13 @@ class Err(object):
                 are: sha256, sha3_512, blake2s, sha3_224, md5, sha384,
                 sha3_256, shake_256, blake2b, sha224, shake_128, sha3_384,
                 sha1, sha512. Refer to the Python's hashlib for details.
-            fail_fast: Iterable of callable for fail-fast detection.
+            fail_fast: Iterable of BaseFailFast instances for fail-fast
+                detection.
                 Process will terminate with `fail_fast_code` error code
-                if any of callables in the chain will return True.
-                Callables are evaluated in the order of appearance, accept
-                sys.exc_info() result as positional arguments and return
-                the boolean type.
+                if any of instances in the chain will return True.
             fail_fast_code: System exit code on fail-fast termination.
-            response: Iterable of callable for error response.
-                Callables are evaluated in the order of appearance
-                and accept Err and ErrorInfo instance as arguments.
+            response: Iterable of BaseResponse instancesfor error response.
+                Instances are evaluated in the order of appearance.
 
         Returns:
             Err instance.
@@ -172,12 +162,16 @@ class Err(object):
             raise RuntimeError(f"Unknown hash: {hash}")
         # Initialize fail fast chain
         if fail_fast:
-            self.__failfast_chain = list(fail_fast)
+            self.__failfast_chain = []
+            for ff in fail_fast:
+                self.add_fail_fast(ff)
         else:
             self.__failfast_chain = []
         # Initialize response chain
         if response:
-            self.__response_chain = list(response)
+            self.__response_chain = []
+            for resp in response:
+                self.add_response(resp)
         else:
             self.__response_chain = []
         # Mark as initialized
@@ -196,7 +190,7 @@ class Err(object):
         """
         if not tb:
             return False
-        return any(f(t, v, tb) for f in self.__failfast_chain)
+        return any(ff.must_die(self, t, v, tb) for ff in self.__failfast_chain)
 
     def __do_response(self, err_info: ErrorInfo) -> None:
         """
@@ -207,7 +201,7 @@ class Err(object):
         """
         for resp in self.__response_chain:
             try:
-                resp(self, err_info)
+                resp.respond(self, err_info)
             except Exception:
                 ...  # @todo: Report error
 
@@ -286,30 +280,31 @@ class Err(object):
         ).digest()
         return UUID(bytes=fp_hash[:16], version=5)
 
-    def add_fail_fast(
-        self,
-        func: Callable[
-            [Type[BaseException], BaseException, TracebackType], bool
-        ],
-    ) -> None:
+    def add_fail_fast(self, ff: BaseFailFast) -> None:
         """
         Add fail-fast handler to the end of the chain.
 
         Args:
-            func: Callable, accepting sys.exc_info() output and returning bool.
-                True should be returned on unrecoverable error which leads to
-                immediate process termination.
+            ff: BaseFailFast instance.
         """
-        self.__failfast_chain.append(func)
+        if not isinstance(ff, BaseFailFast):
+            raise ValueError(
+                "add_fail_fast() argument must be BaseFailFast instance"
+            )
+        self.__failfast_chain.append(ff)
 
-    def add_response(self, func: Callable[["Err", ErrorInfo], None]) -> None:
+    def add_response(self, resp: BaseResponse) -> None:
         """
         Add response handler to the end of the chain.
 
         Args:
-            func: Callable, accepting Err and Error info instances.
+            resp: BaseResponse instance
         """
-        self.__response_chain.append(func)
+        if not isinstance(resp, BaseResponse):
+            raise ValueError(
+                "add_response() argument must be BaseResponse instance"
+            )
+        self.__response_chain.append(resp)
 
 
 # Define the singleton

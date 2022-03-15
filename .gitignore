@@ -1,5 +1,6 @@
 syntax: glob
 .*
+!.coveragerc
 !.gitignore
 !.gitkeep
 !.devcontainer/

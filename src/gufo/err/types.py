@@ -59,6 +59,7 @@ class ErrorInfo(object):
         fingerprint: Error fingerprint.
         stack: List of `FrameInfo`. Current execution frame is first.
         exception: Exception instance, if caught.
+        timestamp: Error timestamp.
     """
 
     name: str
