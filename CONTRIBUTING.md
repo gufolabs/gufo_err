@@ -18,6 +18,6 @@ search open issues to see if someone else has reported the same thing. If it's s
 ### Pull requests
 A [pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests) is a way to suggest changes in our repository.
 
-[Repo]: https://github.com/gufolabs/gufo_loader
-[Discussions]: https://github.com/gufolabs/gufo_loader/discussions/
+[Repo]: https://github.com/gufolabs/gufo_err
+[Discussions]: https://github.com/gufolabs/gufo_err/discussions/
 [GitHub]: https://github.com/
