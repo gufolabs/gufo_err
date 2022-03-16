@@ -19,7 +19,7 @@ from gufo.err import (
     FrameInfo,
     SourceInfo,
     ErrorInfo,
-    BaseResponse,
+    BaseMiddleware,
 )
 from gufo.err.failfast.always import AlwaysFailFast
 from gufo.err.failfast.never import NeverFailFast
@@ -325,14 +325,14 @@ def test_add_fail_fast():
     assert chain == ["f1", "f2", "f3", "f4"]
 
 
-def test_response():
-    class NamedResponse(BaseResponse):
+def test_middlewre():
+    class NamedMiddleware(BaseMiddleware):
         def __init__(self, name: str, fail: bool = False) -> None:
             super().__init__()
             self.name = name
             self.fail = fail
 
-        def respond(self, err: Err, info: ErrorInfo) -> None:
+        def process(self, err: Err, info: ErrorInfo) -> None:
             nonlocal passed
             passed[self.name] = True
             if self.fail:
@@ -341,9 +341,9 @@ def test_response():
     passed = {}
 
     err = Err()
-    err.setup(response=[NamedResponse("r1"), NamedResponse("r2")])
-    err.add_response(NamedResponse("r3", fail=True))
-    err.add_response(NamedResponse("r4"))
+    err.setup(middleware=[NamedMiddleware("r1"), NamedMiddleware("r2")])
+    err.add_middleware(NamedMiddleware("r3", fail=True))
+    err.add_middleware(NamedMiddleware("r4"))
     try:
         raise RuntimeError("test")
     except Exception:
@@ -365,14 +365,14 @@ def test_failfast_type_add():
         err.add_fail_fast(1)
 
 
-def test_response_type_setup():
+def test_middleware_type_setup():
     err = Err()
     with pytest.raises(ValueError):
-        err.setup(response=[1])
+        err.setup(middleware=[1])
 
 
-def test_response_type_add():
+def test_middleware_type_add():
     err = Err()
     err.setup()
     with pytest.raises(ValueError):
-        err.add_response(1)
+        err.add_middleware(1)

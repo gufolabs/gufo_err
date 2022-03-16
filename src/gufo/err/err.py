@@ -16,7 +16,7 @@ import hashlib
 from .types import ErrorInfo, FrameInfo
 from .frame import iter_frames
 from .abc.failfast import BaseFailFast
-from .abc.response import BaseResponse
+from .abc.middleware import BaseMiddleware
 
 
 DEFAULT_NAME = "unknown"
@@ -44,7 +44,7 @@ class Err(object):
         self.__hash_fn = hashlib.sha1
         self.__initialized = False
         self.__failfast_chain: List[BaseFailFast] = []
-        self.__response_chain: List[BaseResponse] = []
+        self.__middleware_chain: List[BaseMiddleware] = []
         self.__failfast_code = DEFAULT_EXIT_CODE
         self.__root_module: Optional[str] = None
 
@@ -106,7 +106,7 @@ class Err(object):
             exception=v,
         )
         # Process the response
-        self.__do_response(err_info)
+        self.__run_middleware(err_info)
 
     def setup(
         self,
@@ -117,7 +117,8 @@ class Err(object):
         hash: str = DEFAULT_HASH,
         fail_fast: Optional[Iterable[BaseFailFast]] = None,
         fail_fast_code: int = DEFAULT_EXIT_CODE,
-        response: Optional[Iterable[BaseResponse]] = None,
+        middleware: Optional[Iterable[BaseMiddleware]] = None,
+        format: Optional[str] = "terse",
     ) -> "Err":
         """
         Setup error handling singleton. Must be called
@@ -140,8 +141,11 @@ class Err(object):
                 Process will terminate with `fail_fast_code` error code
                 if any of instances in the chain will return True.
             fail_fast_code: System exit code on fail-fast termination.
-            response: Iterable of BaseResponse instancesfor error response.
+            middleware: Iterable of BaseMiddleware instances
+                for error processing middleware.
                 Instances are evaluated in the order of appearance.
+            format: If not None install TracebackMiddleware for given
+                output format.
 
         Returns:
             Err instance.
@@ -168,12 +172,12 @@ class Err(object):
         else:
             self.__failfast_chain = []
         # Initialize response chain
-        if response:
-            self.__response_chain = []
-            for resp in response:
-                self.add_response(resp)
+        if middleware:
+            self.__middleware_chain = self.__default_middleware(format=format)
+            for resp in middleware:
+                self.add_middleware(resp)
         else:
-            self.__response_chain = []
+            self.__middleware_chain = self.__default_middleware(format=format)
         # Mark as initialized
         self.__initialized = True
         return self
@@ -192,16 +196,16 @@ class Err(object):
             return False
         return any(ff.must_die(self, t, v, tb) for ff in self.__failfast_chain)
 
-    def __do_response(self, err_info: ErrorInfo) -> None:
+    def __run_middleware(self, err_info: ErrorInfo) -> None:
         """
-        Process all the error response.
+        Process all the middleware.
 
         Args:
             err_info: Filled ErrorInfo structure
         """
-        for resp in self.__response_chain:
+        for resp in self.__middleware_chain:
             try:
-                resp.respond(self, err_info)
+                resp.process(self, err_info)
             except Exception:
                 ...  # @todo: Report error
 
@@ -293,18 +297,35 @@ class Err(object):
             )
         self.__failfast_chain.append(ff)
 
-    def add_response(self, resp: BaseResponse) -> None:
+    def add_middleware(self, mw: BaseMiddleware) -> None:
         """
-        Add response handler to the end of the chain.
+        Add middleware to the end of the chain.
 
         Args:
-            resp: BaseResponse instance
+            resp: BaseMiddleware instance
         """
-        if not isinstance(resp, BaseResponse):
+        if not isinstance(mw, BaseMiddleware):
             raise ValueError(
                 "add_response() argument must be BaseResponse instance"
             )
-        self.__response_chain.append(resp)
+        self.__middleware_chain.append(mw)
+
+    def __default_middleware(
+        self, format: Optional[str] = None
+    ) -> List[BaseMiddleware]:
+        """
+        Get default middleware chain.
+
+        Args:
+            format: traceback format. See TracebackMiddleware for details.
+                Do not configure tracebacks if None.
+        """
+        r: List[BaseMiddleware] = []
+        if format is not None:
+            from .middleware.traceback import TracebackMiddleware
+
+            r.append(TracebackMiddleware(format=format))
+        return r
 
 
 # Define the singleton

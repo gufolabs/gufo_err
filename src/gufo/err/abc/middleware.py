@@ -14,20 +14,19 @@ if TYPE_CHECKING:
     from ..err import Err
 
 
-class BaseResponse(ABC):
+class BaseMiddleware(ABC):
     """
-    Abstract base type for error response. Error responses must
-    implement `respond` method. Error responses may include
-    debug output, notifications, self-healing actions, and much more.
+    Abstract base type for error processing middleware.
+    Middleware must implement `process` method.
     """
 
     @abstractmethod
-    def respond(self, err: "Err", info: "ErrorInfo") -> None:
+    def process(self, err: "Err", info: "ErrorInfo") -> None:
         """
-        Respond to the error.
+        Process the error.
 
         Args:
-            err: Err instance, calling the response.
+            err: Err instance, calling the error processing.
             info: ErrorInfo instance with detailed error information.
         """
         ...

@@ -76,7 +76,7 @@ SAMPLE_FRAMES = [
             first_line=1,
             lines=[
                 "def oops():",
-                "    raise RuntimeError",
+                '    raise RuntimeError("oops")',
                 "",
                 "",
                 "def to_oops():",
@@ -102,7 +102,7 @@ SAMPLE_FRAMES = [
             first_line=1,
             lines=[
                 "def oops():",
-                "    raise RuntimeError",
+                '    raise RuntimeError("oops")',
                 "",
                 "",
                 "def to_oops():",
