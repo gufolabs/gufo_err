@@ -18,7 +18,7 @@ from .util import log_capture
 
 RESAMPLE = False  # Change to True to rewrite sample files
 
-rx_file = re.compile("^(File[^/]+?)(.+?)(/gufo_err/)", re.MULTILINE)
+rx_file = re.compile("^(File[^/]+?)(.+)(/gufo_err/)", re.MULTILINE)
 rx_repr = re.compile("(= <.*? at 0x)([0-9a-f]+?)(>)", re.MULTILINE)
 
 
