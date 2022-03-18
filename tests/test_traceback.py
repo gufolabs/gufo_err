@@ -23,7 +23,7 @@ rx_long = re.compile(r"\|\n", re.MULTILINE)
 
 def test_long_var():
     err = Err().setup(format="extend")
-    longvar = {f"key{d}": "x" * 20 for d in range(10)}
+    longvar = {f"key{d}": "x" * 20 for d in range(10)}  # noqa
     try:
         raise RuntimeError("trigger exception")
     except RuntimeError:
@@ -39,7 +39,7 @@ def test_repr_failed():
             raise ValueError("Invalid repr")
 
     err = Err().setup(format="extend")
-    instance = FailedRepr()
+    instance = FailedRepr()  # noqa
     try:
         raise RuntimeError("trigger exception")
     except RuntimeError:

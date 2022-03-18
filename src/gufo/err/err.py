@@ -302,7 +302,7 @@ class Err(object):
         Add middleware to the end of the chain.
 
         Args:
-            resp: BaseMiddleware instance
+            mw: BaseMiddleware instance
         """
         if not isinstance(mw, BaseMiddleware):
             raise ValueError(
