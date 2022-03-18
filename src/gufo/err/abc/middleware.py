@@ -6,12 +6,9 @@
 
 # Python modules
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING
 
 # GufoLabs modules
-if TYPE_CHECKING:
-    from ..types import ErrorInfo
-    from ..err import Err
+from ..types import ErrorInfo
 
 
 class BaseMiddleware(ABC):
@@ -21,12 +18,11 @@ class BaseMiddleware(ABC):
     """
 
     @abstractmethod
-    def process(self, err: "Err", info: "ErrorInfo") -> None:
+    def process(self, info: ErrorInfo) -> None:
         """
         Process the error.
 
         Args:
-            err: Err instance, calling the error processing.
             info: ErrorInfo instance with detailed error information.
         """
         ...

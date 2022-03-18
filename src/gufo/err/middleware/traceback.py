@@ -6,17 +6,64 @@
 
 # Python modules
 from typing import Callable, Iterable, Tuple
+from pprint import pformat
 
 # Gufo Labs modules
 from ..abc.middleware import BaseMiddleware
-from ..err import Err
 from ..types import ErrorInfo, FrameInfo
+from ..logger import logger
 
 
 class TracebackMiddleware(BaseMiddleware):
     SEP = "-" * 79
+    MAX_VAR_LEN = 72
 
-    def __init__(self, format="terse") -> None:
+    def __init__(self, format: str = "terse") -> None:
+        """
+        Dump traceback to the `gufo.err` logger.
+
+        Args:
+            format: dumping format, one of `terse`, `extend`.
+
+        Examples:
+            Implicit initialization of the middleware using
+            default `terse` format:
+
+            ```
+            from gufo.err import err
+
+            err.setup()
+            ```
+
+            Implicit initialization of the middleware using
+            explicit `terse` format:
+
+            ```
+            from gufo.err import err
+
+            err.setup(format="terse")
+            ```
+
+            Implicit initialization of the middleware using
+            explicit `extend` format:
+
+            ```
+            from gufo.err import err
+
+            err.setup(format="extend")
+            ```
+
+            Explicit initialization of the middleware:
+
+            ```
+            from gufo.err import err
+            from gufo.err.middleware.traceback import TracebackMiddleware
+
+            err.setup(middleware=[TracebackMiddleware(format="extend")])
+            ```
+
+
+        """
         super().__init__()
         try:
             self.format: Callable[[ErrorInfo], Iterable[str]] = getattr(
@@ -25,9 +72,9 @@ class TracebackMiddleware(BaseMiddleware):
         except AttributeError:
             raise ValueError(f"Invalid format {format}")
 
-    def process(self, err: Err, info: ErrorInfo) -> None:
-        for r in self.format(info):
-            print(r)
+    def process(self, info: ErrorInfo) -> None:
+        msg = "\n".join(self.format(info))
+        logger.error(msg)
 
     def iter_stack(self, err: ErrorInfo) -> Iterable[FrameInfo]:
         """
@@ -63,8 +110,10 @@ class TracebackMiddleware(BaseMiddleware):
         for k, v in fi.locals.items():
             try:
                 rv = repr(v)
-            except Exception:
-                rv = "repr() failed"
+                if len(rv) > self.MAX_VAR_LEN:
+                    rv = pformat(v)
+            except Exception as e:
+                rv = f"repr() failed: {e}"
             yield k, rv
 
     def iter_fmt_terse(self, err: ErrorInfo) -> Iterable[str]:
@@ -101,9 +150,12 @@ class TracebackMiddleware(BaseMiddleware):
                     sign = "==>" if n == fi.source.current_line else "   "
                     yield f"{n:5d} {sign} {line}"
             else:
-                yield "File: <stdin>"
+                yield "File: <stdin> (line ???)"
             if fi.locals:
                 yield "Locals:"
                 for var_name, var_value in self.iter_vars(fi):
-                    yield f"{var_name:>20s} = {var_value}"
+                    if len(var_value) > self.MAX_VAR_LEN:
+                        yield f"{var_name:>20s} |\n{var_value}"
+                    else:
+                        yield f"{var_name:>20s} = {var_value}"
         yield self.SEP

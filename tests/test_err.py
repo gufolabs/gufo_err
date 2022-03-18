@@ -332,7 +332,7 @@ def test_middlewre():
             self.name = name
             self.fail = fail
 
-        def process(self, err: Err, info: ErrorInfo) -> None:
+        def process(self, info: ErrorInfo) -> None:
             nonlocal passed
             passed[self.name] = True
             if self.fail:

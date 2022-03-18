@@ -1,0 +1,67 @@
+Error: 6f74dc76-1fea-58a6-bbf7-f355cf555142
+RuntimeError: oops
+Traceback (most resent call last):
+-------------------------------------------------------------------------------
+File: /workspaces/gufo_err/tests/test_traceback_samples.py (line 63)
+   56         ],
+   57     )
+   58     def test_format(cfg):
+   59         fmt = cfg.get("format", "terse")
+   60         err = Err().setup(**cfg)
+   61         cfg = {}  # Reset local vars
+   62         try:
+   63 ==>         entry()
+   64         except Exception:
+   65             with log_capture() as buffer:
+   66                 err.process()
+   67                 output = buffer.getvalue()
+   68         if RESAMPLE:
+   69             set_sample(fmt, output)
+   70         assert clean_config(output) == clean_config(get_sample(fmt))
+Locals:
+                 cfg = {}
+                 fmt = 'extend'
+                 err = <gufo.err.err.Err object at 0x7ff8873533d0>
+              buffer = <_io.StringIO object at 0x7ff887345a20>
+-------------------------------------------------------------------------------
+File: /workspaces/gufo_err/tests/sample/trace.py (line 14)
+    7         x += 1
+    8         oops()
+    9     
+   10     
+   11     def entry():
+   12         s = 2
+   13         s += 1
+   14 ==>     to_oops()
+Locals:
+                   s = 3
+-------------------------------------------------------------------------------
+File: /workspaces/gufo_err/tests/sample/trace.py (line 8)
+    1     def oops():
+    2         raise RuntimeError("oops")
+    3     
+    4     
+    5     def to_oops():
+    6         x = 1
+    7         x += 1
+    8 ==>     oops()
+    9     
+   10     
+   11     def entry():
+   12         s = 2
+   13         s += 1
+   14         to_oops()
+Locals:
+                   x = 2
+-------------------------------------------------------------------------------
+File: /workspaces/gufo_err/tests/sample/trace.py (line 2)
+    1     def oops():
+    2 ==>     raise RuntimeError("oops")
+    3     
+    4     
+    5     def to_oops():
+    6         x = 1
+    7         x += 1
+    8         oops()
+    9     
+-------------------------------------------------------------------------------

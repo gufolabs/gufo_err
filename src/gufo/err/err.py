@@ -17,6 +17,7 @@ from .types import ErrorInfo, FrameInfo
 from .frame import iter_frames
 from .abc.failfast import BaseFailFast
 from .abc.middleware import BaseMiddleware
+from .logger import logger
 
 
 DEFAULT_NAME = "unknown"
@@ -146,7 +147,6 @@ class Err(object):
                 Instances are evaluated in the order of appearance.
             format: If not None install TracebackMiddleware for given
                 output format.
-
         Returns:
             Err instance.
         """
@@ -194,7 +194,7 @@ class Err(object):
         """
         if not tb:
             return False
-        return any(ff.must_die(self, t, v, tb) for ff in self.__failfast_chain)
+        return any(ff.must_die(t, v, tb) for ff in self.__failfast_chain)
 
     def __run_middleware(self, err_info: ErrorInfo) -> None:
         """
@@ -205,9 +205,9 @@ class Err(object):
         """
         for resp in self.__middleware_chain:
             try:
-                resp.process(self, err_info)
-            except Exception:
-                ...  # @todo: Report error
+                resp.process(err_info)
+            except Exception as e:
+                logger.error("%r middleware failed: %s", resp, e)
 
     def iter_fingerprint_parts(
         self,

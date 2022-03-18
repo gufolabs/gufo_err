@@ -1,0 +1,11 @@
+Error: 6f74dc76-1fea-58a6-bbf7-f355cf555142
+Traceback (most resent call last):
+  File "/workspaces/gufo_err/tests/test_traceback_samples.py", line 63, in test_format
+    entry()
+  File "/workspaces/gufo_err/tests/sample/trace.py", line 14, in entry
+    to_oops()
+  File "/workspaces/gufo_err/tests/sample/trace.py", line 8, in to_oops
+    oops()
+  File "/workspaces/gufo_err/tests/sample/trace.py", line 2, in oops
+    raise RuntimeError("oops")
+RuntimeError: oops
