@@ -232,8 +232,7 @@ class Err(object):
         # Top-level stack info
         if stack:
             top = stack[0]
-            if top.source:
-                yield top.source.file_name or "unknown"  # Top module
+            yield top.module or "unknown"  # Top module
             yield top.name  # Top callable name
             if top.source:
                 yield str(top.source.current_line)  # Top execution line
@@ -249,13 +248,12 @@ class Err(object):
                     app_top = frame
                     break
             if app_top:
-                if app_top.source:
-                    yield app_top.source.file_name or "unknown"  # Top module
-                yield app_top.name  # Top callable name
+                yield app_top.module or "unknown"  # App module
+                yield app_top.name  # App module Current callable name
                 if app_top.source:
                     yield str(
                         app_top.source.current_line
-                    )  # Top execution line
+                    )  # App execution line
 
     def __fingerprint(
         self,

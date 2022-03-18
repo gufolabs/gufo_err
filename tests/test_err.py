@@ -94,6 +94,7 @@ def test_hash(hash, data, expected):
             [
                 FrameInfo(
                     name="test_fn",
+                    module="tests.test",
                     source=SourceInfo(
                         file_name="tests/test.py",
                         current_line=10,
@@ -108,7 +109,7 @@ def test_hash(hash, data, expected):
                 "fp_test",
                 "1.0.0",
                 "RuntimeError",
-                "tests/test.py",
+                "tests.test",
                 "test_fn",
                 "10",
             ],
@@ -117,6 +118,7 @@ def test_hash(hash, data, expected):
             [
                 FrameInfo(
                     name="lib_fn",
+                    module="lib.final.test",
                     source=SourceInfo(
                         file_name="lib/final/test.py",
                         current_line=17,
@@ -127,6 +129,7 @@ def test_hash(hash, data, expected):
                 ),
                 FrameInfo(
                     name="proxt_fn",
+                    module="lib.proxy.test",
                     source=SourceInfo(
                         file_name="lib/proxy/test.py",
                         current_line=20,
@@ -151,7 +154,7 @@ def test_hash(hash, data, expected):
                 "fp_test",
                 "1.0.0",
                 "RuntimeError",
-                "lib/final/test.py",
+                "lib.final.test",
                 "lib_fn",
                 "17",
             ],
@@ -197,10 +200,10 @@ def test_hash(hash, data, expected):
                 "fp_test",
                 "1.0.0",
                 "RuntimeError",
-                "lib/final/test.py",
+                "lib.final.test",
                 "lib_fn",
                 "17",
-                "tests/test.py",
+                "tests.test",
                 "test_fn",
                 "10",
             ],

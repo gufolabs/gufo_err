@@ -1,4 +1,4 @@
-Error: 6f74dc76-1fea-58a6-bbf7-f355cf555142
+Error: 0b2975e5-a6b7-5125-ad57-3973ae53f6a3
 RuntimeError: oops
 Traceback (most resent call last):
 -------------------------------------------------------------------------------
@@ -21,8 +21,8 @@ File: /workspaces/gufo_err/tests/test_traceback_samples.py (line 63)
 Locals:
                  cfg = {}
                  fmt = 'extend'
-                 err = <gufo.err.err.Err object at 0x7ff8873533d0>
-              buffer = <_io.StringIO object at 0x7ff887345a20>
+                 err = <gufo.err.err.Err object at 0x7faad8ebcb50>
+              buffer = <_io.StringIO object at 0x7faad901dbd0>
 -------------------------------------------------------------------------------
 File: /workspaces/gufo_err/tests/sample/trace.py (line 14)
     7         x += 1
