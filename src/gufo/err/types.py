@@ -3,6 +3,9 @@
 # ---------------------------------------------------------------------
 # Copyright (C) 2022, Gufo Labs
 # ---------------------------------------------------------------------
+"""
+Public API data types.
+"""
 
 # Python modules
 from typing import Any, Optional, List, Dict

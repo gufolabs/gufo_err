@@ -1,3 +1,5 @@
 # Test requrements
 pytest==7.0.1
 coverage==6.3.2
+# Sentry extras
+sentry_sdk >= 1.5, < 2.0

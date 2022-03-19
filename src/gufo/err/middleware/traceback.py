@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------
-# Gufo Err: Traceback class
+# Gufo Err: TracebackMiddleware
 # ---------------------------------------------------------------------
 # Copyright (C) 2022, Gufo Labs
 # ---------------------------------------------------------------------
@@ -15,55 +15,54 @@ from ..logger import logger
 
 
 class TracebackMiddleware(BaseMiddleware):
+    """
+    Dump traceback to the `gufo.err` logger.
+
+    Args:
+        format: dumping format, one of `terse`, `extend`.
+
+    Examples:
+        Implicit initialization of the middleware using
+        default `terse` format:
+
+        ``` py
+        from gufo.err import err
+
+        err.setup()
+        ```
+
+        Implicit initialization of the middleware using
+        explicit `terse` format:
+
+        ``` py
+        from gufo.err import err
+
+        err.setup(format="terse")
+        ```
+
+        Implicit initialization of the middleware using
+        explicit `extend` format:
+
+        ``` py
+        from gufo.err import err
+
+        err.setup(format="extend")
+        ```
+
+        Explicit initialization of the middleware:
+
+        ``` py
+        from gufo.err import err
+        from gufo.err.middleware.traceback import TracebackMiddleware
+
+        err.setup(middleware=[TracebackMiddleware(format="extend")])
+        ```
+    """
+
     SEP = "-" * 79
     MAX_VAR_LEN = 72
 
     def __init__(self, format: str = "terse") -> None:
-        """
-        Dump traceback to the `gufo.err` logger.
-
-        Args:
-            format: dumping format, one of `terse`, `extend`.
-
-        Examples:
-            Implicit initialization of the middleware using
-            default `terse` format:
-
-            ```
-            from gufo.err import err
-
-            err.setup()
-            ```
-
-            Implicit initialization of the middleware using
-            explicit `terse` format:
-
-            ```
-            from gufo.err import err
-
-            err.setup(format="terse")
-            ```
-
-            Implicit initialization of the middleware using
-            explicit `extend` format:
-
-            ```
-            from gufo.err import err
-
-            err.setup(format="extend")
-            ```
-
-            Explicit initialization of the middleware:
-
-            ```
-            from gufo.err import err
-            from gufo.err.middleware.traceback import TracebackMiddleware
-
-            err.setup(middleware=[TracebackMiddleware(format="extend")])
-            ```
-
-
-        """
         super().__init__()
         try:
             self.format: Callable[[ErrorInfo], Iterable[str]] = getattr(

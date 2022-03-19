@@ -32,7 +32,7 @@ class Err(object):
 
     Example:
 
-        ```
+        ``` py
         from gufo.err import err
 
         err.setup()
@@ -55,7 +55,7 @@ class Err(object):
 
         Example:
 
-            ```
+            ``` py
             from gufo.err import err
 
             ...

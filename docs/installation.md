@@ -6,6 +6,12 @@ Install with the pip
 $ pip install gufo_err
 ```
 
+To enable [Sentry][Sentry] support:
+
+```
+$ pip innstall gufo_err[sentry]
+```
+
 ## Checking the Installation
 
 To check the installation just import the module
@@ -30,3 +36,4 @@ To uninstall Gufo Err use pip
 $ pip uninstall gufo_err
 ```
 
+[Sentry]: https://sentry.io/
