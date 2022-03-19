@@ -9,4 +9,5 @@ RUN \
     -r /tmp/test.txt\
     -r /tmp/lint.txt\
     -r /tmp/docs.txt\
+    -r /tmp/extras.txt\
     -r /tmp/ipython.txt

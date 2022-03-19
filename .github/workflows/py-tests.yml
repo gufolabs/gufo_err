@@ -48,7 +48,7 @@ jobs:
         run: pip install --upgrade build
 
       - name: Install Dependencies
-        run: pip install -IU -r ./.requirements/lint.txt -r ./.requirements/test.txt
+        run: pip install -IU -r ./.requirements/lint.txt -r ./.requirements/test.txt -r ./.requirements/extras.txt
 
       - name: Check Formatting
         run: black --check examples/ src/ tests/
