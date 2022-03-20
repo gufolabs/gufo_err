@@ -13,6 +13,11 @@ from ..abc.failfast import BaseFailFast
 
 
 class NeverFailFast(BaseFailFast):
+    """
+    Never fail-fast. Always returns False,
+    so never inflicts fail-fast.
+    """
+
     def must_die(
         self,
         t: Type[BaseException],

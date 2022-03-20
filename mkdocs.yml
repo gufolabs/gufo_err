@@ -14,6 +14,7 @@ nav:
       - Global Hook: examples/global.md
       - Extended Trace: examples/globalextend.md
       - Process the Exception: examples/process.md
+      - Fail-fast: examples/failfast.md
   - Reference: reference.md
   - Developers' Guide:
       - Developer's Environment: environment.md

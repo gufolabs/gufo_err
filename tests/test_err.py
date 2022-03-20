@@ -23,6 +23,7 @@ from gufo.err import (
 )
 from gufo.err.failfast.always import AlwaysFailFast
 from gufo.err.failfast.never import NeverFailFast
+from gufo.err.failfast.types import TypesFailFast
 
 
 def test_unitialized():
@@ -242,6 +243,9 @@ def test_must_die_no_tb():
         ([AlwaysFailFast()], True),
         ([NeverFailFast(), NeverFailFast()], False),
         ([NeverFailFast(), AlwaysFailFast()], True),
+        ([TypesFailFast([RuntimeError])], True),
+        ([TypesFailFast([ValueError])], False),
+        ([TypesFailFast([RuntimeError, ValueError])], True),
     ],
 )
 def test_must_die(chain, expected):

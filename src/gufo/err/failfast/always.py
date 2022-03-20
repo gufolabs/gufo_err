@@ -13,6 +13,10 @@ from ..abc.failfast import BaseFailFast
 
 
 class AlwaysFailFast(BaseFailFast):
+    """
+    Always fail-fast. Trigger fail-fast unconditionally.
+    """
+
     def must_die(
         self,
         t: Type[BaseException],
