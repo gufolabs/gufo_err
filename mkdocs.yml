@@ -9,6 +9,11 @@ repo_name: GitHub
 nav:
   - Home: index.md
   - Installation: installation.md
+  - Examples:
+      - Overview: examples/index.md
+      - Global Hook: examples/global.md
+      - Extended Trace: examples/globalextend.md
+      - Process the Exception: examples/process.md
   - Reference: reference.md
   - Developers' Guide:
       - Developer's Environment: environment.md
