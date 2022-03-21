@@ -135,7 +135,7 @@ class TypeMatchFailFast(BaseFailFast):
         v: BaseException,
         tb: TracebackType,
     ) -> bool:
-        def msg(s: Optional[str]):
+        def msg(s: Optional[str]) -> None:
             if not s:
                 return
             if "%s" in s:
