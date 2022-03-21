@@ -25,7 +25,7 @@ class TypesFailFast(BaseFailFast):
         from gufo.err import err
         from gufo.err.types import TypesFailFast
 
-        err.setup(fail_fast=TypesFailFast([RuntimeError, ValueError]))
+        err.setup(fail_fast=[TypesFailFast([RuntimeError, ValueError])])
         ```
     """
 

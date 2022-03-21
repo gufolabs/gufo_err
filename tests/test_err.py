@@ -24,6 +24,7 @@ from gufo.err import (
 from gufo.err.failfast.always import AlwaysFailFast
 from gufo.err.failfast.never import NeverFailFast
 from gufo.err.failfast.types import TypesFailFast
+from gufo.err.failfast.typematch import TypeMatchFailFast
 
 
 def test_unitialized():
@@ -246,6 +247,14 @@ def test_must_die_no_tb():
         ([TypesFailFast([RuntimeError])], True),
         ([TypesFailFast([ValueError])], False),
         ([TypesFailFast([RuntimeError, ValueError])], True),
+        ([TypeMatchFailFast(RuntimeError)], True),
+        ([TypeMatchFailFast(ValueError)], False),
+        ([TypeMatchFailFast("builtins.RuntimeError")], True),
+        ([TypeMatchFailFast(RuntimeError, match="test")], True),
+        ([TypeMatchFailFast(RuntimeError, match="est")], True),
+        ([TypeMatchFailFast(RuntimeError, match="nest")], False),
+        ([TypeMatchFailFast(RuntimeError, msg="stop")], True),
+        ([TypeMatchFailFast(RuntimeError, msg="stop: %s")], True),
     ],
 )
 def test_must_die(chain, expected):
