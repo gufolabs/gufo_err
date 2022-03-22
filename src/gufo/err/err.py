@@ -111,6 +111,7 @@ class Err(object):
 
     def setup(
         self,
+        *,
         catch_all: bool = False,
         root_module: Optional[str] = None,
         name: str = DEFAULT_NAME,
