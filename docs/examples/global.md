@@ -23,7 +23,7 @@ so we need to import it first.
 `err.setup()` function must be called to initialize and confugure
 the error protection. `catch_all` argument set to true to replace
 the Python global error handling.
-See [Err.setup()](../reference.md#gufo.err.err.Err.setup) for
+See [Err.setup()](../reference/gufo/err/err.md#gufo.err.err.Err.setup) for
 details.
 
 ```  py title="global.py" linenums="1" hl_lines="6 7"

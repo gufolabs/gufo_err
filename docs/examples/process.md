@@ -28,7 +28,7 @@ so we need to import it first.
 the error protection. `format` argument sets
 traceback format to extended version. Note, we do not set `catch_all`
 exception and do not install the global hook.
-See [Err.setup()](../reference.md#gufo.err.err.Err.setup) for
+See [Err.setup()](../reference/gufo/err/err.md#gufo.err.err.Err.setup) for
 details.
 
 ```  py title="process.py" linenums="1" hl_lines="6 7 8 9"

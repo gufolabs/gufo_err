@@ -83,7 +83,7 @@ a list of configured fail-fast handler instances, not a classes.
 `fail_fast_code` parameter is optional and sets the exit code
 on fail-fast termination. Default code is `1`, but we set it
 to `5` for our example.
-See [Err.setup()](../reference.md#gufo.err.err.Err.setup) for
+See [Err.setup()](../reference/gufo/err/err.md#gufo.err.err.Err.setup) for
 details.
 
 ```  py title="failfast.py" linenums="1" hl_lines="20 21"

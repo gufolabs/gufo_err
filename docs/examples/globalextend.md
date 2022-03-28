@@ -24,7 +24,7 @@ so we need to import it first.
 the error protection. `catch_all` argument set to true to replace
 the Python global error handling. `format` argument sets
 traceback format to extended version.
-See [Err.setup()](../reference.md#gufo.err.err.Err.setup) for
+See [Err.setup()](../reference/gufo/err/err.md#gufo.err.err.Err.setup) for
 details.
 
 ```  py title="globalextend.py" linenums="1" hl_lines="6 7 8 9"
