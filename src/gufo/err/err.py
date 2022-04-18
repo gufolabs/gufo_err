@@ -121,6 +121,8 @@ class Err(object):
         fail_fast_code: int = DEFAULT_EXIT_CODE,
         middleware: Optional[Iterable[BaseMiddleware]] = None,
         format: Optional[str] = "terse",
+        error_info_path: Optional[str] = None,
+        error_info_compress: Optional[str] = None,
     ) -> "Err":
         """
         Setup error handling singleton. Must be called
@@ -148,6 +150,17 @@ class Err(object):
                 Instances are evaluated in the order of appearance.
             format: If not None install TracebackMiddleware for given
                 output format.
+            error_info_path: If not None install ErrorInfoMiddleware.
+                `error_info_path` should point to a writable directories,
+                in which the error info files to be written.
+            error_info_compress: Used only with `error_info_path`.
+                Set error info compression method. One of:
+
+                * `None` - do not compress
+                * `gz` - GZip
+                * `bz2` - BZip2
+                * `xz` - LZMA/xz
+
         Returns:
             Err instance.
         """
@@ -174,11 +187,19 @@ class Err(object):
             self.__failfast_chain = []
         # Initialize response chain
         if middleware:
-            self.__middleware_chain = self.__default_middleware(format=format)
+            self.__middleware_chain = self.__default_middleware(
+                format=format,
+                error_info_path=error_info_path,
+                error_info_compress=error_info_compress,
+            )
             for resp in middleware:
                 self.add_middleware(resp)
         else:
-            self.__middleware_chain = self.__default_middleware(format=format)
+            self.__middleware_chain = self.__default_middleware(
+                format=format,
+                error_info_path=error_info_path,
+                error_info_compress=error_info_compress,
+            )
         # Mark as initialized
         self.__initialized = True
         return self
@@ -310,7 +331,10 @@ class Err(object):
         self.__middleware_chain.append(mw)
 
     def __default_middleware(
-        self, format: Optional[str] = None
+        self,
+        format: Optional[str] = None,
+        error_info_path: Optional[str] = None,
+        error_info_compress: Optional[str] = None,
     ) -> List[BaseMiddleware]:
         """
         Get default middleware chain.
@@ -318,12 +342,25 @@ class Err(object):
         Args:
             format: traceback format. See TracebackMiddleware for details.
                 Do not configure tracebacks if None.
+            error_info_path: Directory path to write error info.
+                See ErrorInfoMiddleware for details.
+                Do not configure middleware if None.
+            error_info_compress: Error info compression algorithm. Used along
+                with `error_info_path`.
         """
         r: List[BaseMiddleware] = []
         if format is not None:
             from .middleware.traceback import TracebackMiddleware
 
             r.append(TracebackMiddleware(format=format))
+        if error_info_path is not None:
+            from .middleware.errorinfo import ErrorInfoMiddleware
+
+            r.append(
+                ErrorInfoMiddleware(
+                    path=error_info_path, compress=error_info_compress
+                )
+            )
         return r
 
 

@@ -18,4 +18,4 @@ from .err import Err, err  # noqa
 from .abc.failfast import BaseFailFast  # noqa
 from .abc.middleware import BaseMiddleware  # noqa
 
-__version__: str = "0.1.1"
+__version__: str = "0.2.0"
