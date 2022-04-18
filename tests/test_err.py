@@ -51,7 +51,7 @@ def test_empty_process():
 
 def test_invalid_hash():
     err = Err()
-    with pytest.raises(RuntimeError):
+    with pytest.raises(ValueError):
         err.setup(hash="invalidhash")
 
 

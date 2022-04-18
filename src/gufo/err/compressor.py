@@ -16,10 +16,14 @@ class Compressor(object):
 
     Args:
         format: Compression algorithm. One of:
+
             * `None` - do not compress
             * `gz` - GZip
             * `bz2` - BZip2
             * `xz` - LZMA/xz
+
+    Raises:
+        ValueError: If format is not supported.
     """
 
     FORMATS: Dict[

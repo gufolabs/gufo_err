@@ -21,6 +21,9 @@ class TracebackMiddleware(BaseMiddleware):
     Args:
         format: dumping format, one of `terse`, `extend`.
 
+    Raises:
+        ValueError: On invalid `format`.
+
     Examples:
         Implicit initialization of the middleware using
         default `terse` format:

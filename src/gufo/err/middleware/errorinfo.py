@@ -27,6 +27,9 @@ class ErrorInfoMiddleware(BaseMiddleware):
             * `gz` - GZip
             * `bz2` - BZip2
             * `xz` - LZMA/xz
+
+    Raises:
+        ValueError: If path is not writable.
     """
 
     def __init__(self, path: str, compress: Optional[str] = None) -> None:

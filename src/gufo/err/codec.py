@@ -146,18 +146,22 @@ def from_dict(data: Dict[str, Any]) -> ErrorInfo:
 
     Returns:
         ErrorInfo instance
+
+    Raises:
+        ValueError: if required key is missed.
     """
 
     def get(d: Dict[str, Any], name: str) -> Any:
         """
-        Get key from dict or raise ValueError if not found.
-
         Args:
             d: Data dictionary
             name: Key name
 
         Returns:
             Value
+
+        Raises:
+            ValueError if key is missed.
         """
         x = d.get(name, None)
         if x is None:
@@ -225,6 +229,9 @@ def from_json(data: str) -> ErrorInfo:
 
     Returns:
         ErrorInfo instance
+
+    Raises:
+        ValueError: if required key is missed.
     """
     return from_dict(json.loads(data))
 

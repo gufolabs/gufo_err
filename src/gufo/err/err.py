@@ -84,6 +84,9 @@ class Err(object):
             t: Exception type.
             v: Exception value.
             tb: Traceback frame.
+
+        Raises:
+            RuntimeError: If setup() is not called.
         """
         if not self.__initialized:
             raise RuntimeError("setup() is not called")
@@ -126,7 +129,7 @@ class Err(object):
     ) -> "Err":
         """
         Setup error handling singleton. Must be called
-        only once. Raises RuntimeError when called twice.
+        only once.
 
         Args:
             catch_all: Install global system exception hook.
@@ -163,6 +166,10 @@ class Err(object):
 
         Returns:
             Err instance.
+
+        Raises:
+            RuntimeError: When called twice.
+            ValueError: On configuration parameters error.
         """
         if self.__initialized:
             raise RuntimeError("Already initialized")
@@ -177,7 +184,7 @@ class Err(object):
         try:
             self.__hash_fn = getattr(hashlib, hash)
         except AttributeError:
-            raise RuntimeError(f"Unknown hash: {hash}")
+            raise ValueError(f"Unknown hash: {hash}")
         # Initialize fail fast chain
         if fail_fast:
             self.__failfast_chain = []
@@ -310,6 +317,9 @@ class Err(object):
 
         Args:
             ff: BaseFailFast instance.
+
+        Raises:
+            ValueError: If `ff` is not BaseFailFast instance.
         """
         if not isinstance(ff, BaseFailFast):
             raise ValueError(
@@ -323,10 +333,13 @@ class Err(object):
 
         Args:
             mw: BaseMiddleware instance
+
+        Raises:
+            ValueError: If `mw` is not BaseMiddleware instance.
         """
         if not isinstance(mw, BaseMiddleware):
             raise ValueError(
-                "add_response() argument must be BaseResponse instance"
+                "add_response() argument must be BaseMiddleware instance"
             )
         self.__middleware_chain.append(mw)
 
