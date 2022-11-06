@@ -16,6 +16,13 @@ To see unreleased changes, please see the [CHANGELOG on the master branch](https
 
 * Move changelog into the project's root
 
+### Infrastructure
+
+* Use Python 3.11 for devcontainer
+* mkdocs-material 8.5.8
+* pytest 7.2.0
+* Coverage 6.5.0
+
 ## 0.2.0 - 2022-04-18
 
 ###  Added
