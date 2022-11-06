@@ -8,6 +8,10 @@ To see unreleased changes, please see the [CHANGELOG on the master branch](https
 
 ## [Unreleased]
 
+### Added
+
+* Add CITATIONS.cff
+
 ### Changed
 
 * Move changelog into the project's root
