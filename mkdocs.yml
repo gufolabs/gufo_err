@@ -43,7 +43,7 @@ plugins:
       default_handler: python
       handlers:
         python:
-          rendering:
+          options:
             show_source: false
             show_submodules: false
       watch:
