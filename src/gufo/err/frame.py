@@ -6,6 +6,7 @@
 
 # Python modules
 import sys
+from itertools import islice
 from types import TracebackType, CodeType
 from typing import Optional, Iterable, cast
 from importlib.abc import InspectLoader
@@ -134,7 +135,7 @@ def __has_code_position() -> bool:
     import os
 
     if sys.version_info.major < 3:
-        return False
+        return False  # No support for Python 2
     if sys.version_info.major > 3:
         return True  # Python 4? :)
     if sys.version_info.minor >= 11:
@@ -144,55 +145,40 @@ def __has_code_position() -> bool:
 
 HAS_CODE_POSITION = __has_code_position()
 
-if HAS_CODE_POSITION:
-    import itertools
 
-    def __get_code_position(
-        code: CodeType, inst_index: int
-    ) -> Optional[CodePosition]:
-        """
-        Extract code range for current instruction.
+def __get_code_position(
+    code: CodeType, inst_index: int
+) -> Optional[CodePosition]:
+    """
+    Extract code range for current instruction.
 
-        Args:
-            code: Code object
-            inst_index: Current instruction index, usually from `tb_lasti`
+    Args:
+        code: Code object
+        inst_index: Current instruction index, usually from `tb_lasti`
 
-        Returns:
-            Optional CodePosition instance
-        """
-        if inst_index < 0:
-            return None
-        positions_gen = code.co_positions()
-        start_line, end_line, start_col, end_col = next(
-            itertools.islice(positions_gen, inst_index // 2, None)
-        )
-        if (
-            start_line is None
-            or end_line is None
-            or start_col is None
-            or end_col is None
-        ):
-            return None
-        return CodePosition(
-            start_line=start_line,
-            end_line=end_line,
-            start_col=start_col,
-            end_col=end_col,
-        )
-
-else:
-    # Prior Python 3.11 stub
-    def __get_code_position(
-        code: CodeType, inst_index: int
-    ) -> Optional[CodePosition]:
-        """
-        Extract code range for current instruction.
-
-        Args:
-            code: Code object
-            inst_index: Current instruction index, usually from `tb_lasti`
-
-        Returns:
-            Optional CodePosition instance
-        """
+    Returns:
+        Optional CodePosition instance
+    """
+    if (
+        not HAS_CODE_POSITION
+        or inst_index < 0
+        or not hasattr(code, "co_positions")
+    ):
         return None
+    positions_gen = code.co_positions()
+    start_line, end_line, start_col, end_col = next(
+        islice(positions_gen, inst_index // 2, None)
+    )
+    if (
+        start_line is None
+        or end_line is None
+        or start_col is None
+        or end_col is None
+    ):
+        return None
+    return CodePosition(
+        start_line=start_line,
+        end_line=end_line,
+        start_col=start_col,
+        end_col=end_col,
+    )
