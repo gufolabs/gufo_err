@@ -15,6 +15,24 @@ import datetime
 
 
 @dataclass
+class CodePosition(object):
+    """
+    Exact code position for Python 3.11+
+
+    Args:
+        start_line: First line of code
+        end_line: Last line of code
+        start_col: Starting column (on start_line)
+        end_col: Ending column (on end_line)
+    """
+
+    start_line: int
+    end_line: int
+    start_col: int
+    end_col: int
+
+
+@dataclass
 class SourceInfo(object):
     """
     Source context for frame.
@@ -24,12 +42,14 @@ class SourceInfo(object):
         first_line: first line of source context.
         current_line: current execution line.
         lines: List of lines, starting from `first_line`
+        pos: Optional exact code position for Python 3.11+
     """
 
     file_name: str
     first_line: int
     current_line: int
     lines: List[str]
+    pos: Optional[CodePosition] = None
 
 
 @dataclass

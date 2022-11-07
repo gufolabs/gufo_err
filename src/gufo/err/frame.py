@@ -6,12 +6,12 @@
 
 # Python modules
 import sys
-from types import TracebackType
+from types import TracebackType, CodeType
 from typing import Optional, Iterable, cast
 from importlib.abc import InspectLoader
 
 # Gufo Labs modules
-from .types import FrameInfo, SourceInfo
+from .types import FrameInfo, SourceInfo, CodePosition
 
 
 def exc_traceback() -> TracebackType:
@@ -49,12 +49,13 @@ def iter_frames(
             context_lines=context_lines,
             loader=frame.f_globals.get("__loader__"),
             module_name=frame.f_globals.get("__name__"),
+            code_position=__get_code_position(frame.f_code, current.tb_lasti),
         )
         yield FrameInfo(
             name=frame.f_code.co_name,
             module=frame.f_globals.get("__name__"),
             source=src,
-            locals=current.tb_frame.f_locals,
+            locals=frame.f_locals,
         )
         current = current.tb_next
 
@@ -97,17 +98,101 @@ def __get_lines(
     file_name: Optional[str] = None,
     loader: Optional[InspectLoader] = None,
     module_name: Optional[str] = None,
+    code_position: Optional[CodePosition] = None,
 ) -> Optional[SourceInfo]:
     src = __get_source(
         file_name=file_name, loader=loader, module_name=module_name
     )
     if not src:
         return None  # Unable to get the source
+    # @todo: maybe use linecachee
     lines = src.splitlines()  # @todo: Implement sliding line iterator
-    first_line = max(1, line_no - context_lines)
+    if code_position:
+        # Exact locations
+        first_line = max(1, code_position.start_line - context_lines)
+        last_line = code_position.end_line + context_lines
+    else:
+        first_line = max(1, line_no - context_lines)
+        last_line = line_no + context_lines
     return SourceInfo(
         file_name=file_name or module_name or "",
         first_line=first_line,
         current_line=line_no,
-        lines=lines[first_line - 1 : line_no + context_lines],
+        lines=lines[first_line - 1 : last_line],
+        pos=code_position,
     )
+
+
+def __has_code_position() -> bool:
+    """
+    Check if python supports exact code positions.
+
+    Returns:
+        * True - if ????
+        * False - otherwise
+    """
+    import os
+
+    if sys.version_info.major < 3:
+        return False
+    if sys.version_info.major > 3:
+        return True  # Python 4? :)
+    if sys.version_info.minor >= 11:
+        return os.environ.get("PYTHONNODEBUGRANGES") is None
+    return False
+
+
+HAS_CODE_POSITION = __has_code_position()
+
+if HAS_CODE_POSITION:
+    import itertools
+
+    def __get_code_position(
+        code: CodeType, inst_index: int
+    ) -> Optional[CodePosition]:
+        """
+        Extract code range for current instruction.
+
+        Args:
+            code: Code object
+            inst_index: Current instruction index, usually from `tb_lasti`
+
+        Returns:
+            Optional CodePosition instance
+        """
+        if inst_index < 0:
+            return None
+        positions_gen = code.co_positions()
+        start_line, end_line, start_col, end_col = next(
+            itertools.islice(positions_gen, inst_index // 2, None)
+        )
+        if (
+            start_line is None
+            or end_line is None
+            or start_col is None
+            or end_col is None
+        ):
+            return None
+        return CodePosition(
+            start_line=start_line,
+            end_line=end_line,
+            start_col=start_col,
+            end_col=end_col,
+        )
+
+else:
+    # Prior Python 3.11 stub
+    def __get_code_position(
+        code: CodeType, inst_index: int
+    ) -> Optional[CodePosition]:
+        """
+        Extract code range for current instruction.
+
+        Args:
+            code: Code object
+            inst_index: Current instruction index, usually from `tb_lasti`
+
+        Returns:
+            Optional CodePosition instance
+        """
+        return None

@@ -10,6 +10,8 @@ To see unreleased changes, please see the [CHANGELOG on the master branch](https
 
 ### Added
 
+* `CodePosition` structure for exact code location (Python 3.11+)
+* `SourceInfo` got optional `pos` field.
 * Add CITATIONS.cff
 * Developer's Common Tasks
 

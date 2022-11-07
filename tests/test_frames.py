@@ -6,13 +6,38 @@
 
 # Python modules
 import os
+from typing import Optional
 
 # Gufo Labs modules
-from gufo.err import iter_frames, exc_traceback, SourceInfo, FrameInfo
+from gufo.err import (
+    iter_frames,
+    exc_traceback,
+    SourceInfo,
+    FrameInfo,
+    CodePosition,
+    HAS_CODE_POSITION,
+)
 from tests.sample.trace import entry
 
 
 cwd = os.getcwd()
+
+
+def MaybeCodePosition(
+    *,
+    start_line: int,
+    end_line: int,
+    start_col: int,
+    end_col: int,
+) -> Optional[CodePosition]:
+    if HAS_CODE_POSITION:
+        return CodePosition(
+            start_line=start_line,
+            end_line=end_line,
+            start_col=start_col,
+            end_col=end_col,
+        )
+    return None
 
 
 def to_full_path(*args) -> str:
@@ -28,8 +53,8 @@ SAMPLE_FRAMES = [
         module="tests.test_frames",
         source=SourceInfo(
             file_name=to_full_path("tests", "test_frames.py"),
-            current_line=125,
-            first_line=118,
+            current_line=162,
+            first_line=155,
             lines=[
                 "",
                 "",
@@ -44,6 +69,9 @@ SAMPLE_FRAMES = [
                 "        frames = list(iter_frames(exc_traceback()))",
                 "        assert frames == SAMPLE_FRAMES",
             ],
+            pos=MaybeCodePosition(
+                start_line=162, end_line=162, start_col=8, end_col=15
+            ),
         ),
         locals={},
     ),
@@ -64,6 +92,9 @@ SAMPLE_FRAMES = [
                 "    s += 1",
                 "    to_oops()",
             ],
+            pos=MaybeCodePosition(
+                start_line=14, end_line=14, start_col=4, end_col=13
+            ),
         ),
         locals={"s": 3},
     ),
@@ -90,6 +121,9 @@ SAMPLE_FRAMES = [
                 "    s += 1",
                 "    to_oops()",
             ],
+            pos=MaybeCodePosition(
+                start_line=8, end_line=8, start_col=4, end_col=10
+            ),
         ),
         locals={"x": 2},
     ),
@@ -111,6 +145,9 @@ SAMPLE_FRAMES = [
                 "    oops()",
                 "",
             ],
+            pos=MaybeCodePosition(
+                start_line=2, end_line=2, start_col=4, end_col=30
+            ),
         ),
         locals={},
     ),
