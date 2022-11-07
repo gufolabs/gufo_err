@@ -159,13 +159,9 @@ def __get_code_position(
     Returns:
         Optional CodePosition instance
     """
-    if (
-        not HAS_CODE_POSITION
-        or inst_index < 0
-        or not hasattr(code, "co_positions")
-    ):
+    if not HAS_CODE_POSITION or inst_index < 0:
         return None
-    positions_gen = code.co_positions()
+    positions_gen = code.co_positions()  # type:ignore[attr-defined]
     start_line, end_line, start_col, end_col = next(
         islice(positions_gen, inst_index // 2, None)
     )

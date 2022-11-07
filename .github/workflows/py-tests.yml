@@ -58,7 +58,7 @@ jobs:
         run: flake8 examples/ src/ tests/
 
       - name: Check Mypy
-        run: mypy --strict src/
+        run: mypy --strict --no-warn-unused-ignores src/
 
       - name: Run Tests
         run: coverage run -m pytest -v
