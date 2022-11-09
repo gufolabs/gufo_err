@@ -6,10 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 To see unreleased changes, please see the [CHANGELOG on the master branch](https://github.com/gufolabs/gufo_err/blob/master/CHANGELOG.md) guide.
 
-## [Unreleased]
+## 0.3.0 - 2022-11-09
 
 ### Added
 
+* Python 3.11 support.
+* TracebackMiddleware shows exact problem position on Python 3.11+
 * `CodePosition` structure for exact code location (Python 3.11+)
 * `SourceInfo` got optional `pos` field.
 * Add CITATIONS.cff

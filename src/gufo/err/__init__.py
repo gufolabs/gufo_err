@@ -26,4 +26,4 @@ from .err import Err, err
 from .abc.failfast import BaseFailFast
 from .abc.middleware import BaseMiddleware
 
-__version__: str = "0.2.0"
+__version__: str = "0.3.0"
