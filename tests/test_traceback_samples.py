@@ -20,11 +20,14 @@ RESAMPLE = False  # Change to True to rewrite sample files
 
 rx_file = re.compile(r"^(\s*File:?\s*\"?)(.*/gufo_err)(/.*)$", re.MULTILINE)
 rx_repr = re.compile("(= <.*? at 0x)([0-9a-f]+?)(>)", re.MULTILINE)
+rx_caret = re.compile(r"\n +~*\^+~*$", re.MULTILINE)
 
 
 def clean_config(src: str) -> str:
     src = rx_file.sub(r"\1\3", src)
     src = rx_repr.sub(r"\1aaaa\3", src)
+    # Remove python 3.11+ caret
+    src = rx_caret.sub("", src)
     return src
 
 

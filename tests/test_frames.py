@@ -15,6 +15,7 @@ from gufo.err import (
     SourceInfo,
     FrameInfo,
     CodePosition,
+    Anchor,
     HAS_CODE_POSITION,
 )
 from tests.sample.trace import entry
@@ -29,13 +30,20 @@ def MaybeCodePosition(
     end_line: int,
     start_col: int,
     end_col: int,
+    anchor_left: Optional[int] = None,
+    anchor_right: Optional[int] = None,
 ) -> Optional[CodePosition]:
     if HAS_CODE_POSITION:
+        if anchor_left is None or anchor_right is None:
+            anchor = None
+        else:
+            anchor = Anchor(left=anchor_left, right=anchor_right)
         return CodePosition(
             start_line=start_line,
             end_line=end_line,
             start_col=start_col,
             end_col=end_col,
+            anchor=anchor,
         )
     return None
 
@@ -53,8 +61,8 @@ SAMPLE_FRAMES = [
         module="tests.test_frames",
         source=SourceInfo(
             file_name=to_full_path("tests", "test_frames.py"),
-            current_line=162,
-            first_line=155,
+            current_line=170,
+            first_line=163,
             lines=[
                 "",
                 "",
@@ -70,7 +78,7 @@ SAMPLE_FRAMES = [
                 "        assert frames == SAMPLE_FRAMES",
             ],
             pos=MaybeCodePosition(
-                start_line=162, end_line=162, start_col=8, end_col=15
+                start_line=170, end_line=170, start_col=8, end_col=15
             ),
         ),
         locals={},

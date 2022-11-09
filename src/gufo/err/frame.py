@@ -6,13 +6,14 @@
 
 # Python modules
 import sys
+import ast
 from itertools import islice
 from types import TracebackType, CodeType
 from typing import Optional, Iterable, cast
 from importlib.abc import InspectLoader
 
 # Gufo Labs modules
-from .types import FrameInfo, SourceInfo, CodePosition
+from .types import FrameInfo, SourceInfo, CodePosition, Anchor
 
 
 def exc_traceback() -> TracebackType:
@@ -44,13 +45,14 @@ def iter_frames(
     current: Optional[TracebackType] = tb
     while current is not None:
         frame = current.tb_frame
-        src = __get_lines(
+        src = __get_source_info(
             file_name=frame.f_code.co_filename,
             line_no=current.tb_lineno,
             context_lines=context_lines,
             loader=frame.f_globals.get("__loader__"),
             module_name=frame.f_globals.get("__name__"),
-            code_position=__get_code_position(frame.f_code, current.tb_lasti),
+            code=frame.f_code,
+            inst_index=current.tb_lasti,
         )
         yield FrameInfo(
             name=frame.f_code.co_name,
@@ -93,21 +95,25 @@ def __get_source(
     return src
 
 
-def __get_lines(
+def __get_source_info(
     line_no: int,
     context_lines: int,
+    code: CodeType,
+    inst_index: int,
     file_name: Optional[str] = None,
     loader: Optional[InspectLoader] = None,
     module_name: Optional[str] = None,
-    code_position: Optional[CodePosition] = None,
 ) -> Optional[SourceInfo]:
     src = __get_source(
         file_name=file_name, loader=loader, module_name=module_name
     )
     if not src:
         return None  # Unable to get the source
-    # @todo: maybe use linecachee
+    # @todo: maybe use linecache
     lines = src.splitlines()  # @todo: Implement sliding line iterator
+    # Extract current code position
+    code_position = __get_code_position(code, inst_index, lines[line_no - 1])
+    #
     if code_position:
         # Exact locations
         first_line = max(1, code_position.start_line - context_lines)
@@ -115,6 +121,7 @@ def __get_lines(
     else:
         first_line = max(1, line_no - context_lines)
         last_line = line_no + context_lines
+    #
     return SourceInfo(
         file_name=file_name or module_name or "",
         first_line=first_line,
@@ -147,7 +154,7 @@ HAS_CODE_POSITION = __has_code_position()
 
 
 def __get_code_position(
-    code: CodeType, inst_index: int
+    code: CodeType, inst_index: int, line: str
 ) -> Optional[CodePosition]:
     """
     Extract code range for current instruction.
@@ -155,12 +162,15 @@ def __get_code_position(
     Args:
         code: Code object
         inst_index: Current instruction index, usually from `tb_lasti`
+        line: Current code line
 
     Returns:
         Optional CodePosition instance
     """
     if not HAS_CODE_POSITION or inst_index < 0:
         return None
+    # Warning! co_positions is not defineed prior the Python 3.11
+    # so mypy will raise an error.
     positions_gen = code.co_positions()  # type:ignore[attr-defined]
     start_line, end_line, start_col, end_col = next(
         islice(positions_gen, inst_index // 2, None)
@@ -172,9 +182,71 @@ def __get_code_position(
         or end_col is None
     ):
         return None
+    if start_line == end_line:
+        anchor = __get_anchor(line[start_col:end_col], start_col)
+    else:
+        anchor = None
     return CodePosition(
         start_line=start_line,
         end_line=end_line,
         start_col=start_col,
         end_col=end_col,
+        anchor=anchor,
     )
+
+
+def __get_anchor(segment: str, indent: int = 0) -> Optional[Anchor]:
+    """
+    Split code segment and try to get error anchors.
+    Backport from Python 3.11
+    `_extract_caret_anchors_from_line_segment`
+
+    Args:
+        segment: Code segment with current op.
+        ident: Position offset.
+
+    Returns:
+        * Anchor instance if code can be refined.
+        * None otherwise
+    """
+    try:
+        tree = ast.parse(segment)
+    except SyntaxError:
+        return None
+    # Should be only current statement
+    if len(tree.body) != 1:
+        return None
+    statement = tree.body[0]
+    # Cannot use match as it raises SyntaxError
+    # prior Python 3.10
+    if not isinstance(statement, ast.Expr):
+        return None
+    expr = statement.value
+    if isinstance(expr, ast.BinOp):
+        # Binary operation, problem with operator
+        operator_str = segment[
+            expr.left.end_col_offset : expr.right.col_offset
+        ]
+        operator_offset = len(operator_str) - len(operator_str.lstrip())
+        if expr.left.end_col_offset is None:
+            return None
+        left_anchor = expr.left.end_col_offset + operator_offset
+        right_anchor = left_anchor + 1
+        if (
+            operator_offset + 1 < len(operator_str)
+            and not operator_str[operator_offset + 1].isspace()
+        ):
+            right_anchor += 1
+        return Anchor(left=left_anchor + indent, right=right_anchor + indent)
+    elif isinstance(expr, ast.Subscript):
+        # Subscript operation, problem with value
+        if (
+            expr.value.end_col_offset is None
+            or expr.slice.end_col_offset is None
+        ):
+            return None
+        return Anchor(
+            left=expr.value.end_col_offset + indent,
+            right=expr.slice.end_col_offset + indent + 1,
+        )
+    return None

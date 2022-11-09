@@ -13,7 +13,13 @@ Attributes:
 """
 
 # Gufo Labs modules
-from .types import ErrorInfo, FrameInfo, SourceInfo, CodePosition  # noqa
+from .types import (
+    ErrorInfo,  # noqa
+    FrameInfo,  # noqa
+    SourceInfo,  # noqa
+    CodePosition,  # noqa
+    Anchor,  # noqa
+)
 from .frame import iter_frames, exc_traceback, HAS_CODE_POSITION  # noqa
 from .logger import logger  # noqa
 from .err import Err, err  # noqa

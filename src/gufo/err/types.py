@@ -15,6 +15,18 @@ import datetime
 
 
 @dataclass
+class Anchor(object):
+    """
+    Exact problem position (Python 3.11+).
+    Denotes operator of subscript which causes
+    the problem
+    """
+
+    left: int
+    right: int
+
+
+@dataclass
 class CodePosition(object):
     """
     Exact code position for Python 3.11+
@@ -24,12 +36,14 @@ class CodePosition(object):
         end_line: Last line of code
         start_col: Starting column (on start_line)
         end_col: Ending column (on end_line)
+        anchor: Problem anchor
     """
 
     start_line: int
     end_line: int
     start_col: int
     end_col: int
+    anchor: Optional[Anchor]
 
 
 @dataclass

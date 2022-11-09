@@ -16,7 +16,6 @@ from gufo.err.frame import (
     __source_from_file,
     __source_from_loader,
     __get_source,
-    __get_lines,
 )
 
 SAMPLE_STR = 'SAMPLE_LINE = "this is the sample"'
@@ -88,10 +87,8 @@ def test_get_source_from_file():
     assert is_valid_sample(source) is True
 
 
-def test_get_lines_miss(loader: InspectLoader):
-    source = __get_lines(
-        line_no=1,
-        context_lines=7,
+def test_get_source_miss(loader: InspectLoader):
+    source = __get_source(
         loader=loader,
         module_name="xxx.nosuchmodule",
     )
