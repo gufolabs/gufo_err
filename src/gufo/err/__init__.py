@@ -8,6 +8,8 @@ Human-readable error reporting.
 
 Attributes:
     __version__: Current version.
+    err: Err singletone
+    Err: Err class
     HAS_CODE_POSITION: True, if Python interpreter supports
         exact code positions  (Python 3.11+)
 """

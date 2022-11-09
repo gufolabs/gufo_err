@@ -203,7 +203,7 @@ def __get_anchor(segment: str, indent: int = 0) -> Optional[Anchor]:
 
     Args:
         segment: Code segment with current op.
-        ident: Position offset.
+        indent: Position offset.
 
     Returns:
         * Anchor instance if code can be refined.

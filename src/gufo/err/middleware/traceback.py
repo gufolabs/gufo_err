@@ -211,10 +211,10 @@ class TracebackMiddleware(BaseMiddleware):
         ```
 
         Args:
-            * line: Current unnstripped line of code
-            * pos: CodePositio
-            * indent: Add `indent` leading spaces
-            * dedent: Remove `indent` leading spaces
+            line: Current unnstripped line of code
+            pos: CodePositio
+            indent: Add `indent` leading spaces
+            dedent: Remove `indent` leading spaces
         """
         if pos.start_line != pos.end_line:
             raise ValueError("Position must be on single line")
