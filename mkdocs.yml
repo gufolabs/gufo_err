@@ -1,5 +1,5 @@
-site_name: Gufo Labs Err
-site_description: Gufo Labs Err Documentation
+site_name: Gufo Err
+site_description: Gufo Err Documentation
 site_author: Gufo Labs
 site_url: "https://docs.gufolabs.com/gufo_err/"
 copyright: "&copy; 2022, Gufo Labs"
@@ -61,4 +61,4 @@ markdown_extensions:
   - pymdownx.snippets
   - pymdownx.superfences
   - pymdownx.tasklist:
-      custom_checkbox: true
+      clickable_checkbox: true

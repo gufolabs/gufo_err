@@ -1,6 +1,6 @@
-# Gufo Labs Err Documentation
+# Gufo Err Documentation
 
-*Gufo Labs Err* is the flexible and robust python error handling framework.
+*Gufo Err* is the flexible and robust python error handling framework.
 
 ## Python Error Handling
 
