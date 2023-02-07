@@ -24,6 +24,7 @@ nav:
       - Code Base: codebase.md
       - Contributing Guide: CONTRIBUTING.md
       - Code of Conduct: CODE_OF_CONDUCT.md
+  - Supported Standards: standards.md
   - FAQ: faq.md
   - Changelog: CHANGELOG.md
   - License: LICENSE.md
@@ -55,10 +56,14 @@ markdown_extensions:
   - toc:
       permalink: True
   - admonition
+  - footnotes
   - pymdownx.highlight:
       anchor_linenums: True
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
   - pymdownx.tasklist:
-      clickable_checkbox: true
+      custom_checkbox: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
