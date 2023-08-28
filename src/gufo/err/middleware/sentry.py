@@ -84,7 +84,7 @@ class SentryMiddleware(BaseMiddleware):
             debug=debug,
             release=release,
             before_send=self.__before_send,
-            **kwargs
+            **kwargs  # type: ignore
             # shutdown_timeout=config.sentry.shutdown_timeout,
             # release=version.version,
             # max_breadcrumbs=config.sentry.max_breadcrumbs,
