@@ -13,6 +13,10 @@ To see unreleased changes, please see the [CHANGELOG on the master branch](https
 * `py.typed` file for PEP-561 compatibility
 * docs: "Supported standards" page
 
+### Changed
+
+* docs: Code Quality
+
 ### Infrastructure
 
 * Use `actions/checkout@v3`
