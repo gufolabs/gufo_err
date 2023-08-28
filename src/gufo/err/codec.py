@@ -1,14 +1,14 @@
 # ---------------------------------------------------------------------
 # Gufo Err: Serialize/deserialize
 # ---------------------------------------------------------------------
-# Copyright (C) 2022, Gufo Labs
+# Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
-
+"""ErrInfo serialization/deserialization primitives."""
 # Python modules
-from typing import Dict, Any, Union, Tuple
+import datetime
 import json
 import uuid
-import datetime
+from typing import Any, Dict, Tuple, Union
 
 # Gufo Labs modules
 from .types import ErrorInfo, FrameInfo, SourceInfo
@@ -44,7 +44,7 @@ def to_dict(info: ErrorInfo) -> Dict[str, Any]:
             return ncls
         return f"{mod}.{ncls}"
 
-    def q_var(x: Any) -> Union[str, int, float]:
+    def q_var(x: Any) -> Union[str, int, float]:  # noqa: ANN401
         """
         Convert variable to the JSON-encodable form.
 
@@ -151,11 +151,13 @@ def from_dict(data: Dict[str, Any]) -> ErrorInfo:
         ValueError: if required key is missed.
     """
 
-    def get(d: Dict[str, Any], name: str) -> Any:
+    def get(d: Dict[str, Any], name: str) -> Any:  # noqa: ANN401
         """
+        Get the key's value from the dictionary.
+
         Args:
             d: Data dictionary
-            name: Key name
+            name: Key name.
 
         Returns:
             Value
@@ -165,14 +167,12 @@ def from_dict(data: Dict[str, Any]) -> ErrorInfo:
         """
         x = d.get(name, None)
         if x is None:
-            raise ValueError(f"{name} is required")
+            msg = f"{name} is required"
+            raise ValueError(msg)
         return x
 
     def get_fi(d: Dict[str, Any]) -> FrameInfo:
-        if d.get("source"):
-            source = get_si(d["source"])
-        else:
-            source = None
+        source = get_si(d["source"]) if d.get("source") else None
         return FrameInfo(
             name=get(d, "name"),
             module=get(d, "module"),
@@ -190,21 +190,21 @@ def from_dict(data: Dict[str, Any]) -> ErrorInfo:
 
     # Check incoming data is dict
     if not isinstance(data, dict):
-        raise ValueError("dict required")
+        msg = "dict required"
+        raise ValueError(msg)
     # Check data has proper type signature
     ci_type = get(data, "$type")
     if ci_type != CODEC_TYPE:
-        raise ValueError("Invalid $type")
+        msg = "Invalid $type"
+        raise ValueError(msg)
     # Check version
     ci_version = get(data, "$version")
     if ci_version != CURRENT_VERSION:
-        raise ValueError("Unknown $version")
+        msg = "Unknown $version"
+        raise ValueError(msg)
     # Process timestamp
     src_ts = data.get("timestamp")
-    if src_ts:
-        ts = datetime.datetime.fromisoformat(src_ts)
-    else:
-        ts = None
+    ts = datetime.datetime.fromisoformat(src_ts) if src_ts else None
     # Exception
     exc = get(data, "exception")
     # Stack
@@ -245,6 +245,8 @@ class ExceptionStub(Exception):
         args: Exception arguments
     """
 
-    def __init__(self, kls: str, args: Tuple[Any, ...]) -> None:
+    def __init__(
+        self: "ExceptionStub", kls: str, args: Tuple[Any, ...]
+    ) -> None:
         self.kls = kls
         self.args = args

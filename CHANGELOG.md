@@ -17,8 +17,10 @@ To see unreleased changes, please see the [CHANGELOG on the master branch](https
 
 * Use `actions/checkout@v3`
 * Use `actions/cache@v3`
+* Use ` pypa/gh-action-pypi-publish@release/v1`
 * Project structure tests
 * CI workflows tests
+* Adopt Ruff
 
 ## 0.3.0 - 2022-11-09
 

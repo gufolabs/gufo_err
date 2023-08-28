@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Gufo Err: iter_frames tests
 # ---------------------------------------------------------------------
-# Copyright (C) 2022, Gufo Labs
+# Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
 
 # Python modules
@@ -10,16 +10,16 @@ from typing import Optional
 
 # Gufo Labs modules
 from gufo.err import (
-    iter_frames,
-    exc_traceback,
-    SourceInfo,
-    FrameInfo,
-    CodePosition,
-    Anchor,
     HAS_CODE_POSITION,
+    Anchor,
+    CodePosition,
+    FrameInfo,
+    SourceInfo,
+    exc_traceback,
+    iter_frames,
 )
-from tests.sample.trace import entry
 
+from tests.sample.trace import entry
 
 cwd = os.getcwd()
 
@@ -49,47 +49,49 @@ def MaybeCodePosition(
 
 
 def to_full_path(*args) -> str:
-    """
-    Convert relative path to full path
-    """
+    """Convert relative path to full path."""
     return os.path.join(cwd, *args)
 
 
 SAMPLE_FRAMES = [
     FrameInfo(
         name="test_iter_frames",
-        module="tests.test_frames",
         source=SourceInfo(
-            file_name=to_full_path("tests", "test_frames.py"),
-            current_line=170,
-            first_line=163,
+            file_name="/workspaces/gufo_err/tests/test_frames.py",
+            first_line=169,
+            current_line=176,
             lines=[
+                "    ),",
+                "]",
                 "",
                 "",
                 "def test_iter_frames():",
-                '    """',
-                "    Call the function which raises an exception",
-                '    """',
+                '    """Call the function which raises an exception."""',
                 "    try:",
                 "        entry()",
-                '        assert False, "No trace"',
+                '        msg = "No trace"',
+                "        raise AssertionError(msg)",
                 "    except RuntimeError:",
                 "        frames = list(iter_frames(exc_traceback()))",
                 "        assert frames == SAMPLE_FRAMES",
             ],
-            pos=MaybeCodePosition(
-                start_line=170, end_line=170, start_col=8, end_col=15
+            pos=CodePosition(
+                start_line=176,
+                end_line=176,
+                start_col=8,
+                end_col=15,
+                anchor=None,
             ),
         ),
         locals={},
+        module="tests.test_frames",
     ),
     FrameInfo(
         name="entry",
-        module="tests.sample.trace",
         source=SourceInfo(
-            file_name=to_full_path("tests", "sample", "trace.py"),
-            current_line=14,
-            first_line=7,
+            file_name="/workspaces/gufo_err/tests/sample/trace.py",
+            first_line=8,
+            current_line=15,
             lines=[
                 "    x += 1",
                 "    oops()",
@@ -100,22 +102,26 @@ SAMPLE_FRAMES = [
                 "    s += 1",
                 "    to_oops()",
             ],
-            pos=MaybeCodePosition(
-                start_line=14, end_line=14, start_col=4, end_col=13
+            pos=CodePosition(
+                start_line=15,
+                end_line=15,
+                start_col=4,
+                end_col=13,
+                anchor=None,
             ),
         ),
         locals={"s": 3},
+        module="tests.sample.trace",
     ),
     FrameInfo(
         name="to_oops",
-        module="tests.sample.trace",
         source=SourceInfo(
-            file_name=to_full_path("tests", "sample", "trace.py"),
-            current_line=8,
-            first_line=1,
+            file_name="/workspaces/gufo_err/tests/sample/trace.py",
+            first_line=2,
+            current_line=9,
             lines=[
-                "def oops():",
-                '    raise RuntimeError("oops")',
+                '    msg = "oops"',
+                "    raise RuntimeError(msg)",
                 "",
                 "",
                 "def to_oops():",
@@ -129,22 +135,23 @@ SAMPLE_FRAMES = [
                 "    s += 1",
                 "    to_oops()",
             ],
-            pos=MaybeCodePosition(
-                start_line=8, end_line=8, start_col=4, end_col=10
+            pos=CodePosition(
+                start_line=9, end_line=9, start_col=4, end_col=10, anchor=None
             ),
         ),
         locals={"x": 2},
+        module="tests.sample.trace",
     ),
     FrameInfo(
         name="oops",
-        module="tests.sample.trace",
         source=SourceInfo(
-            file_name=to_full_path("tests", "sample", "trace.py"),
-            current_line=2,
+            file_name="/workspaces/gufo_err/tests/sample/trace.py",
             first_line=1,
+            current_line=3,
             lines=[
                 "def oops():",
-                '    raise RuntimeError("oops")',
+                '    msg = "oops"',
+                "    raise RuntimeError(msg)",
                 "",
                 "",
                 "def to_oops():",
@@ -153,22 +160,22 @@ SAMPLE_FRAMES = [
                 "    oops()",
                 "",
             ],
-            pos=MaybeCodePosition(
-                start_line=2, end_line=2, start_col=4, end_col=30
+            pos=CodePosition(
+                start_line=3, end_line=3, start_col=4, end_col=27, anchor=None
             ),
         ),
-        locals={},
+        locals={"msg": "oops"},
+        module="tests.sample.trace",
     ),
 ]
 
 
 def test_iter_frames():
-    """
-    Call the function which raises an exception
-    """
+    """Call the function which raises an exception."""
     try:
         entry()
-        assert False, "No trace"
+        msg = "No trace"
+        raise AssertionError(msg)
     except RuntimeError:
         frames = list(iter_frames(exc_traceback()))
         assert frames == SAMPLE_FRAMES

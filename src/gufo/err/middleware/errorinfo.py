@@ -1,19 +1,19 @@
 # ---------------------------------------------------------------------
 # Gufo Err: ErrorInfoMiddleware
 # ---------------------------------------------------------------------
-# Copyright (C) 2022, Gufo Labs
+# Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
-
+"""ErrorInfo middleware."""
 # Python modules
-from typing import Optional
 import os
+from typing import Optional
 
 # Gufo Labs modules
 from ..abc.middleware import BaseMiddleware
-from ..types import ErrorInfo
-from ..logger import logger
 from ..codec import to_json
 from ..compressor import Compressor
+from ..logger import logger
+from ..types import ErrorInfo
 
 
 class ErrorInfoMiddleware(BaseMiddleware):
@@ -32,15 +32,24 @@ class ErrorInfoMiddleware(BaseMiddleware):
         ValueError: If path is not writable.
     """
 
-    def __init__(self, path: str, compress: Optional[str] = None) -> None:
+    def __init__(
+        self: "ErrorInfoMiddleware", path: str, compress: Optional[str] = None
+    ) -> None:
         super().__init__()
         self.path = path
         # Check permissions
         if not os.access(self.path, os.W_OK):
-            raise ValueError(f"{path} is not writable")
+            msg = f"{path} is not writable"
+            raise ValueError(msg)
         self.compressor = Compressor(format=compress)
 
-    def process(self, info: ErrorInfo) -> None:
+    def process(self: "ErrorInfoMiddleware", info: ErrorInfo) -> None:
+        """
+        Middleware entrypoing.
+
+        Args:
+            info: ErrorInfo instance.
+        """
         # ErrorInfo path
         fn = os.path.join(
             self.path, f"{info.fingerprint}.json{self.compressor.suffix}"

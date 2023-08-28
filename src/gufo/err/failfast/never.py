@@ -1,12 +1,12 @@
 # ---------------------------------------------------------------------
 # Gufo Err: NeverFailFast
 # ---------------------------------------------------------------------
-# Copyright (C) 2022, Gufo Labs
+# Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
-
+"""NeverFailFast."""
 # Python modules
-from typing import Type
 from types import TracebackType
+from typing import Type
 
 # Gufo Labs modules
 from ..abc.failfast import BaseFailFast
@@ -14,14 +14,20 @@ from ..abc.failfast import BaseFailFast
 
 class NeverFailFast(BaseFailFast):
     """
-    Never fail-fast. Always returns False,
-    so never inflicts fail-fast.
+    Never fail-fast.
+
+    Always returns False, so never inflicts fail-fast.
     """
 
     def must_die(
-        self,
+        self: "NeverFailFast",
         t: Type[BaseException],
         v: BaseException,
         tb: TracebackType,
     ) -> bool:
+        """
+        Check if the process must die quickly.
+
+        Always returns False.
+        """
         return False

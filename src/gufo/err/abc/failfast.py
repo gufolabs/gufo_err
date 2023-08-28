@@ -1,25 +1,27 @@
 # ---------------------------------------------------------------------
 # Gufo Err: BaseFailFast method
 # ---------------------------------------------------------------------
-# Copyright (C) 2022, Gufo Labs
+# Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
-
+"""BaseFailFast."""
 # Python modules
 from abc import ABC, abstractmethod
-from typing import Type
 from types import TracebackType
+from typing import Type
 
 
 class BaseFailFast(ABC):
     """
-    Abstract base type for fail-fast behavior. Fail-fast classes
-    must implement `must_die` method. When fail-fast check
-    decides the error is unrecoverable, it must return `True` value.
+    Abstract base type for fail-fast behavior.
+
+    Fail-fast classes must implement `must_die` method.
+    When fail-fast check decides the error is unrecoverable,
+    it must return `True` value.
     """
 
     @abstractmethod
     def must_die(
-        self,
+        self: "BaseFailFast",
         t: Type[BaseException],
         v: BaseException,
         tb: TracebackType,

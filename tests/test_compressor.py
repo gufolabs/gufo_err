@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Gufo Err: test Compressor
 # ---------------------------------------------------------------------
-# Copyright (C) 2022, Gufo Labs
+# Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
 
 # Third-party modules
@@ -17,7 +17,7 @@ def test_invalid_format():
 
 
 @pytest.mark.parametrize(
-    ["path", "expected"],
+    ("path", "expected"),
     [
         ("/a/b/c/xxx.json", None),
         ("/a/b/c/xxx.json.gz", "gz"),
@@ -31,7 +31,7 @@ def test_get_format(path: str, expected: str) -> None:
 
 
 @pytest.mark.parametrize(
-    ["path", "expected"],
+    ("path", "expected"),
     [
         ("/a/b/c/xxx.json", None),
         ("/a/b/c/xxx.json.gz", "gz"),
@@ -49,7 +49,7 @@ def test_autodetect(path: str, expected: str) -> None:
 
 
 @pytest.mark.parametrize(
-    ["fmt", "data"],
+    ("fmt", "data"),
     [
         (None, b"12345"),
         (

@@ -1,12 +1,12 @@
 # ---------------------------------------------------------------------
 # Gufo Err: AlwaysFailFast
 # ---------------------------------------------------------------------
-# Copyright (C) 2022, Gufo Labs
+# Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
-
+"""AlwaysFailFast."""
 # Python modules
-from typing import Type
 from types import TracebackType
+from typing import Type
 
 # Gufo Labs modules
 from ..abc.failfast import BaseFailFast
@@ -14,13 +14,20 @@ from ..abc.failfast import BaseFailFast
 
 class AlwaysFailFast(BaseFailFast):
     """
-    Always fail-fast. Trigger fail-fast unconditionally.
+    Always fail-fast.
+
+    Trigger fail-fast unconditionally.
     """
 
     def must_die(
-        self,
+        self: "AlwaysFailFast",
         t: Type[BaseException],
         v: BaseException,
         tb: TracebackType,
     ) -> bool:
+        """
+        Check if the process must die quickly.
+
+        Always returns True.
+        """
         return True

@@ -1,13 +1,13 @@
 # ---------------------------------------------------------------------
 # Gufo Err: SentryMiddleware
 # ---------------------------------------------------------------------
-# Copyright (C) 2022, Gufo Labs
+# Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
-
+"""Sentry integration middleware."""
 # Python modules
-from typing import Optional, Dict, Any, Callable, Generator
-from contextvars import ContextVar
 from contextlib import contextmanager
+from contextvars import ContextVar
+from typing import Any, Callable, Dict, Generator, Optional
 
 # Third-party modules
 import sentry_sdk
@@ -16,13 +16,14 @@ import sentry_sdk
 from ..abc.middleware import BaseMiddleware
 from ..types import ErrorInfo
 
-
 _current_err = ContextVar[Optional[ErrorInfo]]("current_err", default=None)
 
 
 @contextmanager
 def _err_context(info: ErrorInfo) -> Generator[None, None, None]:
     """
+    Context manager to set `__current_err` context variable.
+
     Set __current_err context variable with error info
     and remove it on exit.
     """
@@ -33,9 +34,10 @@ def _err_context(info: ErrorInfo) -> Generator[None, None, None]:
 
 class SentryMiddleware(BaseMiddleware):
     """
-    [Sentry](https://sentry.io/) integration. `SentryMiddleware`
-    is the wrapper around sentry_sdk to seamless integration
-    into Gufo Err.
+    [Sentry](https://sentry.io/) integration.
+
+    `SentryMiddleware` is the wrapper around sentry_sdk
+    to seamless integration into Gufo Err.
 
     Args:
         dsn: URL of the sentry installation. If not provided,
@@ -64,7 +66,7 @@ class SentryMiddleware(BaseMiddleware):
     """
 
     def __init__(
-        self,
+        self: "SentryMiddleware",
         dsn: Optional[str] = None,
         debug: bool = False,
         release: Optional[str] = None,
@@ -73,7 +75,7 @@ class SentryMiddleware(BaseMiddleware):
                 [Dict[str, Any], Dict[str, Any]], Optional[Dict[str, Any]]
             ]
         ] = None,
-        **kwargs: Any,
+        **kwargs: Dict[str, Any],
     ) -> None:
         super().__init__()
         self.__user_before_send = before_send
@@ -91,9 +93,11 @@ class SentryMiddleware(BaseMiddleware):
         )
 
     def __before_send(
-        self, event: Dict[str, Any], hint: Dict[str, Any]
+        self: "SentryMiddleware", event: Dict[str, Any], hint: Dict[str, Any]
     ) -> Optional[Dict[str, Any]]:
         """
+        Enrich event with user-defined information and fingerprint.
+
         Call user-defined `before_send` and add additional
         fingerprint information.
 
@@ -123,6 +127,12 @@ class SentryMiddleware(BaseMiddleware):
         ]
         return event
 
-    def process(self, info: ErrorInfo) -> None:
+    def process(self: "SentryMiddleware", info: ErrorInfo) -> None:
+        """
+        Middleware entrypoint.
+
+        Args:
+            info: ErrorInfo instance.
+        """
         with _err_context(info):
             sentry_sdk.capture_exception()

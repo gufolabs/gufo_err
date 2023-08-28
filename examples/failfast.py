@@ -1,6 +1,7 @@
-from typing import Type
 from types import TracebackType
-from gufo.err import err, BaseFailFast
+from typing import Type
+
+from gufo.err import BaseFailFast, err
 
 
 class FailOnType(BaseFailFast):
@@ -18,7 +19,8 @@ err.setup(fail_fast=[FailOnType(RuntimeError)], fail_fast_code=5)
 
 
 def fail():
-    raise RuntimeError("failing")
+    msg = "failing"
+    raise RuntimeError(msg)
 
 
 try:

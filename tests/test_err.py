@@ -1,39 +1,43 @@
 # ---------------------------------------------------------------------
 # Gufo Err: Err tests
 # ---------------------------------------------------------------------
-# Copyright (C) 2022, Gufo Labs
+# Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
 
 # Python modules
-from uuid import UUID
-from typing import List, Iterable, Type
-import sys
 import os
+import sys
+from typing import Iterable, List, Type
+from uuid import UUID
 
 # Third-party modules
 import pytest
 
 # Gufo Labs modules
 from gufo.err import (
+    BaseMiddleware,
     Err,
+    ErrorInfo,
     FrameInfo,
     SourceInfo,
-    ErrorInfo,
-    BaseMiddleware,
 )
 from gufo.err.failfast.always import AlwaysFailFast
 from gufo.err.failfast.never import NeverFailFast
-from gufo.err.failfast.types import TypesFailFast
 from gufo.err.failfast.typematch import TypeMatchFailFast
+from gufo.err.failfast.types import TypesFailFast
 
 
 def test_unitialized():
-    err = Err()
-    with pytest.raises(RuntimeError):
+    def process():
         try:
-            raise Exception("test")
+            msg = "test"
+            raise Exception(msg)
         except Exception:
             err.process()
+
+    err = Err()
+    with pytest.raises(RuntimeError):
+        process()
 
 
 def test_double_initialized():
@@ -56,7 +60,7 @@ def test_invalid_hash():
 
 
 @pytest.mark.parametrize(
-    ["hash", "data", "expected"],
+    ("hash", "data", "expected"),
     [
         ("sha1", ["test"], "a94a8fe5-ccb1-5ba6-9c4c-0873d391e987"),
         ("sha1", ["test", "test2"], "7408bb49-1e0d-5dc3-bac8-e503353e7940"),
@@ -79,7 +83,8 @@ def test_hash(hash, data, expected):
     err = ZeroHashErr()
     err.setup(hash=hash)
     try:
-        raise RuntimeError("test")
+        msg = "test"
+        raise RuntimeError(msg)
     except Exception:
         t, v, _ = sys.exc_info()
         assert t
@@ -90,7 +95,7 @@ def test_hash(hash, data, expected):
 
 
 @pytest.mark.parametrize(
-    ["stack", "root_module", "expected"],
+    ("stack", "root_module", "expected"),
     [
         (
             [
@@ -216,7 +221,8 @@ def test_iter_fingerprint_parts(stack, root_module, expected):
     err = Err()
     err.setup(name="fp_test", version="1.0.0", root_module=root_module)
     try:
-        raise RuntimeError("test")
+        msg = "test"
+        raise RuntimeError(msg)
     except Exception:
         t, v, _ = sys.exc_info()
         assert t
@@ -229,7 +235,8 @@ def test_must_die_no_tb():
     err = Err()
     err.setup()
     try:
-        raise RuntimeError("test")
+        msg = "test"
+        raise RuntimeError(msg)
     except Exception:
         t, v, _ = sys.exc_info()
         assert t
@@ -238,7 +245,7 @@ def test_must_die_no_tb():
 
 
 @pytest.mark.parametrize(
-    ["chain", "expected"],
+    ("chain", "expected"),
     [
         ([NeverFailFast()], False),
         ([AlwaysFailFast()], True),
@@ -261,10 +268,13 @@ def test_must_die(chain, expected):
     err = Err()
     err.setup(fail_fast=chain)
     try:
-        raise RuntimeError("test")
+        msg = "test"
+        raise RuntimeError(msg)
     except Exception:
         t, v, tb = sys.exc_info()
-        assert t and v and tb
+        assert t
+        assert v
+        assert tb
         r = err._Err__must_die(t, v, tb)
         assert r is expected
 
@@ -290,21 +300,24 @@ def test_process_excluded_exc(exc_class: Type[BaseException]):
     err.setup()
     try:
         try:
-            raise exc_class("test")
+            msg = "test"
+            raise exc_class(msg)
         except BaseException:
             err.process()
     except exc_class as e:
-        assert e.args[0] == "test"
+        assert e.args[0] == "test"  # noqa: PT017
 
 
 def test_process_no_tb():
     err = Err()
     err.setup()
     try:
-        raise RuntimeError("test")
+        msg = "test"
+        raise RuntimeError(msg)
     except Exception:
         t, v, _ = sys.exc_info()
-        assert t and v
+        assert t
+        assert v
         err._Err__process(t, v, None)
 
 
@@ -320,7 +333,8 @@ def test_failfast_exit(code):
     prev_exit = os._exit
     os._exit = _exit
     try:
-        raise RuntimeError("test")
+        msg = "test"
+        raise RuntimeError(msg)
     except Exception:
         err.process()
     os._exit = prev_exit
@@ -352,7 +366,8 @@ def test_middlewre():
             nonlocal passed
             passed[self.name] = True
             if self.fail:
-                raise ValueError("test")
+                msg = "test"
+                raise ValueError(msg)
 
     passed = {}
 
@@ -361,7 +376,8 @@ def test_middlewre():
     err.add_middleware(NamedMiddleware("r3", fail=True))
     err.add_middleware(NamedMiddleware("r4"))
     try:
-        raise RuntimeError("test")
+        msg = "test"
+        raise RuntimeError(msg)
     except Exception:
         err.process()
     for i in ("r1", "r2", "r3", "r4"):

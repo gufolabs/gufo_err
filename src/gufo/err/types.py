@@ -1,25 +1,27 @@
 # ---------------------------------------------------------------------
 # Gufo Err: Types
 # ---------------------------------------------------------------------
-# Copyright (C) 2022, Gufo Labs
+# Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
-"""
-Public API data types.
-"""
+"""Public API data types."""
 
 # Python modules
-from typing import Any, Optional, List, Dict
-from dataclasses import dataclass
-from uuid import UUID
 import datetime
+from dataclasses import dataclass
+from typing import Any, Dict, List, Optional
+from uuid import UUID
 
 
 @dataclass
 class Anchor(object):
     """
     Exact problem position (Python 3.11+).
-    Denotes operator of subscript which causes
-    the problem
+
+    Denotes operator of subscript which causes the problem.
+
+    Args:
+        left: Starting column.
+        right: Stopping column.
     """
 
     left: int
@@ -29,7 +31,7 @@ class Anchor(object):
 @dataclass
 class CodePosition(object):
     """
-    Exact code position for Python 3.11+
+    Exact code position for Python 3.11+.
 
     Args:
         start_line: First line of code

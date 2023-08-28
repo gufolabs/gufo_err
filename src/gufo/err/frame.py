@@ -1,23 +1,28 @@
 # ---------------------------------------------------------------------
 # Gufo Err: Frame Extraction
 # ---------------------------------------------------------------------
-# Copyright (C) 2022, Gufo Labs
+# Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
-
+"""FrameInfo structure."""
 # Python modules
-import sys
 import ast
-from itertools import islice
-from types import TracebackType, CodeType
-from typing import Optional, Iterable, cast
+import sys
 from importlib.abc import InspectLoader
+from itertools import islice
+from types import CodeType, TracebackType
+from typing import Iterable, Optional, cast
 
 # Gufo Labs modules
-from .types import FrameInfo, SourceInfo, CodePosition, Anchor
+from .types import Anchor, CodePosition, FrameInfo, SourceInfo
+
+PY_3 = 3
+PY_3_11 = (3, 11)
 
 
 def exc_traceback() -> TracebackType:
     """
+    Cast type to `sys.exc_info()`.
+
     Extract and return top-level excecution frame
     from current exception context.
 
@@ -31,6 +36,8 @@ def iter_frames(
     tb: TracebackType, context_lines: int = 7
 ) -> Iterable[FrameInfo]:
     """
+    Iterate over traceback frames.
+
     Args:
         tb: current execution frame.
         context_lines: Source code context to extract.
@@ -136,16 +143,16 @@ def __has_code_position() -> bool:
     Check if python supports exact code positions.
 
     Returns:
-        * True - if ????
+        * True - if python 3.11+ and PYTHONNODEBUGRANGES is not set.
         * False - otherwise
     """
     import os
 
-    if sys.version_info.major < 3:
+    if sys.version_info.major < PY_3:
         return False  # No support for Python 2
-    if sys.version_info.major > 3:
+    if sys.version_info.major > PY_3:
         return True  # Python 4? :)
-    if sys.version_info.minor >= 11:
+    if sys.version_info >= PY_3_11:
         return os.environ.get("PYTHONNODEBUGRANGES") is None
     return False
 
@@ -198,8 +205,9 @@ def __get_code_position(
 def __get_anchor(segment: str, indent: int = 0) -> Optional[Anchor]:
     """
     Split code segment and try to get error anchors.
+
     Backport from Python 3.11
-    `_extract_caret_anchors_from_line_segment`
+    `_extract_caret_anchors_from_line_segment`.
 
     Args:
         segment: Code segment with current op.
@@ -238,7 +246,7 @@ def __get_anchor(segment: str, indent: int = 0) -> Optional[Anchor]:
         ):
             right_anchor += 1
         return Anchor(left=left_anchor + indent, right=right_anchor + indent)
-    elif isinstance(expr, ast.Subscript):
+    if isinstance(expr, ast.Subscript):
         # Subscript operation, problem with value
         if (
             expr.value.end_col_offset is None

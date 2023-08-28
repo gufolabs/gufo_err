@@ -4,7 +4,8 @@ err.setup(catch_all=True)
 
 
 def fail():
-    raise RuntimeError("failing")
+    msg = "failing"
+    raise RuntimeError(msg)
 
 
 fail()

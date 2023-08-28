@@ -1,27 +1,27 @@
 # ---------------------------------------------------------------------
 # Gufo Err: serde tests
 # ---------------------------------------------------------------------
-# Copyright (C) 2022, Gufo Labs
+# Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
 
 # Python modules
+import datetime
 import os
 import uuid
-import datetime
 from typing import Any, Dict
 
 # Third-party modules
 import pytest
-
-# Gufo Labs modules
-from gufo.err.types import FrameInfo, SourceInfo, ErrorInfo
 from gufo.err.codec import (
+    ExceptionStub,
+    from_dict,
     from_json,
     to_dict,
     to_json,
-    from_dict,
-    ExceptionStub,
 )
+
+# Gufo Labs modules
+from gufo.err.types import ErrorInfo, FrameInfo, SourceInfo
 
 TZ = datetime.timezone(datetime.timedelta(hours=1), "CEST")
 

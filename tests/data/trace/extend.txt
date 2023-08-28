@@ -1,71 +1,74 @@
-Error: 6fe7c3e4-4910-506a-ad97-2f6f05650b05
+Error: e0de436d-414e-594c-b834-c3f61fb0dcfe
 RuntimeError: oops
 Traceback (most resent call last):
 -------------------------------------------------------------------------------
-File: /workspaces/gufo_err/tests/test_traceback_samples.py (line 66)
-   59         ],
-   60     )
-   61     def test_format(cfg):
-   62         fmt = cfg.get("format", "terse")
-   63         err = Err().setup(**cfg)
-   64         cfg = {}  # Reset local vars
-   65         try:
-   66 ==>         entry()
+File: /workspaces/gufo_err/tests/test_traceback_samples.py (line 67)
+   60         ],
+   61     )
+   62     def test_format(cfg: Dict[str, Any]) -> None:
+   63         fmt = cfg.get("format", "terse")
+   64         err = Err().setup(**cfg)
+   65         cfg = {}  # Reset local vars
+   66         try:
+   67 ==>         entry()
                   ^^^^^^^
-   67         except Exception:
-   68             with log_capture() as buffer:
-   69                 err.process()
-   70                 output = buffer.getvalue()
-   71         if RESAMPLE:
-   72             set_sample(fmt, output)
-   73         assert clean_config(output) == clean_config(get_sample(fmt))
+   68         except Exception:
+   69             with log_capture() as buffer:
+   70                 err.process()
+   71                 output = buffer.getvalue()
+   72         if RESAMPLE:
+   73             set_sample(fmt, output)
+   74         assert clean_config(output) == clean_config(get_sample(fmt))
 Locals:
                  cfg = {}
                  fmt = 'extend'
-                 err = <gufo.err.err.Err object at 0x7fde8a6aec90>
-              buffer = <_io.StringIO object at 0x7fde8a7e7be0>
+                 err = <gufo.err.err.Err object at 0x7f16e9c18c10>
+              buffer = <_io.StringIO object at 0x7f16e9be4a60>
 -------------------------------------------------------------------------------
-File: /workspaces/gufo_err/tests/sample/trace.py (line 14)
-    7         x += 1
-    8         oops()
-    9     
+File: /workspaces/gufo_err/tests/sample/trace.py (line 15)
+    8         x += 1
+    9         oops()
    10     
-   11     def entry():
-   12         s = 2
-   13         s += 1
-   14 ==>     to_oops()
+   11     
+   12     def entry():
+   13         s = 2
+   14         s += 1
+   15 ==>     to_oops()
               ^^^^^^^^^
 Locals:
                    s = 3
 -------------------------------------------------------------------------------
-File: /workspaces/gufo_err/tests/sample/trace.py (line 8)
-    1     def oops():
-    2         raise RuntimeError("oops")
-    3     
+File: /workspaces/gufo_err/tests/sample/trace.py (line 9)
+    2         msg = "oops"
+    3         raise RuntimeError(msg)
     4     
-    5     def to_oops():
-    6         x = 1
-    7         x += 1
-    8 ==>     oops()
+    5     
+    6     def to_oops():
+    7         x = 1
+    8         x += 1
+    9 ==>     oops()
               ^^^^^^
-    9     
    10     
-   11     def entry():
-   12         s = 2
-   13         s += 1
-   14         to_oops()
+   11     
+   12     def entry():
+   13         s = 2
+   14         s += 1
+   15         to_oops()
 Locals:
                    x = 2
 -------------------------------------------------------------------------------
-File: /workspaces/gufo_err/tests/sample/trace.py (line 2)
+File: /workspaces/gufo_err/tests/sample/trace.py (line 3)
     1     def oops():
-    2 ==>     raise RuntimeError("oops")
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^
-    3     
+    2         msg = "oops"
+    3 ==>     raise RuntimeError(msg)
+              ^^^^^^^^^^^^^^^^^^^^^^^
     4     
-    5     def to_oops():
-    6         x = 1
-    7         x += 1
-    8         oops()
-    9     
+    5     
+    6     def to_oops():
+    7         x = 1
+    8         x += 1
+    9         oops()
+   10     
+Locals:
+                 msg = 'oops'
 -------------------------------------------------------------------------------

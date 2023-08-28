@@ -1,17 +1,19 @@
 # ---------------------------------------------------------------------
 # Gufo Err: test ErrorInfoMiddleware
 # ---------------------------------------------------------------------
-# Copyright (C) 2022, Gufo Labs
+# Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
 
 # Third-party modules
-import pytest
 import re
+
+import pytest
 
 # Gufo Labs modules
 from gufo.err import Err
-from gufo.err.compressor import Compressor
 from gufo.err.codec import from_json
+from gufo.err.compressor import Compressor
+
 from .util import log_capture
 
 rx_log_path = re.compile(r"Writing error info into (\S+)")
@@ -29,7 +31,7 @@ def test_invalid_compress(tmpdir):
         )
 
 
-@pytest.mark.parametrize(["compress"], [(None,), ("gz",), ("bz2",), ("xz",)])
+@pytest.mark.parametrize("compress", [None, "gz", "bz2", "xz"])
 def test_compress(tmpdir, compress):
     err_info_path = tmpdir.mkdir("errinfo")
     # Setup
@@ -40,7 +42,8 @@ def test_compress(tmpdir, compress):
     )
     # Generate error
     try:
-        raise RuntimeError("oops")
+        msg = "oops"
+        raise RuntimeError(msg)
     except RuntimeError:
         with log_capture() as buffer:
             err.process()
@@ -70,7 +73,7 @@ def test_compress(tmpdir, compress):
     assert ei_file.endswith(fn)
 
 
-@pytest.mark.parametrize(["compress"], [(None,), ("gz",), ("bz2",), ("xz",)])
+@pytest.mark.parametrize("compress", [None, "gz", "bz2", "xz"])
 def test_seen(tmpdir, compress):
     err_info_path = tmpdir.mkdir("errinfo")
     # Setup
@@ -81,7 +84,8 @@ def test_seen(tmpdir, compress):
     )
     # Generate error
     try:
-        raise RuntimeError("oops")
+        msg = "oops"
+        raise RuntimeError(msg)
     except RuntimeError:
         with log_capture() as buffer:
             err.process()

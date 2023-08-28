@@ -6,7 +6,8 @@ err.setup(catch_all=True, format="extend")
 def fail():
     x = 1
     x += 1
-    raise RuntimeError("failing")
+    msg = "failing"
+    raise RuntimeError(msg)
 
 
 fail()

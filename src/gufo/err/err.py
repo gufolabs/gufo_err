@@ -1,27 +1,29 @@
 # ---------------------------------------------------------------------
 # Gufo Err: err singleton
 # ---------------------------------------------------------------------
-# Copyright (C) 2022, Gufo Labs
+# Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
 """
+Define `Err` class and `err` singleton.
+
 Attributes:
-    err: Err singletone
+    err: Err singletone.
 """
 # Python modules
-import sys
-import os
-from typing import Optional, Type, List, Iterable
-from types import TracebackType
-from uuid import UUID
 import hashlib
+import os
+import sys
+from types import TracebackType
+from typing import Iterable, List, Optional, Type
+from uuid import UUID
+
+from .abc.failfast import BaseFailFast
+from .abc.middleware import BaseMiddleware
+from .frame import iter_frames
+from .logger import logger
 
 # Gufo Labs modules
 from .types import ErrorInfo, FrameInfo
-from .frame import iter_frames
-from .abc.failfast import BaseFailFast
-from .abc.middleware import BaseMiddleware
-from .logger import logger
-
 
 DEFAULT_NAME = "unknown"
 DEFAULT_VERSION = "unknown"
@@ -34,7 +36,6 @@ class Err(object):
     Error handling singleton.
 
     Example:
-
         ``` py
         from gufo.err import err
 
@@ -42,7 +43,7 @@ class Err(object):
         ```
     """
 
-    def __init__(self) -> None:
+    def __init__(self: "Err") -> None:
         self.__name = DEFAULT_NAME
         self.__version = DEFAULT_VERSION
         self.__hash_fn = hashlib.sha1
@@ -52,12 +53,11 @@ class Err(object):
         self.__failfast_code = DEFAULT_EXIT_CODE
         self.__root_module: Optional[str] = None
 
-    def process(self) -> None:
+    def process(self: "Err") -> None:
         """
         Process current exception context in the fenced code block.
 
         Example:
-
             ``` py
             from gufo.err import err
 
@@ -74,13 +74,15 @@ class Err(object):
         self.__process(t, v, tb)
 
     def __process(
-        self,
+        self: "Err",
         t: Type[BaseException],
         v: BaseException,
         tb: Optional[TracebackType] = None,
     ) -> None:
         """
-        Process given exception context. Called either from .process()
+        Process given exception context.
+
+        Called either from .process()
         or as sys.excepthook for unhandled exceptions.
 
         Args:
@@ -92,7 +94,8 @@ class Err(object):
             RuntimeError: If setup() is not called.
         """
         if not self.__initialized:
-            raise RuntimeError("setup() is not called")
+            msg = "setup() is not called"
+            raise RuntimeError(msg)
         if not tb:
             return
         if t in (SystemExit, KeyboardInterrupt):
@@ -116,7 +119,7 @@ class Err(object):
         self.__run_middleware(err_info)
 
     def setup(
-        self,
+        self: "Err",
         *,
         catch_all: bool = False,
         root_module: Optional[str] = None,
@@ -131,8 +134,9 @@ class Err(object):
         error_info_compress: Optional[str] = None,
     ) -> "Err":
         """
-        Setup error handling singleton. Must be called
-        only once.
+        Setup error handling singleton.
+
+        Must be called only once.
 
         Args:
             catch_all: Install global system exception hook.
@@ -175,7 +179,8 @@ class Err(object):
             ValueError: On configuration parameters error.
         """
         if self.__initialized:
-            raise RuntimeError("Already initialized")
+            msg = "Already initialized"
+            raise RuntimeError(msg)
         # Install system-wide exception hook
         if catch_all:
             sys.excepthook = self.__process
@@ -186,8 +191,9 @@ class Err(object):
         self.__root_module = root_module
         try:
             self.__hash_fn = getattr(hashlib, hash)
-        except AttributeError:
-            raise ValueError(f"Unknown hash: {hash}")
+        except AttributeError as e:
+            msg = f"Unknown hash: {hash}"
+            raise ValueError(msg) from e
         # Initialize fail fast chain
         if fail_fast:
             self.__failfast_chain = []
@@ -215,12 +221,14 @@ class Err(object):
         return self
 
     def __must_die(
-        self,
+        self: "Err",
         t: Type[BaseException],
         v: BaseException,
         tb: TracebackType,
     ) -> bool:
         """
+        Check if the error is fatal and the process must die.
+
         Process fail-fast sequence and return True if the
         process must die quickly.
         """
@@ -228,7 +236,7 @@ class Err(object):
             return False
         return any(ff.must_die(t, v, tb) for ff in self.__failfast_chain)
 
-    def __run_middleware(self, err_info: ErrorInfo) -> None:
+    def __run_middleware(self: "Err", err_info: ErrorInfo) -> None:
         """
         Process all the middleware.
 
@@ -238,16 +246,18 @@ class Err(object):
         for resp in self.__middleware_chain:
             try:
                 resp.process(err_info)
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 logger.error("%r middleware failed: %s", resp, e)
 
     def iter_fingerprint_parts(
-        self,
+        self: "Err",
         t: Type[BaseException],
         v: BaseException,
         stack: List[FrameInfo],
     ) -> Iterable[str]:
         """
+        Iterate over the fingerprint parts.
+
         Iterable to yield all fingerprint parts.
         May be overriden in subclasses.
 
@@ -255,6 +265,7 @@ class Err(object):
             t: Exception type.
             v: Exception instance:
             stack: Current stack.
+
         Returns:
             Iterable of strings.
         """
@@ -288,12 +299,14 @@ class Err(object):
                     )  # App execution line
 
     def __fingerprint(
-        self,
+        self: "Err",
         t: Type[BaseException],
         v: BaseException,
         stack: List[FrameInfo],
     ) -> UUID:
         """
+        Calculate the error fingerprint.
+
         Calculate error fingerprint for given exception
         and the stack. Fingerprint is stable for repeating
         conditions.
@@ -314,7 +327,7 @@ class Err(object):
         ).digest()
         return UUID(bytes=fp_hash[:16], version=5)
 
-    def add_fail_fast(self, ff: BaseFailFast) -> None:
+    def add_fail_fast(self: "Err", ff: BaseFailFast) -> None:
         """
         Add fail-fast handler to the end of the chain.
 
@@ -325,12 +338,11 @@ class Err(object):
             ValueError: If `ff` is not BaseFailFast instance.
         """
         if not isinstance(ff, BaseFailFast):
-            raise ValueError(
-                "add_fail_fast() argument must be BaseFailFast instance"
-            )
+            msg = "add_fail_fast() argument must be BaseFailFast instance"
+            raise ValueError(msg)
         self.__failfast_chain.append(ff)
 
-    def add_middleware(self, mw: BaseMiddleware) -> None:
+    def add_middleware(self: "Err", mw: BaseMiddleware) -> None:
         """
         Add middleware to the end of the chain.
 
@@ -341,13 +353,12 @@ class Err(object):
             ValueError: If `mw` is not BaseMiddleware instance.
         """
         if not isinstance(mw, BaseMiddleware):
-            raise ValueError(
-                "add_response() argument must be BaseMiddleware instance"
-            )
+            msg = "add_response() argument must be BaseMiddleware instance"
+            raise ValueError(msg)
         self.__middleware_chain.append(mw)
 
     def __default_middleware(
-        self,
+        self: "Err",
         format: Optional[str] = None,
         error_info_path: Optional[str] = None,
         error_info_compress: Optional[str] = None,

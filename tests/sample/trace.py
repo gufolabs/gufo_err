@@ -1,5 +1,6 @@
 def oops():
-    raise RuntimeError("oops")
+    msg = "oops"
+    raise RuntimeError(msg)
 
 
 def to_oops():

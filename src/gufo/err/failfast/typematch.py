@@ -1,12 +1,12 @@
 # ---------------------------------------------------------------------
 # Gufo Err: TypeMatchFailFast
 # ---------------------------------------------------------------------
-# Copyright (C) 2022, Gufo Labs
+# Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
-
+"""TypeMatchFailFast."""
 # Python modules
-from typing import Type, Union, Optional, Dict
 from types import TracebackType
+from typing import Dict, Optional, Type, Union
 
 # Gufo Labs modules
 from ..abc.failfast import BaseFailFast
@@ -27,7 +27,6 @@ class TypeMatchFailFast(BaseFailFast):
             `%s` will be expanded to the exception value.
 
     Example:
-
         Single type:
 
         ``` py
@@ -62,7 +61,7 @@ class TypeMatchFailFast(BaseFailFast):
     """
 
     def __init__(
-        self,
+        self: "TypeMatchFailFast",
         exc: Optional[Union[str, Type[BaseException]]] = None,
         *,
         match: Optional[str] = None,
@@ -75,7 +74,7 @@ class TypeMatchFailFast(BaseFailFast):
             self.add_match(exc, match=match, msg=msg)
 
     def add_match(
-        self,
+        self: "TypeMatchFailFast",
         exc: Union[str, Type[BaseException]],
         *,
         match: Optional[str] = None,
@@ -106,10 +105,7 @@ class TypeMatchFailFast(BaseFailFast):
             ```
         """
         # Normalize to string
-        if isinstance(exc, str):
-            xn = exc
-        else:
-            xn = self.__exc_to_str(exc)
+        xn = exc if isinstance(exc, str) else self.__exc_to_str(exc)
         # Fill mapping
         if xn not in self.__map:
             self.__map[xn] = {}
@@ -130,11 +126,17 @@ class TypeMatchFailFast(BaseFailFast):
         return f"{t.__module__}.{t.__name__}"
 
     def must_die(
-        self,
+        self: "TypeMatchFailFast",
         t: Type[BaseException],
         v: BaseException,
         tb: TracebackType,
     ) -> bool:
+        """
+        Check if the proceess must die quickly.
+
+        Check if exception class matches given substrings.
+        """
+
         def msg(s: Optional[str]) -> None:
             if not s:
                 return

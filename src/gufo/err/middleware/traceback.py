@@ -1,22 +1,30 @@
 # ---------------------------------------------------------------------
 # Gufo Err: TracebackMiddleware
 # ---------------------------------------------------------------------
-# Copyright (C) 2022, Gufo Labs
+# Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
-
+"""TracebackMiddleware."""
 # Python modules
-from typing import Callable, Iterable, Tuple
-from pprint import pformat
 from dataclasses import dataclass
+from pprint import pformat
+from typing import Callable, Iterable, Tuple
 
 # Gufo Labs modules
 from ..abc.middleware import BaseMiddleware
-from ..types import ErrorInfo, FrameInfo, CodePosition
 from ..logger import logger
+from ..types import CodePosition, ErrorInfo, FrameInfo
 
 
 @dataclass
 class Anchor(object):
+    """
+    Caret position.
+
+    Args:
+        left: Left column of the caret.
+        right: Right column of the caret.
+    """
+
     left: int
     right: int
 
@@ -73,7 +81,7 @@ class TracebackMiddleware(BaseMiddleware):
     MAX_VAR_LEN = 72
 
     def __init__(
-        self,
+        self: "TracebackMiddleware",
         format: str = "terse",
         primary_char: str = "~",
         secondary_char: str = "^",
@@ -85,14 +93,25 @@ class TracebackMiddleware(BaseMiddleware):
             self.format: Callable[[ErrorInfo], Iterable[str]] = getattr(
                 self, f"iter_fmt_{format}"
             )
-        except AttributeError:
-            raise ValueError(f"Invalid format {format}")
+        except AttributeError as e:
+            msg = f"Invalid format {format}"
+            raise ValueError(msg) from e
 
-    def process(self, info: ErrorInfo) -> None:
+    def process(self: "TracebackMiddleware", info: ErrorInfo) -> None:
+        """
+        Middleware entrypoint.
+
+        Dumps stack info error log with given stack format.
+
+        Args:
+            info: ErrorInfo instance.
+        """
         msg = "\n".join(self.format(info))
         logger.error(msg)
 
-    def iter_stack(self, err: ErrorInfo) -> Iterable[FrameInfo]:
+    def iter_stack(
+        self: "TracebackMiddleware", err: ErrorInfo
+    ) -> Iterable[FrameInfo]:
         """
         Iterate stack according to direction.
 
@@ -104,7 +123,7 @@ class TracebackMiddleware(BaseMiddleware):
         """
         yield from err.stack
 
-    def traceback_message(self) -> str:
+    def traceback_message(self: "TracebackMiddleware") -> str:
         """
         Get proper traceback message.
 
@@ -113,7 +132,9 @@ class TracebackMiddleware(BaseMiddleware):
         """
         return "Traceback (most resent call last):"
 
-    def iter_vars(self, fi: FrameInfo) -> Iterable[Tuple[str, str]]:
+    def iter_vars(
+        self: "TracebackMiddleware", fi: FrameInfo
+    ) -> Iterable[Tuple[str, str]]:
         """
         Iterate frame variables and convert them to the readable form.
 
@@ -128,11 +149,19 @@ class TracebackMiddleware(BaseMiddleware):
                 rv = repr(v)
                 if len(rv) > self.MAX_VAR_LEN:
                     rv = pformat(v)
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 rv = f"repr() failed: {e}"
             yield k, rv
 
-    def iter_fmt_terse(self, err: ErrorInfo) -> Iterable[str]:
+    def iter_fmt_terse(
+        self: "TracebackMiddleware", err: ErrorInfo
+    ) -> Iterable[str]:
+        """
+        Iterate terse stack dump.
+
+        Args:
+            err: ErrorInfo instance.
+        """
         yield f"Error: {err.fingerprint}"
         yield self.traceback_message()
         for fi in self.iter_stack(err):
@@ -164,11 +193,19 @@ class TracebackMiddleware(BaseMiddleware):
                     yield f"    {line}"
             else:
                 yield '  File "<stdin>", line ??? in <module>'
-        yield f"{err.exception.__class__.__name__}: {str(err.exception)}"
+        yield f"{err.exception.__class__.__name__}: {err.exception!s}"
 
-    def iter_fmt_extend(self, err: ErrorInfo) -> Iterable[str]:
+    def iter_fmt_extend(
+        self: "TracebackMiddleware", err: ErrorInfo
+    ) -> Iterable[str]:
+        """
+        Iterate exteded stack dump.
+
+        Args:
+            err: ErrorInfo instance.
+        """
         yield f"Error: {err.fingerprint}"
-        yield f"{err.exception.__class__.__name__}: {str(err.exception)}"
+        yield f"{err.exception.__class__.__name__}: {err.exception!s}"
         yield self.traceback_message()
         for fi in self.iter_stack(err):
             yield self.SEP
@@ -201,14 +238,19 @@ class TracebackMiddleware(BaseMiddleware):
         yield self.SEP
 
     def __get_caret(
-        self, line: str, pos: CodePosition, indent: int, dedent: int = 0
+        self: "TracebackMiddleware",
+        line: str,
+        pos: CodePosition,
+        indent: int,
+        dedent: int = 0,
     ) -> str:
         """
         Generate caret for code position.
+
         Carret has a format:
         ```
         <spaces><primary chars...><secondary chars...><primary chars...>
-        ```
+        ```.
 
         Args:
             line: Current unnstripped line of code
@@ -217,7 +259,8 @@ class TracebackMiddleware(BaseMiddleware):
             dedent: Remove `indent` leading spaces
         """
         if pos.start_line != pos.end_line:
-            raise ValueError("Position must be on single line")
+            msg = "Position must be on single line"
+            raise ValueError(msg)
         # Leading spaces
         leading = " " * (pos.start_col + indent - dedent)
         # Parse AST and find anchors

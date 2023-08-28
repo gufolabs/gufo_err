@@ -1,18 +1,20 @@
 # ---------------------------------------------------------------------
 # Gufo Err: test TracebackResponse
 # ---------------------------------------------------------------------
-# Copyright (C) 2022, Gufo Labs
+# Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
 
 # Python modules
-import re
 import os
+import re
+from typing import Any, Dict
 
 # Third-party modules
 import pytest
 
 # Gufo Labs modules
 from gufo.err import Err
+
 from .sample.trace import entry
 from .util import log_capture
 
@@ -27,8 +29,7 @@ def clean_config(src: str) -> str:
     src = rx_file.sub(r"\1\3", src)
     src = rx_repr.sub(r"\1aaaa\3", src)
     # Remove python 3.11+ caret
-    src = rx_caret.sub("", src)
-    return src
+    return rx_caret.sub("", src)
 
 
 def get_sample_path(fmt: str) -> str:
@@ -45,20 +46,20 @@ def set_sample(fmt: str, sample: str) -> None:
         f.write(sample)
 
 
-def test_ci_resample():
+def test_ci_resample() -> None:
     if RESAMPLE:
         assert "CI" not in os.environ, "RESAMPLE must not be set for CI"
 
 
 @pytest.mark.parametrize(
-    ["cfg"],
+    "cfg",
     [
-        ({},),
-        ({"format": "terse"},),
-        ({"format": "extend"},),
+        {},
+        {"format": "terse"},
+        {"format": "extend"},
     ],
 )
-def test_format(cfg):
+def test_format(cfg: Dict[str, Any]) -> None:
     fmt = cfg.get("format", "terse")
     err = Err().setup(**cfg)
     cfg = {}  # Reset local vars

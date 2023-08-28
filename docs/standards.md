@@ -1,6 +1,6 @@
 # Supported Standards
 
-Gufo Ping implements and is guided by the following standards:
+Gufo Err implements and is guided by the following standards:
 
 ## :simple-python: Python PEP
 

@@ -1,15 +1,15 @@
-Error: 6fe7c3e4-4910-506a-ad97-2f6f05650b05
+Error: e0de436d-414e-594c-b834-c3f61fb0dcfe
 Traceback (most resent call last):
-  File "/workspaces/gufo_err/tests/test_traceback_samples.py", line 66, in test_format
+  File "/workspaces/gufo_err/tests/test_traceback_samples.py", line 67, in test_format
     entry()
     ^^^^^^^
-  File "/workspaces/gufo_err/tests/sample/trace.py", line 14, in entry
+  File "/workspaces/gufo_err/tests/sample/trace.py", line 15, in entry
     to_oops()
     ^^^^^^^^^
-  File "/workspaces/gufo_err/tests/sample/trace.py", line 8, in to_oops
+  File "/workspaces/gufo_err/tests/sample/trace.py", line 9, in to_oops
     oops()
     ^^^^^^
-  File "/workspaces/gufo_err/tests/sample/trace.py", line 2, in oops
-    raise RuntimeError("oops")
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/gufo_err/tests/sample/trace.py", line 3, in oops
+    raise RuntimeError(msg)
+    ^^^^^^^^^^^^^^^^^^^^^^^
 RuntimeError: oops
