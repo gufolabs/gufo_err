@@ -57,7 +57,7 @@ SAMPLE_FRAMES = [
     FrameInfo(
         name="test_iter_frames",
         source=SourceInfo(
-            file_name="/workspaces/gufo_err/tests/test_frames.py",
+            file_name=to_full_path("tests", "test_frames.py"),
             first_line=169,
             current_line=176,
             lines=[
@@ -89,7 +89,7 @@ SAMPLE_FRAMES = [
     FrameInfo(
         name="entry",
         source=SourceInfo(
-            file_name="/workspaces/gufo_err/tests/sample/trace.py",
+            file_name=to_full_path("tests", "sample", "trace.py"),
             first_line=8,
             current_line=15,
             lines=[
@@ -116,7 +116,7 @@ SAMPLE_FRAMES = [
     FrameInfo(
         name="to_oops",
         source=SourceInfo(
-            file_name="/workspaces/gufo_err/tests/sample/trace.py",
+            file_name=to_full_path("tests", "sample", "trace.py"),
             first_line=2,
             current_line=9,
             lines=[
@@ -145,7 +145,7 @@ SAMPLE_FRAMES = [
     FrameInfo(
         name="oops",
         source=SourceInfo(
-            file_name="/workspaces/gufo_err/tests/sample/trace.py",
+            file_name=to_full_path("tests", "sample", "trace.py"),
             first_line=1,
             current_line=3,
             lines=[
