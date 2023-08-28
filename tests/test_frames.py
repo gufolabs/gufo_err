@@ -58,8 +58,8 @@ SAMPLE_FRAMES = [
         name="test_iter_frames",
         source=SourceInfo(
             file_name=to_full_path("tests", "test_frames.py"),
-            first_line=169,
-            current_line=176,
+            first_line=167,
+            current_line=174,
             lines=[
                 "    ),",
                 "]",
@@ -75,12 +75,11 @@ SAMPLE_FRAMES = [
                 "        frames = list(iter_frames(exc_traceback()))",
                 "        assert frames == SAMPLE_FRAMES",
             ],
-            pos=CodePosition(
-                start_line=176,
-                end_line=176,
+            pos=MaybeCodePosition(
+                start_line=174,
+                end_line=174,
                 start_col=8,
                 end_col=15,
-                anchor=None,
             ),
         ),
         locals={},
@@ -102,12 +101,11 @@ SAMPLE_FRAMES = [
                 "    s += 1",
                 "    to_oops()",
             ],
-            pos=CodePosition(
+            pos=MaybeCodePosition(
                 start_line=15,
                 end_line=15,
                 start_col=4,
                 end_col=13,
-                anchor=None,
             ),
         ),
         locals={"s": 3},
@@ -135,8 +133,8 @@ SAMPLE_FRAMES = [
                 "    s += 1",
                 "    to_oops()",
             ],
-            pos=CodePosition(
-                start_line=9, end_line=9, start_col=4, end_col=10, anchor=None
+            pos=MaybeCodePosition(
+                start_line=9, end_line=9, start_col=4, end_col=10
             ),
         ),
         locals={"x": 2},
@@ -160,8 +158,8 @@ SAMPLE_FRAMES = [
                 "    oops()",
                 "",
             ],
-            pos=CodePosition(
-                start_line=3, end_line=3, start_col=4, end_col=27, anchor=None
+            pos=MaybeCodePosition(
+                start_line=3, end_line=3, start_col=4, end_col=27
             ),
         ),
         locals={"msg": "oops"},
