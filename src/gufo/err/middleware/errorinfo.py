@@ -23,6 +23,7 @@ class ErrorInfoMiddleware(BaseMiddleware):
     Args:
         path: Path to directory to write error info.
         compress: Compression algorithm. One of:
+
             * `None` - do not compress
             * `gz` - GZip
             * `bz2` - BZip2
@@ -30,6 +31,14 @@ class ErrorInfoMiddleware(BaseMiddleware):
 
     Raises:
         ValueError: If path is not writable.
+
+
+    Examples:
+        ``` py
+        from gufo.err import err
+
+        err.setup(error_info_path="/var/err/", error_info_compress="gz")
+        ```
     """
 
     def __init__(

@@ -19,8 +19,8 @@ class TypesFailFast(BaseFailFast):
     Args:
         types: Iterable of exception types.
 
-    Example:
-        ```
+    Examples:
+        ``` py
         from gufo.err import err
         from gufo.err.types import TypesFailFast
 

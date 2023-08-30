@@ -26,7 +26,7 @@ class TypeMatchFailFast(BaseFailFast):
         msg: Optional message to show to log before failfast.
             `%s` will be expanded to the exception value.
 
-    Example:
+    Examples:
         Single type:
 
         ``` py

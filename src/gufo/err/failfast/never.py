@@ -17,6 +17,11 @@ class NeverFailFast(BaseFailFast):
     Never fail-fast.
 
     Always returns False, so never inflicts fail-fast.
+
+    Examples:
+        ``` py
+        err.setup(fail_fast=[NeverFailFast()])
+        ```
     """
 
     def must_die(

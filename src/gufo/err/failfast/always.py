@@ -17,6 +17,11 @@ class AlwaysFailFast(BaseFailFast):
     Always fail-fast.
 
     Trigger fail-fast unconditionally.
+
+    Examples:
+        ``` py
+        err.setup(fail_fast=[AlwaysFailFast()])
+        ```
     """
 
     def must_die(
