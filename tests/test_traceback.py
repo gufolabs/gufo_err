@@ -67,3 +67,40 @@ def test_stdin_module(fmt) -> None:
             err.process()
             output = buffer.getvalue()
     assert "<stdin>" in output
+
+
+def test_frame_bin_op() -> None:
+    x = 1
+    err = Err().setup()
+    try:
+        x + y
+    except NameError:
+        err.process()
+
+
+def test_frame_bin_op2() -> None:
+    x = 1
+    y = "2"
+    err = Err().setup()
+    try:
+        x + y
+    except TypeError:
+        err.process()
+
+
+def test_frame_subscript() -> None:
+    x = [1]
+    err = Err().setup()
+    try:
+        x[2]
+    except IndexError:
+        err.process()
+
+
+def test_frame_subscript2() -> None:
+    x = [1]
+    err = Err().setup()
+    try:
+        x[y]
+    except NameError:
+        err.process()

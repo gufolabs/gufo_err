@@ -246,13 +246,12 @@ def __get_anchor(segment: str, indent: int = 0) -> Optional[Anchor]:
         ):
             right_anchor += 1
         return Anchor(left=left_anchor + indent, right=right_anchor + indent)
-    if isinstance(expr, ast.Subscript):
+    if (
+        isinstance(expr, ast.Subscript)
+        and expr.value.end_col_offset is not None
+        and expr.slice.end_col_offset is not None
+    ):
         # Subscript operation, problem with value
-        if (
-            expr.value.end_col_offset is None
-            or expr.slice.end_col_offset is None
-        ):
-            return None
         return Anchor(
             left=expr.value.end_col_offset + indent,
             right=expr.slice.end_col_offset + indent + 1,
