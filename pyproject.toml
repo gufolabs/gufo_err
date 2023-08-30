@@ -1,7 +1,7 @@
 [build-system]
 build-backend = "setuptools.build_meta"
 requires = [
-  "setuptools>=42",
+  "setuptools>=61.2",
   "wheel",
 ]
 
@@ -104,3 +104,53 @@ max-complexity = 10
   "PLR2004", # Magic value used in comparison, consider replacing {value} with a constant variable
   "PT011", # `pytest.raises(ValueError)` is too broad, set the `match` parameter or use a more specific exception
 ]
+
+[project]
+authors = [{name = "Gufo Labs"}]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "License :: OSI Approved :: BSD License",
+  "Topic :: Software Development",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Operating System :: OS Independent",
+  "Typing :: Typed",
+]
+dynamic = ["version"]
+keywords = ["error"]
+license = {text = "BSD 3-Clause License"}
+name = "gufo_err"
+requires-python = ">=3.8"
+
+[project.readme]
+content-type = "text/markdown"
+file = "README.md"
+
+[project.urls]
+"Bug Tracker" = "https://github.com/gufolabs/gufo_err/issues"
+Changelog = "https://github.com/gufolabs/gufo_err/blob/master/CHANGELOG.md"
+Documentation = "https://docs.gufolabs.com/gufo_err/"
+Homepage = "https://github.com/gufolabs/gufo_err/"
+"Source Code" = "https://github.com/gufolabs/gufo_err/"
+
+[project.optional-dependencies]
+sentry = ["sentry_sdk >= 1.5, < 2.0"]
+
+[tool.setuptools]
+include-package-data = false
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+namespaces = true
+where = ["src"]
+
+[tool.setuptools.package-data]
+"*" = ["py.typed"]
+
+[tool.setuptools.dynamic]
+version = {attr = "gufo.err.__version__"}

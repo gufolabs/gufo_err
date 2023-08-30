@@ -28,6 +28,7 @@ To see unreleased changes, please see the [CHANGELOG on the master branch](https
 * Adopt Ruff
 * Coverage 7.3.0
 * Move `.coveragerc` to `pyproject.toml`
+* Move `setup.cfg` to `pyproject.toml`
 
 ## 0.3.0 - 2022-11-09
 
