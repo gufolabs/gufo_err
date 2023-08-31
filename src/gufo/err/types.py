@@ -93,12 +93,16 @@ class ErrorInfo(object):
     Current execution frame information.
 
     Args:
-        name: Application or service name.
-        version: Application or service version.
+        name: Application or service name, as set by
+            [setup()][gufo.err.Err.setup]
+        version: Application or service version, as set by
+            [setup()][gufo.err.Err.setup]
         fingerprint: Error fingerprint.
         stack: List of `FrameInfo`. Current execution frame is first.
         exception: Exception instance, if caught.
         timestamp: Error timestamp.
+        root_module: Optional root module, as set by
+            [setup()][gufo.err.Err.setup]
     """
 
     name: str
@@ -107,3 +111,4 @@ class ErrorInfo(object):
     stack: List[FrameInfo]
     exception: BaseException
     timestamp: Optional[datetime.datetime] = None
+    root_module: Optional[str] = None

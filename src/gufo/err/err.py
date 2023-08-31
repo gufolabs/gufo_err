@@ -114,6 +114,7 @@ class Err(object):
             fingerprint=fp,
             stack=stack,
             exception=v,
+            root_module=self.__root_module,
         )
         # Process the response
         self.__run_middleware(err_info)

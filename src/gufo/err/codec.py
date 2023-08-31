@@ -120,7 +120,8 @@ def to_dict(info: ErrorInfo) -> Dict[str, Any]:
     }
     if info.timestamp:
         r["timestamp"] = info.timestamp.isoformat()
-    # @todo: stack
+    if info.root_module:
+        r["root_module"] = info.root_module
     return r
 
 
@@ -217,6 +218,7 @@ def from_dict(data: Dict[str, Any]) -> ErrorInfo:
         timestamp=ts,
         stack=stack,
         exception=ExceptionStub(kls=exc["class"], args=exc["args"]),
+        root_module=data.get("root_module"),
     )
 
 
