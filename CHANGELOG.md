@@ -11,6 +11,7 @@ To see unreleased changes, please see the [CHANGELOG on the master branch](https
 ### Added
 
 * `ErrorInfo` got optional `root_module` field.
+* `ErrorInfo.get_top_app_frame()` function.
 * `py.typed` file for PEP-561 compatibility
 * docs: "Supported standards" page
 

@@ -31,6 +31,7 @@ SAMPLE = ErrorInfo(
     fingerprint=uuid.UUID("be8ccd86-3661-434c-8569-40dd65d9860a"),
     exception=RuntimeError("oops"),
     timestamp=datetime.datetime(2022, 3, 22, 7, 21, 29, 215827, tzinfo=TZ),
+    root_module="tests",
     stack=[
         FrameInfo(
             name="test_iter_frames",
@@ -133,6 +134,7 @@ SAMPLE_DICT: Dict[str, Any] = {
     "name": "oops",
     "timestamp": "2022-03-22T07:21:29.215827+01:00",
     "version": "1.0",
+    "root_module": "tests",
     "exception": {"class": "RuntimeError", "args": ["oops"]},
     "stack": [
         {

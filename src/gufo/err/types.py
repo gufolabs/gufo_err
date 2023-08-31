@@ -112,3 +112,26 @@ class ErrorInfo(object):
     exception: BaseException
     timestamp: Optional[datetime.datetime] = None
     root_module: Optional[str] = None
+
+    def get_app_top_frame(self: "ErrorInfo") -> Optional[FrameInfo]:
+        """
+        Get application's top stack frame.
+
+        Find top stack frame belonging to the application,
+        if `root_module` is set, or return stack top otherwise.
+
+        Returns:
+            * [FrameInfo][gufo.err.FrameInfo] if the stack is not empty.
+            * None otherwise.
+        """
+        if not self.stack:
+            return None
+        if self.root_module:
+            prefix = f"{self.root_module}."
+            for frame in self.stack:
+                if frame.module and (
+                    frame.module == self.root_module
+                    or frame.module.startswith(prefix)
+                ):
+                    return frame
+        return self.stack[0]
