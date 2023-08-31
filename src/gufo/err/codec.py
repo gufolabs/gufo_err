@@ -17,6 +17,92 @@ CODEC_TYPE = "errorinfo"
 CURRENT_VERSION = "1.0"
 
 
+def __q_x_class(e: BaseException) -> str:
+    """
+    Get exception class.
+
+    Args:
+        e: Exception instance
+
+    Returns:
+        Serialized exception class name
+    """
+    mod = e.__class__.__module__
+    ncls = e.__class__.__name__
+    if mod == "builtins":
+        return ncls
+    return f"{mod}.{ncls}"
+
+
+def __q_var(x: Any) -> Union[str, int, float]:  # noqa: ANN401
+    """
+    Convert variable to the JSON-encodable form.
+
+    Args:
+        x: Exception argument
+
+    Returns:
+        JSON-serializeable form of argument
+    """
+    if isinstance(x, (int, float, str)):
+        return x
+    return str(x)
+
+
+def __q_frame_info(fi: FrameInfo) -> Dict[str, Any]:
+    """
+    Convert FrameInfo into JSON-serializeable form.
+
+    Args:
+        fi: FrameInfo instance
+
+    Returns:
+        Serialized dict
+    """
+    r = {
+        "name": fi.name,
+        "module": fi.module,
+        "locals": {x: __q_var(y) for x, y in fi.locals.items()},
+    }
+    if fi.source:
+        r["source"] = __q_source(fi.source)
+    return r
+
+
+def __q_source(si: SourceInfo) -> Dict[str, Any]:
+    """
+    Convert SourceInfo into JSON-serializeable form.
+
+    Args:
+        si: SourceInfo instance
+
+    Returns:
+        Serialized dict
+    """
+    return {
+        "file_name": si.file_name,
+        "first_line": si.first_line,
+        "current_line": si.current_line,
+        "lines": si.lines,
+    }
+
+
+def __q_exception(e: BaseException) -> Dict[str, Any]:
+    """
+    Convery exception into JSON-serializeable form.
+
+    Args:
+        e: BaseException instance
+
+    Returns:
+        Serialized dict
+    """
+    return {
+        "class": __q_x_class(e),
+        "args": [__q_var(x) for x in e.args],
+    }
+
+
 def to_dict(info: ErrorInfo) -> Dict[str, Any]:
     """
     Serialize ErrorInfo to a dict of primitive types.
@@ -27,96 +113,14 @@ def to_dict(info: ErrorInfo) -> Dict[str, Any]:
     Returns:
         Dict of primitive types (str, int, float).
     """
-
-    def q_x_class(e: BaseException) -> str:
-        """
-        Get exception class.
-
-        Args:
-            e: Exception instance
-
-        Returns:
-            Serialized exception class name
-        """
-        mod = e.__class__.__module__
-        ncls = e.__class__.__name__
-        if mod == "builtins":
-            return ncls
-        return f"{mod}.{ncls}"
-
-    def q_var(x: Any) -> Union[str, int, float]:  # noqa: ANN401
-        """
-        Convert variable to the JSON-encodable form.
-
-        Args:
-            x: Exception argument
-
-        Returns:
-            JSON-serializeable form of argument
-        """
-        if isinstance(x, (int, float, str)):
-            return x
-        return str(x)
-
-    def q_frame_info(fi: FrameInfo) -> Dict[str, Any]:
-        """
-        Convert FrameInfo into JSON-serializeable form.
-
-        Args:
-            fi: FrameInfo instance
-
-        Returns:
-            Serialized dict
-        """
-        r = {
-            "name": fi.name,
-            "module": fi.module,
-            "locals": {x: q_var(y) for x, y in fi.locals.items()},
-        }
-        if fi.source:
-            r["source"] = q_source(fi.source)
-        return r
-
-    def q_source(si: SourceInfo) -> Dict[str, Any]:
-        """
-        Convert SourceInfo into JSON-serializeable form.
-
-        Args:
-            si: SourceInfo instance
-
-        Returns:
-            Serialized dict
-        """
-        return {
-            "file_name": si.file_name,
-            "first_line": si.first_line,
-            "current_line": si.current_line,
-            "lines": si.lines,
-        }
-
-    def q_exception(e: BaseException) -> Dict[str, Any]:
-        """
-        Convery exception into JSON-serializeable form.
-
-        Args:
-            e: BaseException instance
-
-        Returns:
-            Serialized dict
-        """
-        return {
-            "class": q_x_class(e),
-            "args": [q_var(x) for x in e.args],
-        }
-
     r = {
         "$type": CODEC_TYPE,
         "$version": CURRENT_VERSION,
         "name": info.name,
         "version": info.version,
         "fingerprint": str(info.fingerprint),
-        "exception": q_exception(info.exception),
-        "stack": [q_frame_info(x) for x in info.stack],
+        "exception": __q_exception(info.exception),
+        "stack": [__q_frame_info(x) for x in info.stack],
     }
     if info.timestamp:
         r["timestamp"] = info.timestamp.isoformat()
