@@ -26,4 +26,4 @@ from .types import (
     SourceInfo,
 )
 
-__version__: str = "0.3.0"
+__version__: str = "0.4.0"
