@@ -9,8 +9,7 @@ from abc import ABC, abstractmethod
 from typing import Iterable
 
 # GufoLabs modules
-from ..codec import ExceptionStub
-from ..types import CodePosition, ErrorInfo, FrameInfo
+from ..types import CodePosition, ErrorInfo, ExceptionStub, FrameInfo
 
 DEFAULT_PRIMARY_CHAR = "~"
 DEFAULT_SECONDARY_CHAR = "^"
@@ -128,7 +127,7 @@ class BaseFormatter(ABC):
         return f"{leading}{prolog}{middle}{epilog}"
 
     @staticmethod
-    def get_exception_summary(x: Exception) -> str:
+    def get_exception_summary(x: BaseException) -> str:
         """
         Format exception to summary string.
 
@@ -139,7 +138,7 @@ class BaseFormatter(ABC):
             Formatted string
         """
         # Class name
-        if x.__class__ is ExceptionStub:
+        if isinstance(x, ExceptionStub):
             cls_name = x.kls
             info = str(x.args[0]) if x.args else ""
         else:

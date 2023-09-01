@@ -8,7 +8,7 @@
 # Python modules
 import datetime
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 from uuid import UUID
 
 
@@ -135,3 +135,30 @@ class ErrorInfo(object):
                 ):
                     return frame
         return self.stack[0]
+
+
+class ExceptionStub(Exception):
+    """
+    Stub to deserialized exceptions.
+
+    Args:
+        kls: Exception class name
+        args: Exception arguments
+    """
+
+    def __init__(
+        self: "ExceptionStub", kls: str, args: Tuple[Any, ...]
+    ) -> None:
+        self.kls = kls
+        self.args = args
+
+    def __str__(self: "ExceptionStub") -> str:
+        """
+        Format exception to string.
+
+        Returns:
+            Formatted string.
+        """
+        if not self.args:
+            return self.kls
+        return f"{self.kls}: {self.args[0]}"

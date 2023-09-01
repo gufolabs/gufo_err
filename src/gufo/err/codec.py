@@ -8,10 +8,10 @@
 import datetime
 import json
 import uuid
-from typing import Any, Dict, Tuple, Union
+from typing import Any, Dict, Union
 
 # Gufo Labs modules
-from .types import ErrorInfo, FrameInfo, SourceInfo
+from .types import ErrorInfo, ExceptionStub, FrameInfo, SourceInfo
 
 CODEC_TYPE = "errorinfo"
 CURRENT_VERSION = "1.0"
@@ -240,30 +240,3 @@ def from_json(data: str) -> ErrorInfo:
         ValueError: if required key is missed.
     """
     return from_dict(json.loads(data))
-
-
-class ExceptionStub(Exception):
-    """
-    Stub to deserialized exceptions.
-
-    Args:
-        kls: Exception class name
-        args: Exception arguments
-    """
-
-    def __init__(
-        self: "ExceptionStub", kls: str, args: Tuple[Any, ...]
-    ) -> None:
-        self.kls = kls
-        self.args = args
-
-    def __str__(self: "ExceptionStub") -> str:
-        """
-        Format exception to string.
-
-        Returns:
-            Formatted string.
-        """
-        if not self.args:
-            return self.kls
-        return f"{self.kls}: {self.args[0]}"
