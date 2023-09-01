@@ -131,6 +131,9 @@ requires-python = ">=3.8"
 content-type = "text/markdown"
 file = "README.md"
 
+[project.scripts]
+err = "gufo.err.cli:main"
+
 [project.urls]
 "Bug Tracker" = "https://github.com/gufolabs/gufo_err/issues"
 Changelog = "https://github.com/gufolabs/gufo_err/blob/master/CHANGELOG.md"

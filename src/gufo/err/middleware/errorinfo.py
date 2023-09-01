@@ -20,6 +20,8 @@ class ErrorInfoMiddleware(BaseMiddleware):
     """
     Dump error to JSON file.
 
+    Use `err` tool to manipulate collected files.
+
     Args:
         path: Path to directory to write error info.
         compress: Compression algorithm. One of:

@@ -15,6 +15,9 @@ nav:
       - Extended Trace: examples/globalextend.md
       - Process the Exception: examples/process.md
       - Fail-fast: examples/failfast.md
+  - Man Pages:
+      - Overview: man/index.md
+      - err: man/err.md
   - Reference: reference/
   - Developers' Guide:
       - Developer's Environment: environment.md

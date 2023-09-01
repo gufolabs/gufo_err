@@ -10,6 +10,7 @@ To see unreleased changes, please see the [CHANGELOG on the master branch](https
 
 ### Added
 
+* `err` command-line tool.
 * `BaseFormatter` abstract base class.
 * `TerseFormatter` and `ExtendFormatter` formatters.
 * `ErrorInfo` got optional `root_module` field.
