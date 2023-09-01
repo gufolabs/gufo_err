@@ -31,6 +31,7 @@ To see unreleased changes, please see the [CHANGELOG on the master branch](https
 * CI workflows tests
 * Adopt Ruff
 * Coverage 7.3.0
+* mypy 1.5.1
 * Move `.coveragerc` to `pyproject.toml`
 * Move `setup.cfg` to `pyproject.toml`
 
