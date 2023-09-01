@@ -256,3 +256,14 @@ class ExceptionStub(Exception):
     ) -> None:
         self.kls = kls
         self.args = args
+
+    def __str__(self: "ExceptionStub") -> str:
+        """
+        Format exception to string.
+
+        Returns:
+            Formatted string.
+        """
+        if not self.args:
+            return self.kls
+        return f"{self.kls}: {self.args[0]}"
