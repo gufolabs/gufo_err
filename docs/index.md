@@ -1,7 +1,14 @@
-# Gufo Err Documentation
-
-*Gufo Err* is the flexible and robust python error handling framework.
-
+---
+template: index.html
+hide:
+    - navigation
+    - toc
+hero:
+    title: Gufo Err
+    subtitle: The flexible and robust python error handling framework
+    install_button: Getting Started
+    source_button: Source Code
+---
 ## Python Error Handling
 
 Errors are in human nature - so any modern software may face errors. 
@@ -20,7 +27,7 @@ Proper error handling consists of the stages:
 
 Gufo Err is the final solution for Python exception handling and introduces the middleware-based approach. Middleware uses clean API for stack frame analysis and source code extraction.
 
-## Virtues
+## Features
 
 * Clean API to extract execution frames.
 * Global Python exception hook.
@@ -29,8 +36,8 @@ Gufo Err is the final solution for Python exception handling and introduces the 
 * Configurable fail-fast behavior.
 * Configurable error-reporting formats.
 * Error fingerprinting.
-* Traceback serialization.
-* CLI tool for tracebacks analysis.
+* Traceback serialization/deserialization.
+* [CLI tool](man/err.md) for tracebacks analysis.
 * Seamless [Sentry][Sentry] integration.
 
 ## On Gufo Stack

@@ -1,3 +1,7 @@
+---
+hide:
+    - navigation
+---
 # Installation
 
 Install with the pip
@@ -9,7 +13,7 @@ $ pip install gufo_err
 To enable [Sentry][Sentry] support:
 
 ```
-$ pip innstall gufo_err[sentry]
+$ pip install gufo_err[sentry]
 ```
 
 ## Checking the Installation
