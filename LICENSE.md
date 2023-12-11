@@ -1,7 +1,6 @@
 ---
 hide:
     - navigation
-    - toc
 ---
 Copyright &copy; 2022-2023, Gufo Labs.
 All rights reserved.
