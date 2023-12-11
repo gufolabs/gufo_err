@@ -12,9 +12,14 @@ To see unreleased changes, please see the [CHANGELOG on the master branch](https
 
 # [Unreleased]
 
+### Added
+
+* Python 3.12 tests.
+
 ### Changed
 
-* docs: Fancy home page
+* docs: Fancy home page.
+* devcontainer: Use Python 3.12.
 
 ## 0.4.0 - 2023-09-01
 
