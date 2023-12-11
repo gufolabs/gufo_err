@@ -2,7 +2,7 @@
 
 *Gufo Err is the flexible and robust python error handling framework.*.
 
-[![PyPi version](https://img.shields.io/pypi/v/gufo_err.svg)](https://pypi.python.org/pypi/gufo_loader/)
+[![PyPi version](https://img.shields.io/pypi/v/gufo_err.svg)](https://pypi.python.org/pypi/gufo_err/)
 ![Python Versions](https://img.shields.io/pypi/pyversions/gufo_err)
 [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 ![Build](https://img.shields.io/github/actions/workflow/status/gufolabs/gufo_err/py-tests.yml?branch=master)
