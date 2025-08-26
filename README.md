@@ -46,6 +46,7 @@ Gufo Err is the final solution for Python exception handling and introduces the 
 * Traceback serialization.
 * CLI tool for tracebacks analysis.
 * Seamless [Sentry][Sentry] integration.
+* Built with security in mind.
 
 ## On Gufo Stack
 
