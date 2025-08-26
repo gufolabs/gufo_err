@@ -14,8 +14,7 @@ from uuid import UUID
 
 @dataclass
 class Anchor(object):
-    """
-    Exact problem position (Python 3.11+).
+    """Exact problem position (Python 3.11+).
 
     Denotes operator of subscript which causes the problem.
 
@@ -30,8 +29,7 @@ class Anchor(object):
 
 @dataclass
 class CodePosition(object):
-    """
-    Exact code position for Python 3.11+.
+    """Exact code position for Python 3.11+.
 
     Args:
         start_line: First line of code
@@ -50,8 +48,7 @@ class CodePosition(object):
 
 @dataclass
 class SourceInfo(object):
-    """
-    Source context for frame.
+    """Source context for frame.
 
     Args:
         file_name: Normalized file name.
@@ -70,8 +67,7 @@ class SourceInfo(object):
 
 @dataclass
 class FrameInfo(object):
-    """
-    Execution frame.
+    """Execution frame.
 
     Args:
         name: Current callable name.
@@ -89,8 +85,7 @@ class FrameInfo(object):
 
 @dataclass
 class ErrorInfo(object):
-    """
-    Current execution frame information.
+    """Current execution frame information.
 
     Args:
         name: Application or service name, as set by
@@ -114,8 +109,7 @@ class ErrorInfo(object):
     root_module: Optional[str] = None
 
     def get_app_top_frame(self: "ErrorInfo") -> Optional[FrameInfo]:
-        """
-        Get application's top stack frame.
+        """Get application's top stack frame.
 
         Find top stack frame belonging to the application,
         if `root_module` is set, or return stack top otherwise.
@@ -138,8 +132,7 @@ class ErrorInfo(object):
 
 
 class ExceptionStub(Exception):
-    """
-    Stub to deserialized exceptions.
+    """Stub to deserialized exceptions.
 
     Args:
         kls: Exception class name
@@ -153,8 +146,7 @@ class ExceptionStub(Exception):
         self.args = args
 
     def __str__(self: "ExceptionStub") -> str:
-        """
-        Format exception to string.
+        """Format exception to string.
 
         Returns:
             Formatted string.

@@ -4,6 +4,7 @@
 # Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
 """get_formatter implementation."""
+
 # Gufo Err modules
 from ..abc.formatter import (
     DEFAULT_PRIMARY_CHAR,
@@ -18,8 +19,7 @@ def get_formatter(
     primary_char: str = DEFAULT_PRIMARY_CHAR,
     secondary_char: str = DEFAULT_SECONDARY_CHAR,
 ) -> BaseFormatter:
-    """
-    Configure and return formatter instance.
+    """Configure and return formatter instance.
 
     Args:
         format: Formatter name, one of:

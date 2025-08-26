@@ -3,8 +3,7 @@
 # ---------------------------------------------------------------------
 # Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
-"""
-Middleware handlers.
+"""Middleware handlers.
 
 Configured middleware handlers are launched on every unhandled exception
 and allows to customize an error processing. See

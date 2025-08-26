@@ -3,8 +3,7 @@
 # ---------------------------------------------------------------------
 # Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
-"""
-Abstract base classes to be used to extend the functionality.
+"""Abstract base classes to be used to extend the functionality.
 
 * [FailFast][gufo.err.abc.failfast.BaseFailFast]:
   Fail-fast processing.

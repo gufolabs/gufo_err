@@ -55,8 +55,7 @@ def test_source_from_loader_miss(loader: InspectLoader) -> None:
 
 
 def test_source_from_broken_loader() -> None:
-    class BrokenLoader(object):
-        ...
+    class BrokenLoader(object): ...
 
     assert __source_from_loader(BrokenLoader(), "invalidmodule") is None
 

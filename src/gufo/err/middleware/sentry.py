@@ -4,6 +4,7 @@
 # Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
 """Sentry integration middleware."""
+
 # Python modules
 from contextlib import contextmanager
 from contextvars import ContextVar
@@ -21,8 +22,7 @@ _current_err = ContextVar[Optional[ErrorInfo]]("current_err", default=None)
 
 @contextmanager
 def _err_context(info: ErrorInfo) -> Generator[None, None, None]:
-    """
-    Context manager to set `__current_err` context variable.
+    """Context manager to set `__current_err` context variable.
 
     Set __current_err context variable with error info
     and remove it on exit.
@@ -33,8 +33,7 @@ def _err_context(info: ErrorInfo) -> Generator[None, None, None]:
 
 
 class SentryMiddleware(BaseMiddleware):
-    """
-    [Sentry](https://sentry.io/) integration.
+    """[Sentry](https://sentry.io/) integration.
 
     `SentryMiddleware` is the wrapper around sentry_sdk
     to seamless integration into Gufo Err.
@@ -84,7 +83,7 @@ class SentryMiddleware(BaseMiddleware):
             debug=debug,
             release=release,
             before_send=self.__before_send,
-            **kwargs  # type: ignore
+            **kwargs,  # type: ignore
             # shutdown_timeout=config.sentry.shutdown_timeout,
             # release=version.version,
             # max_breadcrumbs=config.sentry.max_breadcrumbs,
@@ -95,8 +94,7 @@ class SentryMiddleware(BaseMiddleware):
     def __before_send(
         self: "SentryMiddleware", event: Dict[str, Any], hint: Dict[str, Any]
     ) -> Optional[Dict[str, Any]]:
-        """
-        Enrich event with user-defined information and fingerprint.
+        """Enrich event with user-defined information and fingerprint.
 
         Call user-defined `before_send` and add additional
         fingerprint information.
@@ -128,8 +126,7 @@ class SentryMiddleware(BaseMiddleware):
         return event
 
     def process(self: "SentryMiddleware", info: ErrorInfo) -> None:
-        """
-        Middleware entrypoint.
+        """Middleware entrypoint.
 
         Args:
             info: ErrorInfo instance.

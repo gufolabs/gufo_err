@@ -4,6 +4,7 @@
 # Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
 """FrameInfo structure."""
+
 # Python modules
 import ast
 import sys
@@ -20,8 +21,7 @@ PY_3_11 = (3, 11)
 
 
 def exc_traceback() -> TracebackType:
-    """
-    Cast type to `sys.exc_info()`.
+    """Cast type to `sys.exc_info()`.
 
     Extract and return top-level excecution frame
     from current exception context.
@@ -35,8 +35,7 @@ def exc_traceback() -> TracebackType:
 def iter_frames(
     tb: TracebackType, context_lines: int = 7
 ) -> Iterable[FrameInfo]:
-    """
-    Iterate over traceback frames.
+    """Iterate over traceback frames.
 
     Args:
         tb: current execution frame.
@@ -120,7 +119,6 @@ def __get_source_info(
     lines = src.splitlines()  # @todo: Implement sliding line iterator
     # Extract current code position
     code_position = __get_code_position(code, inst_index, lines[line_no - 1])
-    #
     if code_position:
         # Exact locations
         first_line = max(1, code_position.start_line - context_lines)
@@ -128,7 +126,6 @@ def __get_source_info(
     else:
         first_line = max(1, line_no - context_lines)
         last_line = line_no + context_lines
-    #
     return SourceInfo(
         file_name=file_name or module_name or "",
         first_line=first_line,
@@ -139,8 +136,7 @@ def __get_source_info(
 
 
 def __has_code_position() -> bool:
-    """
-    Check if python supports exact code positions.
+    """Check if python supports exact code positions.
 
     Returns:
         * True - if python 3.11+ and PYTHONNODEBUGRANGES is not set.
@@ -163,8 +159,7 @@ HAS_CODE_POSITION = __has_code_position()
 def __get_code_position(
     code: CodeType, inst_index: int, line: str
 ) -> Optional[CodePosition]:
-    """
-    Extract code range for current instruction.
+    """Extract code range for current instruction.
 
     Args:
         code: Code object
@@ -203,8 +198,7 @@ def __get_code_position(
 
 
 def __get_anchor(segment: str, indent: int = 0) -> Optional[Anchor]:
-    """
-    Split code segment and try to get error anchors.
+    """Split code segment and try to get error anchors.
 
     Backport from Python 3.11
     `_extract_caret_anchors_from_line_segment`.

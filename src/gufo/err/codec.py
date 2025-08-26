@@ -4,6 +4,7 @@
 # Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
 """ErrInfo serialization/deserialization primitives."""
+
 # Python modules
 import datetime
 import json
@@ -18,8 +19,7 @@ CURRENT_VERSION = "1.0"
 
 
 def __q_x_class(e: BaseException) -> str:
-    """
-    Get exception class.
+    """Get exception class.
 
     Args:
         e: Exception instance
@@ -35,8 +35,7 @@ def __q_x_class(e: BaseException) -> str:
 
 
 def __q_var(x: Any) -> Union[str, int, float]:  # noqa: ANN401
-    """
-    Convert variable to the JSON-encodable form.
+    """Convert variable to the JSON-encodable form.
 
     Args:
         x: Exception argument
@@ -50,8 +49,7 @@ def __q_var(x: Any) -> Union[str, int, float]:  # noqa: ANN401
 
 
 def __q_frame_info(fi: FrameInfo) -> Dict[str, Any]:
-    """
-    Convert FrameInfo into JSON-serializeable form.
+    """Convert FrameInfo into JSON-serializeable form.
 
     Args:
         fi: FrameInfo instance
@@ -70,8 +68,7 @@ def __q_frame_info(fi: FrameInfo) -> Dict[str, Any]:
 
 
 def __q_source(si: SourceInfo) -> Dict[str, Any]:
-    """
-    Convert SourceInfo into JSON-serializeable form.
+    """Convert SourceInfo into JSON-serializeable form.
 
     Args:
         si: SourceInfo instance
@@ -88,8 +85,7 @@ def __q_source(si: SourceInfo) -> Dict[str, Any]:
 
 
 def __q_exception(e: BaseException) -> Dict[str, Any]:
-    """
-    Convery exception into JSON-serializeable form.
+    """Convery exception into JSON-serializeable form.
 
     Args:
         e: BaseException instance
@@ -104,8 +100,7 @@ def __q_exception(e: BaseException) -> Dict[str, Any]:
 
 
 def to_dict(info: ErrorInfo) -> Dict[str, Any]:
-    """
-    Serialize ErrorInfo to a dict of primitive types.
+    """Serialize ErrorInfo to a dict of primitive types.
 
     Args:
         info: ErrorInfo instance.
@@ -130,8 +125,7 @@ def to_dict(info: ErrorInfo) -> Dict[str, Any]:
 
 
 def to_json(info: ErrorInfo) -> str:
-    """
-    Serialize ErrorInfo to JSON string.
+    """Serialize ErrorInfo to JSON string.
 
     Args:
         info: ErrorInfo instance.
@@ -143,8 +137,7 @@ def to_json(info: ErrorInfo) -> str:
 
 
 def from_dict(data: Dict[str, Any]) -> ErrorInfo:
-    """
-    Deserealize Dict to ErrorInfo.
+    """Deserealize Dict to ErrorInfo.
 
     Args:
         data: Result of to_dict
@@ -157,8 +150,7 @@ def from_dict(data: Dict[str, Any]) -> ErrorInfo:
     """
 
     def get(d: Dict[str, Any], name: str) -> Any:  # noqa: ANN401
-        """
-        Get the key's value from the dictionary.
+        """Get the key's value from the dictionary.
 
         Args:
             d: Data dictionary
@@ -170,7 +162,7 @@ def from_dict(data: Dict[str, Any]) -> ErrorInfo:
         Raises:
             ValueError if key is missed.
         """
-        x = d.get(name, None)
+        x = d.get(name)
         if x is None:
             msg = f"{name} is required"
             raise ValueError(msg)
@@ -227,8 +219,7 @@ def from_dict(data: Dict[str, Any]) -> ErrorInfo:
 
 
 def from_json(data: str) -> ErrorInfo:
-    """
-    Deserialize ErrorInfo from JSON string.
+    """Deserialize ErrorInfo from JSON string.
 
     Args:
         data: JSON string

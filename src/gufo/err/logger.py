@@ -4,6 +4,7 @@
 # Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
 """Define gufo.err logger."""
+
 # Python modules
 import logging
 

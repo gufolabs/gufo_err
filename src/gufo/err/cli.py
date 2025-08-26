@@ -27,8 +27,7 @@ from .types import ErrorInfo
 
 @dataclass
 class ListItem(object):
-    """
-    Data structure for `err list`.
+    """Data structure for `err list`.
 
     Attributes:
         fingerprint: Stringified fingerprint.
@@ -46,8 +45,7 @@ class ListItem(object):
 
 
 class ExitCode(IntEnum):
-    """
-    Cli exit codes.
+    """Cli exit codes.
 
     Attributes:
         OK: Successful exit
@@ -75,8 +73,7 @@ class Cli(object):
     )
 
     def handle_version(self: "Cli", _ns: argparse.Namespace) -> ExitCode:
-        """
-        Print Gufo Err version.
+        """Print Gufo Err version.
 
         Args:
             _ns: Options namespace, ignored.
@@ -89,8 +86,7 @@ class Cli(object):
 
     @staticmethod
     def col(t: str, width: int) -> str:
-        """
-        Format text to column.
+        """Format text to column.
 
         Enlarge with spaces, when necessary.
         Cut if too long.
@@ -120,8 +116,7 @@ class Cli(object):
 
     @staticmethod
     def rcol(t: str, width: int) -> str:
-        """
-        Format text to column aligned to the range.
+        """Format text to column aligned to the range.
 
         Enlarge with spaces, when necessary.
         Cut if too long.
@@ -151,8 +146,7 @@ class Cli(object):
 
     @staticmethod
     def __check_dir(path: str) -> ExitCode:
-        """
-        Check if directory exists and accessible.
+        """Check if directory exists and accessible.
 
         Args:
             path: Directory path
@@ -173,8 +167,7 @@ class Cli(object):
         return ExitCode.OK
 
     def handle_list(self: "Cli", ns: argparse.Namespace) -> ExitCode:
-        """
-        Show the list of the registered errors.
+        """Show the list of the registered errors.
 
         Args:
             ns: argsparse.Namespace with fields:
@@ -219,7 +212,6 @@ class Cli(object):
                 place = f"{top.source.file_name}:{top.source.current_line}"
             else:
                 place = "unknown"
-            #
             r.append(
                 ListItem(
                     fingerprint=str(info.fingerprint),
@@ -276,8 +268,7 @@ class Cli(object):
 
     @staticmethod
     def iter_fingerprints(items: List[str], prefix: str) -> Iterable[str]:
-        """
-        Resolve fingerprint expressions and iterate result.
+        """Resolve fingerprint expressions and iterate result.
 
         Fingerprint expressions is a list user-defined expressions
         passed via command line. Each item may be:
@@ -309,8 +300,7 @@ class Cli(object):
                     yield fp
 
         def iter_resolve(expr: str) -> Iterable[str]:
-            """
-            Resolve single expression.
+            """Resolve single expression.
 
             Args:
                 expr: Expression
@@ -334,8 +324,7 @@ class Cli(object):
 
     @staticmethod
     def get_index(prefix: str) -> Dict[str, str]:
-        """
-        Get fingerprint index.
+        """Get fingerprint index.
 
         Args:
             prefix: Error Info directory prefix
@@ -346,8 +335,7 @@ class Cli(object):
         return {fn.split(".")[0]: fn for fn in os.listdir(prefix)}
 
     def handle_view(self: "Cli", ns: argparse.Namespace) -> ExitCode:
-        """
-        Show the details of the selected errors.
+        """Show the details of the selected errors.
 
         Args:
             ns: argsparse.Namespace with fields:
@@ -372,7 +360,6 @@ class Cli(object):
                 "Must be one of: terse, extend"
             )
             return ExitCode.INVALID_ARGS
-        #
         prefix = ns.prefix
         # Check if the directory exists
         code = self.__check_dir(prefix)
@@ -388,7 +375,6 @@ class Cli(object):
             return ExitCode.SYNTAX
         # List all files
         index = self.get_index(prefix)
-        #
         faults = 0
         for fp in fingerprints:
             path = index.get(fp)
@@ -405,8 +391,7 @@ class Cli(object):
         return ExitCode.OK if not faults else ExitCode.CANNOT_READ
 
     def handle_clear(self: "Cli", ns: argparse.Namespace) -> ExitCode:
-        """
-        Clear selected errors.
+        """Clear selected errors.
 
         Args:
             ns: argsparse.Namespace with fields:
@@ -417,7 +402,6 @@ class Cli(object):
         Returns:
             Exit code.
         """
-        #
         prefix = ns.prefix
         # Check if the directory exists
         code = self.__check_dir(prefix)
@@ -433,7 +417,6 @@ class Cli(object):
             return ExitCode.SYNTAX
         # List all files
         index = self.get_index(prefix)
-        #
         faults = 0
         for fp in fingerprints:
             path = index.get(fp)
@@ -451,8 +434,7 @@ class Cli(object):
 
     @staticmethod
     def read_info(path: str) -> Optional[ErrorInfo]:
-        """
-        Read error info file.
+        """Read error info file.
 
         Args:
             path: JSON file path
@@ -474,8 +456,7 @@ class Cli(object):
     def get_handler(
         self: "Cli", name: str
     ) -> Callable[[argparse.Namespace], ExitCode]:
-        """
-        Get handler for command.
+        """Get handler for command.
 
         Return the handler for furher command processing.
 
@@ -492,8 +473,7 @@ class Cli(object):
         return h
 
     def run(self: "Cli", args: List[str]) -> ExitCode:
-        """
-        Main dispatcher function.
+        """Main dispatcher function.
 
         Args:
             args: List of command-line arguments.

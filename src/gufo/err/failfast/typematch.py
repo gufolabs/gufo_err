@@ -4,6 +4,7 @@
 # Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
 """TypeMatchFailFast."""
+
 # Python modules
 from types import TracebackType
 from typing import Dict, Optional, Type, Union
@@ -14,8 +15,7 @@ from ..logger import logger
 
 
 class TypeMatchFailFast(BaseFailFast):
-    """
-    Fail-fast on the given exception types and optional substrings.
+    """Fail-fast on the given exception types and optional substrings.
 
     Args:
         exc:
@@ -80,8 +80,7 @@ class TypeMatchFailFast(BaseFailFast):
         match: Optional[str] = None,
         msg: Optional[str] = None,
     ) -> "TypeMatchFailFast":
-        """
-        Add new exception type for the fail-fast.
+        """Add new exception type for the fail-fast.
 
         Args:
             exc: Exception type or string in form "module.name".
@@ -114,8 +113,7 @@ class TypeMatchFailFast(BaseFailFast):
 
     @staticmethod
     def __exc_to_str(t: Type[BaseException]) -> str:
-        """
-        Convert exception instance to string class name.
+        """Convert exception instance to string class name.
 
         Args:
             t: Exception type
@@ -131,8 +129,7 @@ class TypeMatchFailFast(BaseFailFast):
         v: BaseException,
         tb: TracebackType,
     ) -> bool:
-        """
-        Check if the proceess must die quickly.
+        """Check if the proceess must die quickly.
 
         Check if exception class matches given substrings.
         """

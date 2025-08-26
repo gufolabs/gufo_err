@@ -10,6 +10,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 To see unreleased changes, please see the [CHANGELOG on the master branch](https://github.com/gufolabs/gufo_err/blob/master/CHANGELOG.md) guide.
 
+## [Unreleased]
+
+### Infrastructure
+
+* Move requirements to pyproject.toml
+* Move to ruff formatter from black
+* mkdocs-material 9.5.44
+* mypy 1.13.0
+* ruff 0.11.2
+* pytest 8.3.3
+
 ## 0.4.1 - 2023-12-11
 
 ### Added

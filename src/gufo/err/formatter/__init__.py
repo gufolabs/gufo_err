@@ -3,8 +3,7 @@
 # ---------------------------------------------------------------------
 # Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
-"""
-ErrInfo formatters.
+"""ErrInfo formatters.
 
 Formatters process [ErrorInfo][gufo.err.ErrorInfo]
 structure and produces human-readable output.

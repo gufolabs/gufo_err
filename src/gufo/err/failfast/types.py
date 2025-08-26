@@ -4,6 +4,7 @@
 # Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
 """TypesFailFast."""
+
 # Python modules
 from types import TracebackType
 from typing import Iterable, Type
@@ -13,8 +14,7 @@ from ..abc.failfast import BaseFailFast
 
 
 class TypesFailFast(BaseFailFast):
-    """
-    Fail-fast on the given list of exception types.
+    """Fail-fast on the given list of exception types.
 
     Args:
         types: Iterable of exception types.
@@ -40,8 +40,7 @@ class TypesFailFast(BaseFailFast):
         v: BaseException,
         tb: TracebackType,
     ) -> bool:
-        """
-        Check if the process must die quickly.
+        """Check if the process must die quickly.
 
         Returns true if the exception type is one of the given types.
         """

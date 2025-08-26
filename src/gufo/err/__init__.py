@@ -3,8 +3,7 @@
 # ---------------------------------------------------------------------
 # Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
-"""
-Human-readable error reporting.
+"""Human-readable error reporting.
 
 Attributes:
     __version__: Current version.

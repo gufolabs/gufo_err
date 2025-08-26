@@ -4,6 +4,7 @@
 # Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
 """ExtendFormatter."""
+
 # Python modules
 from pprint import pformat
 from typing import Iterable, Tuple
@@ -14,8 +15,7 @@ from ..types import ErrorInfo, FrameInfo
 
 
 class ExtendFormatter(BaseFormatter):
-    """
-    Extended output.
+    """Extended output.
 
     Produces extended output with code surroundings
     and variable values.
@@ -25,8 +25,7 @@ class ExtendFormatter(BaseFormatter):
     MAX_VAR_LEN = 72
 
     def iter_format(self: "ExtendFormatter", err: ErrorInfo) -> Iterable[str]:
-        """
-        Iterator yielding human-redable lines.
+        """Iterator yielding human-redable lines.
 
         Process ErrorInfo instance and yield humar-readable
         lines one-by-one.
@@ -73,8 +72,7 @@ class ExtendFormatter(BaseFormatter):
     def iter_vars(
         self: "ExtendFormatter", fi: FrameInfo
     ) -> Iterable[Tuple[str, str]]:
-        """
-        Iterate frame variables and convert them to the readable form.
+        """Iterate frame variables and convert them to the readable form.
 
         Args:
             fi: FrameInfo instance

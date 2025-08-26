@@ -4,6 +4,7 @@
 # Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
 """ErrorInfo middleware."""
+
 # Python modules
 import os
 from typing import Optional
@@ -17,8 +18,7 @@ from ..types import ErrorInfo
 
 
 class ErrorInfoMiddleware(BaseMiddleware):
-    """
-    Dump error to JSON file.
+    """Dump error to JSON file.
 
     Use `err` tool to manipulate collected files.
 
@@ -55,8 +55,7 @@ class ErrorInfoMiddleware(BaseMiddleware):
         self.compressor = Compressor(format=compress)
 
     def process(self: "ErrorInfoMiddleware", info: ErrorInfo) -> None:
-        """
-        Middleware entrypoing.
+        """Middleware entrypoing.
 
         Args:
             info: ErrorInfo instance.

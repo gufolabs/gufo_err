@@ -13,8 +13,7 @@ from ..types import ErrorInfo
 
 
 class TracebackMiddleware(BaseMiddleware):
-    """
-    Dump traceback to the `gufo.err` logger.
+    """Dump traceback to the `gufo.err` logger.
 
     Args:
         format: dumping format, one of `terse`, `extend`.
@@ -74,8 +73,7 @@ class TracebackMiddleware(BaseMiddleware):
         )
 
     def process(self: "TracebackMiddleware", info: ErrorInfo) -> None:
-        """
-        Middleware entrypoint.
+        """Middleware entrypoint.
 
         Dumps stack info error log with given stack format.
 

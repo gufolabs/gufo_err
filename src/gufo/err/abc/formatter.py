@@ -4,6 +4,7 @@
 # Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
 """BaseFormatter class."""
+
 # Python modules
 from abc import ABC, abstractmethod
 from typing import Iterable
@@ -16,8 +17,7 @@ DEFAULT_SECONDARY_CHAR = "^"
 
 
 class BaseFormatter(ABC):
-    """
-    Abstract base class for formatters.
+    """Abstract base class for formatters.
 
     Formatters process [ErrorInfo][gufo.err.ErrorInfo]
     instances and produces human-readable output.
@@ -38,8 +38,7 @@ class BaseFormatter(ABC):
         self.secondary_char = secondary_char
 
     def format(self: "BaseFormatter", err: ErrorInfo) -> str:
-        """
-        Format ErrorInfo to human-readable string.
+        """Format ErrorInfo to human-readable string.
 
         Args:
             err: ErrorInfo instance
@@ -51,8 +50,7 @@ class BaseFormatter(ABC):
 
     @abstractmethod
     def iter_format(self: "BaseFormatter", err: ErrorInfo) -> Iterable[str]:
-        """
-        Iterator yielding human-redable lines.
+        """Iterator yielding human-redable lines.
 
         Process ErrorInfo instance and yield humar-readable
         lines one-by-one.
@@ -65,8 +63,7 @@ class BaseFormatter(ABC):
         """
 
     def traceback_message(self: "BaseFormatter") -> str:
-        """
-        Get proper traceback message.
+        """Get proper traceback message.
 
         Returns:
             String like "Traceback (most resent call last):"
@@ -76,8 +73,7 @@ class BaseFormatter(ABC):
     def iter_stack(
         self: "BaseFormatter", err: ErrorInfo
     ) -> Iterable[FrameInfo]:
-        """
-        Iterate stack according to direction.
+        """Iterate stack according to direction.
 
         Args:
             err: ErrorInfo instance.
@@ -94,8 +90,7 @@ class BaseFormatter(ABC):
         indent: int,
         dedent: int = 0,
     ) -> str:
-        """
-        Generate caret for code position.
+        """Generate caret for code position.
 
         Carret has a format:
         ```
@@ -115,7 +110,6 @@ class BaseFormatter(ABC):
         leading = " " * (pos.start_col + indent - dedent)
         # Parse AST and find anchors
         anchor = pos.anchor
-        #
         if not anchor:
             # Fill everything with secondary char
             carret_len = pos.end_col - pos.start_col
@@ -128,8 +122,7 @@ class BaseFormatter(ABC):
 
     @staticmethod
     def get_exception_summary(x: BaseException) -> str:
-        """
-        Format exception to summary string.
+        """Format exception to summary string.
 
         Args:
             x: Exception instance

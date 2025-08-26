@@ -4,6 +4,7 @@
 # Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
 """BaseFailFast."""
+
 # Python modules
 from abc import ABC, abstractmethod
 from types import TracebackType
@@ -11,8 +12,7 @@ from typing import Type
 
 
 class BaseFailFast(ABC):
-    """
-    Abstract base type for fail-fast behavior.
+    """Abstract base type for fail-fast behavior.
 
     Fail-fast classes must implement `must_die` method.
     When fail-fast check decides the error is unrecoverable,
@@ -26,8 +26,7 @@ class BaseFailFast(ABC):
         v: BaseException,
         tb: TracebackType,
     ) -> bool:
-        """
-        Fail-fast check. Must be overriden in subclasses.
+        """Fail-fast check. Must be overriden in subclasses.
 
         Args:
             t: Exception type. Same as `sys.exc_info()[0]`.

@@ -3,8 +3,7 @@
 # ---------------------------------------------------------------------
 # Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
-"""
-Fail-fast handlers.
+"""Fail-fast handlers.
 
 Fail-fast handlers are launched on every unnhandled
 exception and have to deside if the error is fatal

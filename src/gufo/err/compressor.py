@@ -4,14 +4,14 @@
 # Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
 """Compressor."""
+
 # Python modules
 import os
 from typing import Callable, Dict, Optional, Tuple, Type
 
 
 class Compressor(object):
-    """
-    Compressor/decompressor class.
+    """Compressor/decompressor class.
 
     Use .encode() to compress data and .decode() to decompress.
 
@@ -45,8 +45,7 @@ class Compressor(object):
 
     @classmethod
     def autodetect(cls: Type["Compressor"], path: str) -> "Compressor":
-        """
-        Returns Compressor instance for given format.
+        """Returns Compressor instance for given format.
 
         Args:
             path: File path
@@ -58,8 +57,7 @@ class Compressor(object):
 
     @classmethod
     def get_format(cls: Type["Compressor"], path: str) -> Optional[str]:
-        """
-        Auto-detect format from path.
+        """Auto-detect format from path.
 
         Args:
             path: File path.
@@ -76,8 +74,7 @@ class Compressor(object):
 
     @staticmethod
     def encode_none(data: bytes) -> bytes:
-        """
-        Encoder for `none` format.
+        """Encoder for `none` format.
 
         Args:
             data: Input bytes
@@ -89,8 +86,7 @@ class Compressor(object):
 
     @staticmethod
     def decode_none(data: bytes) -> bytes:
-        """
-        Decoder for `none` format.
+        """Decoder for `none` format.
 
         Args:
             data: Input bytes
@@ -102,8 +98,7 @@ class Compressor(object):
 
     @staticmethod
     def encode_gz(data: bytes) -> bytes:
-        """
-        Encoder for `gz` format.
+        """Encoder for `gz` format.
 
         Args:
             data: Input bytes
@@ -117,8 +112,7 @@ class Compressor(object):
 
     @staticmethod
     def decode_gz(data: bytes) -> bytes:
-        """
-        Decoder for `gz` format.
+        """Decoder for `gz` format.
 
         Args:
             data: gzipped data as bytes.
@@ -132,8 +126,7 @@ class Compressor(object):
 
     @staticmethod
     def encode_bz2(data: bytes) -> bytes:
-        """
-        Encoder for `bz2` format.
+        """Encoder for `bz2` format.
 
         Args:
             data: Input bytes
@@ -147,8 +140,7 @@ class Compressor(object):
 
     @staticmethod
     def decode_bz2(data: bytes) -> bytes:
-        """
-        Encoder for `bz2` format.
+        """Encoder for `bz2` format.
 
         Args:
             data: bzipped data as bytes.
@@ -162,8 +154,7 @@ class Compressor(object):
 
     @staticmethod
     def encode_xz(data: bytes) -> bytes:
-        """
-        Encoder for `xz` format.
+        """Encoder for `xz` format.
 
         Args:
             data: Input bytes
@@ -177,8 +168,7 @@ class Compressor(object):
 
     @staticmethod
     def decode_xz(data: bytes) -> bytes:
-        """
-        Decoder for `xz` format.
+        """Decoder for `xz` format.
 
         Args:
             data: xzipped data as bytes.

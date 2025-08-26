@@ -3,12 +3,12 @@
 # ---------------------------------------------------------------------
 # Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
-"""
-Define `Err` class and `err` singleton.
+"""Define `Err` class and `err` singleton.
 
 Attributes:
     err: Err singletone.
 """
+
 # Python modules
 import hashlib
 import os
@@ -32,8 +32,7 @@ DEFAULT_EXIT_CODE = 1
 
 
 class Err(object):
-    """
-    Error handling singleton.
+    """Error handling singleton.
 
     Example:
         ``` py
@@ -54,8 +53,7 @@ class Err(object):
         self.__root_module: Optional[str] = None
 
     def process(self: "Err") -> None:
-        """
-        Process current exception context in the fenced code block.
+        """Process current exception context in the fenced code block.
 
         Example:
             ``` py
@@ -79,8 +77,7 @@ class Err(object):
         v: BaseException,
         tb: Optional[TracebackType] = None,
     ) -> None:
-        """
-        Process given exception context.
+        """Process given exception context.
 
         Called either from .process()
         or as sys.excepthook for unhandled exceptions.
@@ -134,8 +131,7 @@ class Err(object):
         error_info_path: Optional[str] = None,
         error_info_compress: Optional[str] = None,
     ) -> "Err":
-        """
-        Setup error handling singleton.
+        """Setup error handling singleton.
 
         Must be called only once.
 
@@ -227,8 +223,7 @@ class Err(object):
         v: BaseException,
         tb: TracebackType,
     ) -> bool:
-        """
-        Check if the error is fatal and the process must die.
+        """Check if the error is fatal and the process must die.
 
         Process fail-fast sequence and return True if the
         process must die quickly.
@@ -238,8 +233,7 @@ class Err(object):
         return any(ff.must_die(t, v, tb) for ff in self.__failfast_chain)
 
     def __run_middleware(self: "Err", err_info: ErrorInfo) -> None:
-        """
-        Process all the middleware.
+        """Process all the middleware.
 
         Args:
             err_info: Filled ErrorInfo structure
@@ -256,8 +250,7 @@ class Err(object):
         v: BaseException,
         stack: List[FrameInfo],
     ) -> Iterable[str]:
-        """
-        Iterate over the fingerprint parts.
+        """Iterate over the fingerprint parts.
 
         Iterable to yield all fingerprint parts.
         May be overriden in subclasses.
@@ -305,8 +298,7 @@ class Err(object):
         v: BaseException,
         stack: List[FrameInfo],
     ) -> UUID:
-        """
-        Calculate the error fingerprint.
+        """Calculate the error fingerprint.
 
         Calculate error fingerprint for given exception
         and the stack. Fingerprint is stable for repeating
@@ -329,8 +321,7 @@ class Err(object):
         return UUID(bytes=fp_hash[:16], version=5)
 
     def add_fail_fast(self: "Err", ff: BaseFailFast) -> None:
-        """
-        Add fail-fast handler to the end of the chain.
+        """Add fail-fast handler to the end of the chain.
 
         Args:
             ff: BaseFailFast instance.
@@ -344,8 +335,7 @@ class Err(object):
         self.__failfast_chain.append(ff)
 
     def add_middleware(self: "Err", mw: BaseMiddleware) -> None:
-        """
-        Add middleware to the end of the chain.
+        """Add middleware to the end of the chain.
 
         Args:
             mw: BaseMiddleware instance
@@ -364,8 +354,7 @@ class Err(object):
         error_info_path: Optional[str] = None,
         error_info_compress: Optional[str] = None,
     ) -> List[BaseMiddleware]:
-        """
-        Get default middleware chain.
+        """Get default middleware chain.
 
         Args:
             format: traceback format. See TracebackMiddleware for details.

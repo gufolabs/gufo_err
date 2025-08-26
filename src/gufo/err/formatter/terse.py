@@ -4,6 +4,7 @@
 # Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
 """TerseFormatter class."""
+
 # Python modules
 from typing import Iterable
 
@@ -17,8 +18,7 @@ class TerseFormatter(BaseFormatter):
     """Condensed terse output."""
 
     def iter_format(self: "TerseFormatter", err: ErrorInfo) -> Iterable[str]:
-        """
-        Iterator yielding human-redable lines.
+        """Iterator yielding human-redable lines.
 
         Process ErrorInfo instance and yield humar-readable
         lines one-by-one.

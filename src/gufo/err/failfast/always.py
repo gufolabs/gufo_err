@@ -4,6 +4,7 @@
 # Copyright (C) 2022-23, Gufo Labs
 # ---------------------------------------------------------------------
 """AlwaysFailFast."""
+
 # Python modules
 from types import TracebackType
 from typing import Type
@@ -13,8 +14,7 @@ from ..abc.failfast import BaseFailFast
 
 
 class AlwaysFailFast(BaseFailFast):
-    """
-    Always fail-fast.
+    """Always fail-fast.
 
     Trigger fail-fast unconditionally.
 
@@ -30,8 +30,7 @@ class AlwaysFailFast(BaseFailFast):
         v: BaseException,
         tb: TracebackType,
     ) -> bool:
-        """
-        Check if the process must die quickly.
+        """Check if the process must die quickly.
 
         Always returns True.
         """
