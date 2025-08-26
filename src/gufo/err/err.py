@@ -96,7 +96,7 @@ class Err(object):
         if not tb:
             return
         if t in (SystemExit, KeyboardInterrupt):
-            raise  # Do not mess the exit sequence
+            raise  # noqa: PLE0704 Do not mess the exit sequence
         if self.__must_die(t, v, tb):
             os._exit(self.__failfast_code)  # Fatal error, die quickly
         # Collect stack frames
