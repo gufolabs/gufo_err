@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Gufo Err: Frame Extraction
 # ---------------------------------------------------------------------
-# Copyright (C) 2022-23, Gufo Labs
+# Copyright (C) 2022-25, Gufo Labs
 # ---------------------------------------------------------------------
 """FrameInfo structure."""
 
@@ -173,7 +173,7 @@ def __get_code_position(
         return None
     # Warning! co_positions is not defineed prior the Python 3.11
     # so mypy will raise an error.
-    positions_gen = code.co_positions()  # type:ignore[attr-defined]
+    positions_gen = code.co_positions()
     start_line, end_line, start_col, end_col = next(
         islice(positions_gen, inst_index // 2, None)
     )
