@@ -8,7 +8,7 @@
 # Python modules
 from contextlib import contextmanager
 from contextvars import ContextVar
-from typing import Any, Callable, Dict, Generator, Optional
+from typing import TYPE_CHECKING, Any, Callable, Dict, Generator, Optional
 
 # Third-party modules
 import sentry_sdk
@@ -18,6 +18,11 @@ from ..abc.middleware import BaseMiddleware
 from ..types import ErrorInfo
 
 _current_err = ContextVar[Optional[ErrorInfo]]("current_err", default=None)
+
+if TYPE_CHECKING:
+    Event = sentry_sdk._types.Event
+else:
+    Event = Dict[str, Any]
 
 
 @contextmanager
@@ -71,7 +76,8 @@ class SentryMiddleware(BaseMiddleware):
         release: Optional[str] = None,
         before_send: Optional[
             Callable[
-                [Dict[str, Any], Dict[str, Any]], Optional[Dict[str, Any]]
+                [Event, Dict[str, Any]],
+                Optional[Event],
             ]
         ] = None,
         **kwargs: Dict[str, Any],
@@ -92,8 +98,10 @@ class SentryMiddleware(BaseMiddleware):
         )
 
     def __before_send(
-        self: "SentryMiddleware", event: Dict[str, Any], hint: Dict[str, Any]
-    ) -> Optional[Dict[str, Any]]:
+        self: "SentryMiddleware",
+        event: Event,
+        hint: Dict[str, Any],
+    ) -> Optional[Event]:
         """Enrich event with user-defined information and fingerprint.
 
         Call user-defined `before_send` and add additional
