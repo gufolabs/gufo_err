@@ -50,7 +50,7 @@ jobs:
         run: ruff check -q examples/ src/ tests/
 
       - name: Check Mypy
-        run: mypy src/
+        run: mypy --strict src/
 
   test:
     runs-on: ubuntu-24.04
