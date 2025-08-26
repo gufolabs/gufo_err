@@ -12,6 +12,10 @@ To see unreleased changes, please see the [CHANGELOG on the master branch](https
 
 ## [Unreleased]
 
+### Changed
+
+* Minimal sentry_sdk version is 2.8.0
+
 ### Infrastructure
 
 * Move requirements to pyproject.toml
