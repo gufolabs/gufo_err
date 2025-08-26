@@ -1,2 +1,0 @@
-# [sentry] extras
-sentry_sdk >= 1.5, < 2.0

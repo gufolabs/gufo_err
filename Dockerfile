@@ -1,14 +1,10 @@
-FROM python:3.12-slim-bullseye AS dev
-COPY .requirements /tmp
+FROM python:3.13-slim-bullseye AS dev
+COPY . /workspaces/gufo_loader
+WORKDIR /workspaces/gufo_loader
 RUN \
     set -x \
     && apt-get update \
     && apt-get install -y --no-install-recommends git\
     && pip install --upgrade pip\
     && pip install --upgrade build\
-    && pip install \
-    -r /tmp/test.txt\
-    -r /tmp/lint.txt\
-    -r /tmp/docs.txt\
-    -r /tmp/extras.txt\
-    -r /tmp/ipython.txt
+    && pip install -e .[test,lint,docs,extras,ipython]

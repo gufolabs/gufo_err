@@ -29,6 +29,11 @@ exclude = [".git", "build", "dist"]
 line-length = 79
 # Assume Python 3.9
 target-version = "py39"
+# Always autofix, but never try to fix `F401` (unused imports).
+fix = true
+
+[tool.ruff.lint]
+ignore = ["D203", "D212", "D107", "A002", "A003", "PLR0911", "PLR0913"]
 # Enable
 select = [
   "E", # Pycodestyle Error
@@ -57,22 +62,19 @@ select = [
   "PIE", # flake8-pie
   "RUF", # ruff specific
 ]
-# Always autofix, but never try to fix `F401` (unused imports).
-fix = true
-ignore = ["D203", "D212", "D107", "A002", "A003", "PLR0911", "PLR0913"]
 unfixable = ["F401"]
 
-[tool.ruff.flake8-quotes]
+[tool.ruff.lint.flake8-quotes]
 docstring-quotes = "double"
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "google"
 
-[tool.ruff.mccabe]
+[tool.ruff.lint.mccabe]
 # Unlike Flake8, default to a complexity level of 10.
 max-complexity = 10
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 # Ignore `E402` (import violations) in all `__init__.py` files
 "__init__.py" = ["F401", "E402"]
 "examples/*.py" = [
@@ -110,11 +112,11 @@ authors = [{name = "Gufo Labs"}]
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Developers",
-  "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "License :: OSI Approved :: BSD License",
   "Topic :: Software Development",
   "Topic :: Software Development :: Libraries",
@@ -122,11 +124,38 @@ classifiers = [
   "Operating System :: OS Independent",
   "Typing :: Typed",
 ]
+description = "flexible and robust python error handling framework"
 dynamic = ["version"]
 keywords = ["error"]
 license = {text = "BSD 3-Clause License"}
 name = "gufo_err"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
+
+[project.optional-dependencies]
+docs = [
+  "mkdocs-material==9.5.44",
+  "mkdocstrings[python]==0.27.0",
+  "mkdocs-gen-files==0.5.0",
+  "mkdocs-literate-nav==0.6.1",
+  "mkdocs-section-index==0.3.9",
+]
+extras = [
+  "sentry_sdk >= 1.5, < 2.0",
+]
+ipython = [
+  "ipython==9.4.0",
+]
+lint = [
+  "mypy==1.13.0",
+  "ruff==0.11.2",
+  "types-PyYAML==6.0.12.3",
+]
+sentry = ["sentry_sdk >= 1.5, < 2.0"]
+test = [
+  "pytest==8.3.3",
+  "coverage[toml]==7.6.4",
+  "PyYAML>=6.0",
+]
 
 [project.readme]
 content-type = "text/markdown"
@@ -141,9 +170,6 @@ Changelog = "https://github.com/gufolabs/gufo_err/blob/master/CHANGELOG.md"
 Documentation = "https://docs.gufolabs.com/gufo_err/"
 Homepage = "https://github.com/gufolabs/gufo_err/"
 "Source Code" = "https://github.com/gufolabs/gufo_err/"
-
-[project.optional-dependencies]
-sentry = ["sentry_sdk >= 1.5, < 2.0"]
 
 [tool.setuptools]
 include-package-data = false
