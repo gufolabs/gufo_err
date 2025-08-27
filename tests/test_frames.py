@@ -18,7 +18,6 @@ from gufo.err import (
     exc_traceback,
     iter_frames,
 )
-
 from tests.sample.trace import entry
 
 cwd = os.getcwd()
@@ -54,37 +53,6 @@ def to_full_path(*args) -> str:
 
 
 SAMPLE_FRAMES = [
-    FrameInfo(
-        name="test_iter_frames",
-        source=SourceInfo(
-            file_name=to_full_path("tests", "test_frames.py"),
-            first_line=167,
-            current_line=174,
-            lines=[
-                "    ),",
-                "]",
-                "",
-                "",
-                "def test_iter_frames():",
-                '    """Call the function which raises an exception."""',
-                "    try:",
-                "        entry()",
-                '        msg = "No trace"',
-                "        raise AssertionError(msg)",
-                "    except RuntimeError:",
-                "        frames = list(iter_frames(exc_traceback()))",
-                "        assert frames == SAMPLE_FRAMES",
-            ],
-            pos=MaybeCodePosition(
-                start_line=174,
-                end_line=174,
-                start_col=8,
-                end_col=15,
-            ),
-        ),
-        locals={},
-        module="tests.test_frames",
-    ),
     FrameInfo(
         name="entry",
         source=SourceInfo(
@@ -175,5 +143,8 @@ def test_iter_frames():
         msg = "No trace"
         raise AssertionError(msg)
     except RuntimeError:
-        frames = list(iter_frames(exc_traceback()))
+        # First frame is from this module and may vary
+        # on code changes and pytest version bumping.
+        # So we discard it.
+        frames = list(iter_frames(exc_traceback()))[1:]
         assert frames == SAMPLE_FRAMES
