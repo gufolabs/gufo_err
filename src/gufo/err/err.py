@@ -14,7 +14,7 @@ import hashlib
 import os
 import sys
 from types import TracebackType
-from typing import Iterable, List, Optional, Type
+from typing import Callable, Iterable, List, Optional, Type
 from uuid import UUID
 
 from .abc.failfast import BaseFailFast
@@ -51,6 +51,19 @@ class Err(object):
         self.__middleware_chain: List[BaseMiddleware] = []
         self.__failfast_code = DEFAULT_EXIT_CODE
         self.__root_module: Optional[str] = None
+        self.__prev_exc_hook: Optional[
+            Callable[
+                [Type[BaseException], BaseException, Optional[TracebackType]],
+                None,
+            ]
+        ] = None
+
+    def __del__(self) -> None:
+        """Cleanup."""
+        if self.__prev_exc_hook:
+            # Restore previous exception hook
+            sys.excepthook = self.__prev_exc_hook
+            self.__prev_exc_hook = None
 
     def process(self: "Err") -> None:
         """Process current exception context in the fenced code block.
@@ -180,6 +193,7 @@ class Err(object):
             raise RuntimeError(msg)
         # Install system-wide exception hook
         if catch_all:
+            self.__prev_exc_hook = sys.excepthook
             sys.excepthook = self.__process
         # Init parameters
         self.__name = name or DEFAULT_NAME
