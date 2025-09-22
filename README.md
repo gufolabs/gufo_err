@@ -7,6 +7,7 @@
 ![Python Versions](https://img.shields.io/pypi/pyversions/gufo_err)
 [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 ![Build](https://img.shields.io/github/actions/workflow/status/gufolabs/gufo_err/py-tests.yml?branch=master)
+[![codecov](https://codecov.io/gh/gufolabs/gufo_err/graph/badge.svg?token=NME8DXFKJN)](https://codecov.io/gh/gufolabs/gufo_err)
 ![Sponsors](https://img.shields.io/github/sponsors/gufolabs)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v0.json)](https://github.com/charliermarsh/ruff)
 ---
