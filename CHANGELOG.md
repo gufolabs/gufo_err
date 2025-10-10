@@ -22,6 +22,10 @@ To see unreleased changes, please see the [CHANGELOG on the master branch](https
 
 ### Infrastructure
 
+* Ruff 0.14.0
+* Mypy 1.18.2
+* Pytest 8.4.2
+* IPython 9.6.0
 * Codecov integration.
 * Use python:3.14-slim-trixie as base for devcontainer.
 
