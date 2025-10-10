@@ -25,7 +25,7 @@ from .types import (
     SourceInfo,
 )
 
-__version__: str = "0.5.0"
+__version__: str = "0.6.0"
 __all__ = [
     "HAS_CODE_POSITION",
     "Anchor",

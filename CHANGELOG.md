@@ -10,10 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 To see unreleased changes, please see the [CHANGELOG on the master branch](https://github.com/gufolabs/gufo_err/blob/master/CHANGELOG.md) guide.
 
-## [Unreleased]
+## 0.6.0 - 2025-10-10
 
 ### Added
 
+* Explicitly enumerate all exportable symbols into `__all__`.
 * Python 3.14 support.
 
 ### Security
