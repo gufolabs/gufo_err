@@ -12,6 +12,8 @@ from typing import Any, Dict
 
 # Third-party modules
 import pytest
+
+# Gufo Err modules
 from gufo.err.codec import (
     ExceptionStub,
     from_dict,

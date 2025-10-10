@@ -29,7 +29,7 @@ target-version = "py39"
 fix = true
 
 [tool.ruff.lint]
-ignore = ["D203", "D212", "D107", "A002", "A003", "PLR0911", "PLR0913"]
+ignore = ["D203", "D212", "D107", "A002", "A003", "PLR0911", "PLR0913", "PLC0415"]
 # Enable
 select = [
   "E", # Pycodestyle Error
@@ -139,11 +139,11 @@ extras = [
   "sentry_sdk >= 2.8.0, < 3.0",
 ]
 ipython = [
-  "ipython==9.4.0",
+  "ipython==9.6.0",
 ]
 lint = [
-  "mypy==1.13.0",
-  "ruff==0.11.2",
+  "mypy==1.18.2",
+  "ruff==0.14.0",
   "types-PyYAML==6.0.12.3",
 ]
 sentry = ["sentry_sdk >= 2.8.0, < 3.0"]
@@ -151,7 +151,7 @@ test = [
   "PyYAML>=6.0",
   "pytest-benchmark==5.1.0",
   "pytest-cov==7.0.0",
-  "pytest==8.3.3",
+  "pytest==8.4.2",
 ]
 
 [project.readme]
