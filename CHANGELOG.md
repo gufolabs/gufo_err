@@ -12,9 +12,9 @@ To see unreleased changes, please see the [CHANGELOG on the master branch](https
 
 ## [Unreleased]
 
-### Fixed
+### Added
 
-* Suppress Sentry SDK traceback on tests exit.
+* SentryMiddleware: `disable_integrations` flag.
 
 ## 0.6.0 - 2025-10-10
 

@@ -54,6 +54,8 @@ class SentryMiddleware(BaseMiddleware):
         before_send: The function accepting sentry event
             object and returning modified event object or
             nothing to stop processing.
+        disable_integrations: Disable Sentry default integrations,
+            for tests purposes.
 
     Examples:
         To configure the SentryMiddleware:
@@ -80,6 +82,7 @@ class SentryMiddleware(BaseMiddleware):
                 Optional[Event],
             ]
         ] = None,
+        disable_integrations: bool = False,
         **kwargs: Dict[str, Any],
     ) -> None:
         super().__init__()
@@ -89,6 +92,7 @@ class SentryMiddleware(BaseMiddleware):
             debug=debug,
             release=release,
             before_send=self.__before_send,
+            default_integrations=not disable_integrations,
             **kwargs,  # type: ignore
             # shutdown_timeout=config.sentry.shutdown_timeout,
             # release=version.version,
