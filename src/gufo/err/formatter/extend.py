@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Gufo Err: ExtendFormatter class
 # ---------------------------------------------------------------------
-# Copyright (C) 2022-23, Gufo Labs
+# Copyright (C) 2022-26, Gufo Labs
 # ---------------------------------------------------------------------
 """ExtendFormatter."""
 
@@ -27,7 +27,7 @@ class ExtendFormatter(BaseFormatter):
     def iter_format(self: "ExtendFormatter", err: ErrorInfo) -> Iterable[str]:
         """Iterator yielding human-redable lines.
 
-        Process ErrorInfo instance and yield humar-readable
+        Process ErrorInfo instance and yield human-readable
         lines one-by-one.
 
         Args:

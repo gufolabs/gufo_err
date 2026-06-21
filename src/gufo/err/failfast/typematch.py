@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Gufo Err: TypeMatchFailFast
 # ---------------------------------------------------------------------
-# Copyright (C) 2022-23, Gufo Labs
+# Copyright (C) 2022-26, Gufo Labs
 # ---------------------------------------------------------------------
 """TypeMatchFailFast."""
 
@@ -129,7 +129,8 @@ class TypeMatchFailFast(BaseFailFast):
         v: BaseException,
         tb: TracebackType,
     ) -> bool:
-        """Check if the proceess must die quickly.
+        """
+        Check if the process must die quickly.
 
         Check if exception class matches given substrings.
         """

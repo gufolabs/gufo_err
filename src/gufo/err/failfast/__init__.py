@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Gufo Err: failfast module
 # ---------------------------------------------------------------------
-# Copyright (C) 2022-23, Gufo Labs
+# Copyright (C) 2022-26, Gufo Labs
 # ---------------------------------------------------------------------
 """Fail-fast handlers.
 
@@ -13,7 +13,7 @@ See [gufo.err.abs.failfast.BaseFailFast] for details.
 The following fail-fast handlers are available out-of-the-box:
 
 * [AlwaysFailFast][gufo.err.failfast.always.AlwaysFailFast]:
-  Triggers fail-fast unconditionaly.
+  Triggers fail-fast unconditionally.
 * [NeverFailFast][gufo.err.failfast.never.NeverFailFast]:
   Never triggers fail-fast.
 * [TypeMatchFailFast][gufo.err.failfast.typematch.TypeMatchFailFast]:

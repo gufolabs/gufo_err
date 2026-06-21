@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Gufo Err: Serialize/deserialize
 # ---------------------------------------------------------------------
-# Copyright (C) 2022-23, Gufo Labs
+# Copyright (C) 2022-26, Gufo Labs
 # ---------------------------------------------------------------------
 """ErrInfo serialization/deserialization primitives."""
 
@@ -85,7 +85,8 @@ def __q_source(si: SourceInfo) -> Dict[str, Any]:
 
 
 def __q_exception(e: BaseException) -> Dict[str, Any]:
-    """Convery exception into JSON-serializeable form.
+    """
+    Convert exception into JSON-serializeable form.
 
     Args:
         e: BaseException instance
@@ -137,7 +138,7 @@ def to_json(info: ErrorInfo) -> str:
 
 
 def from_dict(data: Dict[str, Any]) -> ErrorInfo:
-    """Deserealize Dict to ErrorInfo.
+    """Deserialize Dict to ErrorInfo.
 
     Args:
         data: Result of to_dict
