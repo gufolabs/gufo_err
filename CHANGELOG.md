@@ -12,6 +12,10 @@ To see unreleased changes, please see the [CHANGELOG on the master branch](https
 
 ## [Unreleased]
 
+### Fixed
+
+* Possible race condition in ErrorInfoMiddleware
+
 ### Added
 
 * SentryMiddleware: `disable_integrations` flag.

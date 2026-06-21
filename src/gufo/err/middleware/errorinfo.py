@@ -1,13 +1,14 @@
 # ---------------------------------------------------------------------
 # Gufo Err: ErrorInfoMiddleware
 # ---------------------------------------------------------------------
-# Copyright (C) 2022-23, Gufo Labs
+# Copyright (C) 2022-26, Gufo Labs
 # ---------------------------------------------------------------------
 """ErrorInfo middleware."""
 
 # Python modules
 import os
-from typing import Optional
+from pathlib import Path
+from typing import Optional, Union
 
 # Gufo Labs modules
 from ..abc.middleware import BaseMiddleware
@@ -18,7 +19,8 @@ from ..types import ErrorInfo
 
 
 class ErrorInfoMiddleware(BaseMiddleware):
-    """Dump error to JSON file.
+    """
+    Dump error to JSON file.
 
     Use `err` tool to manipulate collected files.
 
@@ -44,10 +46,12 @@ class ErrorInfoMiddleware(BaseMiddleware):
     """
 
     def __init__(
-        self: "ErrorInfoMiddleware", path: str, compress: Optional[str] = None
+        self: "ErrorInfoMiddleware",
+        path: Union[Path, str],
+        compress: Optional[str] = None,
     ) -> None:
         super().__init__()
-        self.path = path
+        self.path = Path(path)
         # Check permissions
         if not os.access(self.path, os.W_OK):
             msg = f"{path} is not writable"
@@ -61,16 +65,9 @@ class ErrorInfoMiddleware(BaseMiddleware):
             info: ErrorInfo instance.
         """
         # ErrorInfo path
-        fn = os.path.join(
-            self.path, f"{info.fingerprint}.json{self.compressor.suffix}"
-        )
-        # Check if path is already exists
-        if os.path.exists(fn):
-            logger.error(
-                "Error %s is already registered. Skipping.", info.fingerprint
-            )
-            return
-        # Write erorr info
-        logger.error("Writing error info into %s", fn)
-        with open(fn, "wb") as f:
-            f.write(self.compressor.encode(to_json(info).encode("utf-8")))
+        fn = self.path / f"{info.fingerprint}.json{self.compressor.suffix}"
+        try:
+            with open(fn, "xb") as fp:
+                fp.write(self.compressor.encode(to_json(info).encode()))
+        except FileExistsError:
+            logger.info("Error %s is already registered", info.fingerprint)
