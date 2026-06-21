@@ -158,7 +158,7 @@ SAMPLE_ERR = ErrorInfo(
 )
 
 TERSE_RESULT = """Error: be8ccd86-3661-434c-8569-40dd65d9860a
-Traceback (most resent call last):
+Traceback (most recent call last):
   File "/app/tests/test_frames.py", line 174, in test_iter_frames
     entry()
     ^^^^^^^
@@ -177,7 +177,7 @@ EXTEND_RESULT = "\n".join(
     [
         "Error: be8ccd86-3661-434c-8569-40dd65d9860a",
         "RuntimeError: oops",
-        "Traceback (most resent call last):",
+        "Traceback (most recent call last):",
         "-------------------------------------------------------------------------------",
         "File: /app/tests/test_frames.py (line 174)",
         "  167         ),",

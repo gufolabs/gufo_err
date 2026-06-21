@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Gufo Err: Command-line utility
 # ---------------------------------------------------------------------
-# Copyright (C) 2022-23, Gufo Labs
+# Copyright (C) 2022-26, Gufo Labs
 # ---------------------------------------------------------------------
 """`err` utility."""
 
@@ -233,7 +233,7 @@ class Cli(object):
         print(
             " ".join(
                 [
-                    self.col("Fingreprint", W_FINGER),
+                    self.col("Fingerprint", W_FINGER),
                     self.col("Exception", W_EXCEPTION),
                     self.col("Service", W_SERVICE),
                     self.col("Time", W_TS),

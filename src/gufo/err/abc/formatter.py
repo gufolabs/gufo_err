@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Gufo Err: BaseFormatter class
 # ---------------------------------------------------------------------
-# Copyright (C) 2022-23, Gufo Labs
+# Copyright (C) 2022-26, Gufo Labs
 # ---------------------------------------------------------------------
 """BaseFormatter class."""
 
@@ -52,7 +52,7 @@ class BaseFormatter(ABC):
     def iter_format(self: "BaseFormatter", err: ErrorInfo) -> Iterable[str]:
         """Iterator yielding human-redable lines.
 
-        Process ErrorInfo instance and yield humar-readable
+        Process ErrorInfo instance and yield human-readable
         lines one-by-one.
 
         Args:
@@ -66,9 +66,9 @@ class BaseFormatter(ABC):
         """Get proper traceback message.
 
         Returns:
-            String like "Traceback (most resent call last):"
+            String like "Traceback (most recent call last):"
         """
-        return "Traceback (most resent call last):"
+        return "Traceback (most recent call last):"
 
     def iter_stack(
         self: "BaseFormatter", err: ErrorInfo

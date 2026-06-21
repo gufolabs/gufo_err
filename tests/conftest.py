@@ -23,11 +23,10 @@ def pytest_sessionfinish(session, exitstatus):
 
     Closing the client explicitly here prevents that atexit path.
     """
-    sentry = sys.modules.get("sentry_sdk")
-    if not sentry:
+    sentry_sdk = sys.modules.get("sentry_sdk")
+    if not sentry_sdk:
         return
 
     with suppress(Exception):
-        client = sentry.get_current_client()
-        if hasattr(client, "transport") and client.transport is not None:
-            sentry.close()
+        client = sentry_sdk.get_current_client()
+        client.close()
