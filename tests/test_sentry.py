@@ -13,7 +13,11 @@ def test_sentry_middleware():
     # Configure sentry without URL
     err = Err().setup(
         middleware=[
-            SentryMiddleware("http://public@127.0.0.1:9999/1", debug=True)
+            SentryMiddleware(
+                "http://public@127.0.0.1:9999/1",
+                debug=True,
+                disable_integrations=True,
+            )
         ]
     )
     # Without __before_send
@@ -31,6 +35,7 @@ def test_sentry_middleware_skip_before_send():
                 "http://public@127.0.0.1:9999/1",
                 debug=True,
                 before_send=lambda _event, _hint: None,
+                disable_integrations=True,
             )
         ]
     )
