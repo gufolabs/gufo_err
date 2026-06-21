@@ -53,7 +53,7 @@ And got the output:
 ```
 Error: 70173ec8-930f-5579-bb26-623847905f64
 RuntimeError: failing
-Traceback (most resent call last):
+Traceback (most recent call last):
 -------------------------------------------------------------------------------
 File: /workspaces/gufo_err/examples/globalextend.py (line 12)
     5     

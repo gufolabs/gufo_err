@@ -71,7 +71,7 @@ And got the output:
 ```
 Error: eda58358-92cc-5e8b-a466-e50c699268a1
 RuntimeError: failing
-Traceback (most resent call last):
+Traceback (most recent call last):
 -------------------------------------------------------------------------------
 File: /workspaces/gufo_err/examples/process.py (line 13)
     6     def fail():

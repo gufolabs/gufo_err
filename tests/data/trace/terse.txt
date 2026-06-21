@@ -1,5 +1,5 @@
 Error: e0de436d-414e-594c-b834-c3f61fb0dcfe
-Traceback (most resent call last):
+Traceback (most recent call last):
   File "/workspaces/gufo_err/tests/test_traceback_samples.py", line 67, in test_format
     entry()
     ^^^^^^^

@@ -50,7 +50,7 @@ And got the output:
 
 ```
 Error: 39dc9706-9550-5959-9c67-e702d036d4f9
-Traceback (most resent call last):
+Traceback (most recent call last):
   File "/workspaces/gufo_err/examples/global.py", line 10, in <module>
     fail()
   File "/workspaces/gufo_err/examples/global.py", line 7, in fail
@@ -66,7 +66,7 @@ error discriminator.
 Lets run our example again and check the output:
 ```
 Error: 39dc9706-9550-5959-9c67-e702d036d4f9
-Traceback (most resent call last):
+Traceback (most recent call last):
   File "/workspaces/gufo_err/examples/global.py", line 10, in <module>
     fail()
   File "/workspaces/gufo_err/examples/global.py", line 7, in fail
