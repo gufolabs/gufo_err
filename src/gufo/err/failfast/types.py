@@ -28,14 +28,12 @@ class TypesFailFast(BaseFailFast):
         ```
     """
 
-    def __init__(
-        self: "TypesFailFast", types: Iterable[Type[Exception]]
-    ) -> None:
+    def __init__(self, types: Iterable[Type[Exception]]) -> None:
         super().__init__()
         self.types = set(types)
 
     def must_die(
-        self: "TypesFailFast",
+        self,
         t: Type[BaseException],
         v: BaseException,
         tb: TracebackType,

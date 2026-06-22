@@ -61,7 +61,7 @@ class TypeMatchFailFast(BaseFailFast):
     """
 
     def __init__(
-        self: "TypeMatchFailFast",
+        self,
         exc: Optional[Union[str, Type[BaseException]]] = None,
         *,
         match: Optional[str] = None,
@@ -74,7 +74,7 @@ class TypeMatchFailFast(BaseFailFast):
             self.add_match(exc, match=match, msg=msg)
 
     def add_match(
-        self: "TypeMatchFailFast",
+        self,
         exc: Union[str, Type[BaseException]],
         *,
         match: Optional[str] = None,
@@ -124,7 +124,7 @@ class TypeMatchFailFast(BaseFailFast):
         return f"{t.__module__}.{t.__name__}"
 
     def must_die(
-        self: "TypeMatchFailFast",
+        self,
         t: Type[BaseException],
         v: BaseException,
         tb: TracebackType,

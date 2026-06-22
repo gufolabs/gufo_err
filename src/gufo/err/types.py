@@ -108,7 +108,7 @@ class ErrorInfo(object):
     timestamp: Optional[datetime.datetime] = None
     root_module: Optional[str] = None
 
-    def get_app_top_frame(self: "ErrorInfo") -> Optional[FrameInfo]:
+    def get_app_top_frame(self) -> Optional[FrameInfo]:
         """Get application's top stack frame.
 
         Find top stack frame belonging to the application,
@@ -139,13 +139,11 @@ class ExceptionStub(Exception):
         args: Exception arguments
     """
 
-    def __init__(
-        self: "ExceptionStub", kls: str, args: Tuple[Any, ...]
-    ) -> None:
+    def __init__(self, kls: str, args: Tuple[Any, ...]) -> None:
         self.kls = kls
         self.args = args
 
-    def __str__(self: "ExceptionStub") -> str:
+    def __str__(self) -> str:
         """Format exception to string.
 
         Returns:

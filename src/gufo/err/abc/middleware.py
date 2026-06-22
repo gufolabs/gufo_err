@@ -19,7 +19,7 @@ class BaseMiddleware(ABC):
     """
 
     @abstractmethod
-    def process(self: "BaseMiddleware", info: ErrorInfo) -> None:
+    def process(self, info: ErrorInfo) -> None:
         """Process the error.
 
         Args:

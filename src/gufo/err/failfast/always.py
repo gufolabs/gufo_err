@@ -25,7 +25,7 @@ class AlwaysFailFast(BaseFailFast):
     """
 
     def must_die(
-        self: "AlwaysFailFast",
+        self,
         t: Type[BaseException],
         v: BaseException,
         tb: TracebackType,

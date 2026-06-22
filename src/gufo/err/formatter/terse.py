@@ -17,7 +17,7 @@ from ..types import ErrorInfo
 class TerseFormatter(BaseFormatter):
     """Condensed terse output."""
 
-    def iter_format(self: "TerseFormatter", err: ErrorInfo) -> Iterable[str]:
+    def iter_format(self, err: ErrorInfo) -> Iterable[str]:
         """Iterator yielding human-redable lines.
 
         Process ErrorInfo instance and yield human-readable

@@ -21,7 +21,7 @@ class BaseFailFast(ABC):
 
     @abstractmethod
     def must_die(
-        self: "BaseFailFast",
+        self,
         t: Type[BaseException],
         v: BaseException,
         tb: TracebackType,
