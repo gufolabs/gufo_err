@@ -33,10 +33,10 @@ The following commands are supported:
 * `view`: View one or more error details. Dumped format
   may be set with `-f` option:
 
-  * `terse` (default): Terse format similar to standart python's tracebacks.
+  * `terse` (default): Terse format similar to standard python's tracebacks.
   * `extend`: Extended format with code surroundings and stack variables dump.
 
-* `clear`: Remove on or more error reports.
+* `clear`: Remove one or more error reports.
 
 ## Environment
 
@@ -44,6 +44,13 @@ The following commands are supported:
   where error reports are stored.
 
 ## Exit Status
+
+* `0` - Successful exit
+* `1` - Error Info directory is not found
+* `2` - Error Info directory is not readable
+* `3` - Cannot read Error Info file
+* `4` - Invalid arguments
+* `5` - Invalid expression
 
 ## Error Fingerprint Expressions
 
@@ -61,7 +68,7 @@ Following types of expressions are supported:
 
 Enable [ErrorInfoMiddleware][gufo.err.middleware.errorinfo.ErrorInfoMiddleware]
 in your code and point to the designated directory to store serialized
-ErrorInfo files. Add to you code:
+ErrorInfo files. Add to your code:
 
 ``` py
 from gufo.err import err
@@ -100,7 +107,7 @@ err list
 
 Output:
 ```
-Fingreprint                          Exception            Service                       Time                           Place                                             
+Fingerprint                          Exception            Service                       Time                           Place                                             
 ------------------------------------ -------------------- ----------------------------- ------------------------------ --------------------------------------------------
 0dc69dd9-85f9-5491-bc06-7a493e708738 NameError: foobar    fmt-gz                        2023-09-01T07:54:59.690078     /workspaces/gufo_err/tests/test_cli.py:57         
 30dae827-0264-549a-b96f-a9b0298341b2 NotImplementedError  fmt-xz                        2023-09-01T07:54:59.690078     /workspaces/gufo_err/tests/test_cli.py:57         
@@ -117,7 +124,7 @@ err list <fingerprint1> ... <fingerprintN>
 Where `<fingerprintX>` is an [Fingerprint Expression](#error-fingerprint-expressions).
 Output:
 ```
-Fingreprint                          Exception            Service                       Time                           Place                                             
+Fingerprint                          Exception            Service                       Time                           Place                                             
 ------------------------------------ -------------------- ----------------------------- ------------------------------ --------------------------------------------------
 0dc69dd9-85f9-5491-bc06-7a493e708738 NameError: foobar    fmt-gz                        2023-09-01T07:54:59.690078     /workspaces/gufo_err/tests/test_cli.py:57         
 4d2895ed-519d-508e-9ab9-ecc30c65b7cf ValueError           fmt-None                      2023-09-01T07:54:59.690078     /workspaces/gufo_err/tests/test_cli.py:57         

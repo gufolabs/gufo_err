@@ -4,8 +4,8 @@ Python default error hook is the last resort in the error
 handling, called just before thread or process termination.
 What if we want to catch and process errors early? 
 
-Lets modify our [globalextend.py](globalextend.md) example to
-get more information beyound default error traceback.
+Let's modify our [globalextend.py](globalextend.md) example to
+get more information beyond default error traceback.
 
 ```  py title="process.py" linenums="1"
 --8<-- "examples/process.py"
@@ -24,7 +24,7 @@ so we need to import it first.
 --8<-- "examples/process.py"
 ```
 
-`err.setup()` function must be called to initialize and confugure
+`err.setup()` function must be called to initialize and configure
 the error protection. `format` argument sets
 traceback format to extended version. Note, we do not set `catch_all`
 exception and do not install the global hook.
@@ -35,7 +35,7 @@ details.
 --8<-- "examples/process.py"
 ```
 
-Lets define the function which will intentionally fail. We define
+Let's define the function which will intentionally fail. We define
 the `x` variable to catch it in the trace later.
 
 ```  py title="process.py" linenums="1" hl_lines="12 14"
@@ -50,7 +50,7 @@ we may catch, so `Exception` is the good start.
 --8<-- "examples/process.py"
 ```
 
-Lets call our function.
+Let's call our function.
 
 ```  py title="process.py" linenums="1" hl_lines="15"
 --8<-- "examples/process.py"
