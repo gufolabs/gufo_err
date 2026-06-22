@@ -74,10 +74,8 @@ def __source_from_loader(
 ) -> Optional[str]:
     try:
         return loader.get_source(module_name)
-    except AttributeError:
-        return None  # .get_source() does not supported
-    except ImportError:
-        return None
+    except (AttributeError, ImportError, OSError):
+        return None  # .get_source() not supported
 
 
 def __source_from_file(file_name: str) -> Optional[str]:
