@@ -64,6 +64,10 @@ class ExitCode(IntEnum):
     SYNTAX = 5
 
 
+ELLIPSIS = "..."
+L_ELLIPSIS = len(ELLIPSIS)
+
+
 class Cli(object):
     """`err` utility class."""
 
@@ -108,11 +112,12 @@ class Cli(object):
             ```
         """
         ln = len(t)
-        if ln < width:
+        if ln <= width:
             return t + " " * (width - ln)
-        if ln == width:
-            return t
-        return t[: width - 3] + "..."
+        cut = max(width - L_ELLIPSIS, 0)
+        if cut:
+            return f"{t[:cut]}{ELLIPSIS}"
+        return t[:width]
 
     @staticmethod
     def rcol(t: str, width: int) -> str:
@@ -138,11 +143,12 @@ class Cli(object):
             ```
         """
         ln = len(t)
-        if ln < width:
+        if ln <= width:
             return t + " " * (width - ln)
-        if ln == width:
-            return t
-        return "..." + t[ln - width - 3 :]
+        cut = max(ln - width + L_ELLIPSIS, 0)
+        if cut:
+            return f"{ELLIPSIS}{t[cut:]}"
+        return t[:width]
 
     @staticmethod
     def __check_dir(path: str) -> ExitCode:
