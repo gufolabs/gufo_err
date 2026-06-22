@@ -408,3 +408,10 @@ def test_middleware_type_add():
     err.setup()
     with pytest.raises(ValueError):
         err.add_middleware(1)
+
+
+def test_is_initialized() -> None:
+    err = Err()
+    assert err.is_initialized is False
+    err.setup()
+    assert err.is_initialized is True

@@ -394,6 +394,11 @@ class Err(object):
             )
         return r
 
+    @property
+    def is_initialized(self) -> bool:
+        """Check if setup() is called."""
+        return self.__initialized
+
 
 # Define the singleton
 err = Err()
