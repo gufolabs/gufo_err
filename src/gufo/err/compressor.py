@@ -118,7 +118,7 @@ class Compressor(object):
             data: gzipped data as bytes.
 
         Returns:
-            Ucompressed bytes.
+            Uncompressed bytes.
         """
         import gzip
 
@@ -160,7 +160,7 @@ class Compressor(object):
             data: Input bytes
 
         Returns:
-            xzipped stream as bytes.
+            xz-compressed stream as bytes.
         """
         import lzma
 
