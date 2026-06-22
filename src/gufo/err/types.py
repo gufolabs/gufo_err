@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Gufo Err: Types
 # ---------------------------------------------------------------------
-# Copyright (C) 2022-23, Gufo Labs
+# Copyright (C) 2022-26, Gufo Labs
 # ---------------------------------------------------------------------
 """Public API data types."""
 
@@ -71,7 +71,7 @@ class FrameInfo(object):
 
     Args:
         name: Current callable name.
-        source: Optional `SourceInfo` procedure. May be missed
+        source: Optional `SourceInfo` procedure. May be missing
             on loader problems.
         locals: Dicts of local variables.
         module: Python module name.

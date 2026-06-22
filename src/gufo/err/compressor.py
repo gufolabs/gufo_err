@@ -146,7 +146,7 @@ class Compressor(object):
             data: bzipped data as bytes.
 
         Returns:
-            Ucompressed bytes.
+            Uncompressed bytes.
         """
         import bz2
 
@@ -174,7 +174,7 @@ class Compressor(object):
             data: xzipped data as bytes.
 
         Returns:
-            Ucompressed bytes.
+            Uncompressed bytes.
         """
         import lzma
 
