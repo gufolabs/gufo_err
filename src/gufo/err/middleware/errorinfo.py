@@ -68,9 +68,9 @@ class ErrorInfoMiddleware(BaseMiddleware):
         fn = self.path / f"{info.fingerprint}.json{self.compressor.suffix}"
         try:
             with open(fn, "xb") as fp:
-                logger.error("Writing error info into %s", fn)
+                logger.warning("Writing error info into %s", fn)
                 fp.write(self.compressor.encode(to_json(info).encode()))
         except FileExistsError:
-            logger.error(
+            logger.warning(
                 "Error %s is already registered. Skipping.", info.fingerprint
             )

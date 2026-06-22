@@ -358,7 +358,7 @@ class Err(object):
             ValueError: If `mw` is not BaseMiddleware instance.
         """
         if not isinstance(mw, BaseMiddleware):
-            msg = "add_response() argument must be BaseMiddleware instance"
+            msg = "add_middleware() argument must be BaseMiddleware instance"
             raise ValueError(msg)
         self.__middleware_chain.append(mw)
 
