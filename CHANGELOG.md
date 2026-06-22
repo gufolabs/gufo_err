@@ -18,11 +18,13 @@ To see unreleased changes, please see the [CHANGELOG on the master branch](https
 
 ### Added
 
+* `Err.is_initialized` property.
 * SentryMiddleware: `disable_integrations` flag.
 
 ### Changed
 
 * Remove unnecessary `self` type hints.
+* Updated docs.
 
 ### Infrastructure
 
