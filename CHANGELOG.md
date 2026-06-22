@@ -30,6 +30,7 @@ To see unreleased changes, please see the [CHANGELOG on the master branch](https
 
 * ruff 0.16.18
 * mypy 2.1.0
+* Setup pytest in devcontainer.
 
 ## 0.6.0 - 2025-10-10
 
