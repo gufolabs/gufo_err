@@ -72,7 +72,7 @@ class SentryMiddleware(BaseMiddleware):
     """
 
     def __init__(
-        self: "SentryMiddleware",
+        self,
         dsn: Optional[str] = None,
         debug: bool = False,
         release: Optional[str] = None,
@@ -102,7 +102,7 @@ class SentryMiddleware(BaseMiddleware):
         )
 
     def __before_send(
-        self: "SentryMiddleware",
+        self,
         event: Event,
         hint: Dict[str, Any],
     ) -> Optional[Event]:
@@ -137,7 +137,7 @@ class SentryMiddleware(BaseMiddleware):
         ]
         return event
 
-    def process(self: "SentryMiddleware", info: ErrorInfo) -> None:
+    def process(self, info: ErrorInfo) -> None:
         """Middleware entrypoint.
 
         Args:

@@ -76,7 +76,7 @@ class Cli(object):
         "(|.gz|.bz2|.xz)$"
     )
 
-    def handle_version(self: "Cli", _ns: argparse.Namespace) -> ExitCode:
+    def handle_version(self, _ns: argparse.Namespace) -> ExitCode:
         """Print Gufo Err version.
 
         Args:
@@ -172,7 +172,7 @@ class Cli(object):
             return ExitCode.EACCESS
         return ExitCode.OK
 
-    def handle_list(self: "Cli", ns: argparse.Namespace) -> ExitCode:
+    def handle_list(self, ns: argparse.Namespace) -> ExitCode:
         """Show the list of the registered errors.
 
         Args:
@@ -340,7 +340,7 @@ class Cli(object):
         """
         return {fn.split(".")[0]: fn for fn in os.listdir(prefix)}
 
-    def handle_view(self: "Cli", ns: argparse.Namespace) -> ExitCode:
+    def handle_view(self, ns: argparse.Namespace) -> ExitCode:
         """Show the details of the selected errors.
 
         Args:
@@ -396,7 +396,7 @@ class Cli(object):
             print(formatter.format(info))
         return ExitCode.OK if not faults else ExitCode.CANNOT_READ
 
-    def handle_clear(self: "Cli", ns: argparse.Namespace) -> ExitCode:
+    def handle_clear(self, ns: argparse.Namespace) -> ExitCode:
         """Clear selected errors.
 
         Args:
@@ -460,7 +460,7 @@ class Cli(object):
         return from_json(data.decode())
 
     def get_handler(
-        self: "Cli", name: str
+        self, name: str
     ) -> Callable[[argparse.Namespace], ExitCode]:
         """Get handler for command.
 
@@ -478,7 +478,7 @@ class Cli(object):
         )
         return h
 
-    def run(self: "Cli", args: List[str]) -> ExitCode:
+    def run(self, args: List[str]) -> ExitCode:
         """Main dispatcher function.
 
         Args:

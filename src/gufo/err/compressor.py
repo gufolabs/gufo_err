@@ -32,7 +32,7 @@ class Compressor(object):
         Tuple[Callable[[bytes], bytes], Callable[[bytes], bytes]],
     ]
 
-    def __init__(self: "Compressor", format: Optional[str] = None) -> None:
+    def __init__(self, format: Optional[str] = None) -> None:
         try:
             self.encode, self.decode = self.FORMATS[format]
         except KeyError as e:

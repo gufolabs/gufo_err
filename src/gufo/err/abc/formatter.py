@@ -30,14 +30,14 @@ class BaseFormatter(ABC):
     """
 
     def __init__(
-        self: "BaseFormatter",
+        self,
         primary_char: str = DEFAULT_PRIMARY_CHAR,
         secondary_char: str = DEFAULT_SECONDARY_CHAR,
     ) -> None:
         self.primary_char = primary_char
         self.secondary_char = secondary_char
 
-    def format(self: "BaseFormatter", err: ErrorInfo) -> str:
+    def format(self, err: ErrorInfo) -> str:
         """Format ErrorInfo to human-readable string.
 
         Args:
@@ -49,7 +49,7 @@ class BaseFormatter(ABC):
         return "\n".join(self.iter_format(err))
 
     @abstractmethod
-    def iter_format(self: "BaseFormatter", err: ErrorInfo) -> Iterable[str]:
+    def iter_format(self, err: ErrorInfo) -> Iterable[str]:
         """Iterator yielding human-redable lines.
 
         Process ErrorInfo instance and yield human-readable
@@ -62,7 +62,7 @@ class BaseFormatter(ABC):
             Iterator yieldig formatted lines.
         """
 
-    def traceback_message(self: "BaseFormatter") -> str:
+    def traceback_message(self) -> str:
         """Get proper traceback message.
 
         Returns:
@@ -70,9 +70,7 @@ class BaseFormatter(ABC):
         """
         return "Traceback (most recent call last):"
 
-    def iter_stack(
-        self: "BaseFormatter", err: ErrorInfo
-    ) -> Iterable[FrameInfo]:
+    def iter_stack(self, err: ErrorInfo) -> Iterable[FrameInfo]:
         """Iterate stack according to direction.
 
         Args:
@@ -84,7 +82,7 @@ class BaseFormatter(ABC):
         yield from err.stack
 
     def get_caret(
-        self: "BaseFormatter",
+        self,
         line: str,
         pos: CodePosition,
         indent: int,

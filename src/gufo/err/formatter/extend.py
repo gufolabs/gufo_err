@@ -24,7 +24,7 @@ class ExtendFormatter(BaseFormatter):
     SEP = "-" * 79
     MAX_VAR_LEN = 72
 
-    def iter_format(self: "ExtendFormatter", err: ErrorInfo) -> Iterable[str]:
+    def iter_format(self, err: ErrorInfo) -> Iterable[str]:
         """Iterator yielding human-redable lines.
 
         Process ErrorInfo instance and yield human-readable
@@ -69,9 +69,7 @@ class ExtendFormatter(BaseFormatter):
                         yield f"{var_name:>20s} = {var_value}"
         yield self.SEP
 
-    def iter_vars(
-        self: "ExtendFormatter", fi: FrameInfo
-    ) -> Iterable[Tuple[str, str]]:
+    def iter_vars(self, fi: FrameInfo) -> Iterable[Tuple[str, str]]:
         """Iterate frame variables and convert them to the readable form.
 
         Args:

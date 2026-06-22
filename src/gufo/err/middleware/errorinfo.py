@@ -46,7 +46,7 @@ class ErrorInfoMiddleware(BaseMiddleware):
     """
 
     def __init__(
-        self: "ErrorInfoMiddleware",
+        self,
         path: Union[Path, str],
         compress: Optional[str] = None,
     ) -> None:
@@ -58,7 +58,7 @@ class ErrorInfoMiddleware(BaseMiddleware):
             raise ValueError(msg)
         self.compressor = Compressor(format=compress)
 
-    def process(self: "ErrorInfoMiddleware", info: ErrorInfo) -> None:
+    def process(self, info: ErrorInfo) -> None:
         """Middleware entrypoing.
 
         Args:

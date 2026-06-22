@@ -42,7 +42,7 @@ class Err(object):
         ```
     """
 
-    def __init__(self: "Err") -> None:
+    def __init__(self) -> None:
         self.__name = DEFAULT_NAME
         self.__version = DEFAULT_VERSION
         self.__hash_fn = hashlib.sha1
@@ -65,7 +65,7 @@ class Err(object):
             sys.excepthook = self.__prev_exc_hook
             self.__prev_exc_hook = None
 
-    def process(self: "Err") -> None:
+    def process(self) -> None:
         """Process current exception context in the fenced code block.
 
         Example:
@@ -85,7 +85,7 @@ class Err(object):
         self.__process(t, v, tb)
 
     def __process(
-        self: "Err",
+        self,
         t: Type[BaseException],
         v: BaseException,
         tb: Optional[TracebackType] = None,
@@ -130,7 +130,7 @@ class Err(object):
         self.__run_middleware(err_info)
 
     def setup(
-        self: "Err",
+        self,
         *,
         catch_all: bool = False,
         root_module: Optional[str] = None,
@@ -232,7 +232,7 @@ class Err(object):
         return self
 
     def __must_die(
-        self: "Err",
+        self,
         t: Type[BaseException],
         v: BaseException,
         tb: TracebackType,
@@ -246,7 +246,7 @@ class Err(object):
             return False
         return any(ff.must_die(t, v, tb) for ff in self.__failfast_chain)
 
-    def __run_middleware(self: "Err", err_info: ErrorInfo) -> None:
+    def __run_middleware(self, err_info: ErrorInfo) -> None:
         """Process all the middleware.
 
         Args:
@@ -259,7 +259,7 @@ class Err(object):
                 logger.error("%r middleware failed: %s", resp, e)
 
     def iter_fingerprint_parts(
-        self: "Err",
+        self,
         t: Type[BaseException],
         v: BaseException,
         stack: List[FrameInfo],
@@ -307,7 +307,7 @@ class Err(object):
                     )  # App execution line
 
     def __fingerprint(
-        self: "Err",
+        self,
         t: Type[BaseException],
         v: BaseException,
         stack: List[FrameInfo],
@@ -334,7 +334,7 @@ class Err(object):
         ).digest()
         return UUID(bytes=fp_hash[:16], version=5)
 
-    def add_fail_fast(self: "Err", ff: BaseFailFast) -> None:
+    def add_fail_fast(self, ff: BaseFailFast) -> None:
         """Add fail-fast handler to the end of the chain.
 
         Args:
@@ -348,7 +348,7 @@ class Err(object):
             raise ValueError(msg)
         self.__failfast_chain.append(ff)
 
-    def add_middleware(self: "Err", mw: BaseMiddleware) -> None:
+    def add_middleware(self, mw: BaseMiddleware) -> None:
         """Add middleware to the end of the chain.
 
         Args:
@@ -363,7 +363,7 @@ class Err(object):
         self.__middleware_chain.append(mw)
 
     def __default_middleware(
-        self: "Err",
+        self,
         format: Optional[str] = None,
         error_info_path: Optional[str] = None,
         error_info_compress: Optional[str] = None,

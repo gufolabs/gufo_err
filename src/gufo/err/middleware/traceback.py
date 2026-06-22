@@ -60,7 +60,7 @@ class TracebackMiddleware(BaseMiddleware):
     """
 
     def __init__(
-        self: "TracebackMiddleware",
+        self,
         format: str = "terse",
         primary_char: str = "~",
         secondary_char: str = "^",
@@ -72,7 +72,7 @@ class TracebackMiddleware(BaseMiddleware):
             secondary_char=secondary_char,
         )
 
-    def process(self: "TracebackMiddleware", info: ErrorInfo) -> None:
+    def process(self, info: ErrorInfo) -> None:
         """Middleware entrypoint.
 
         Dumps stack info error log with given stack format.
