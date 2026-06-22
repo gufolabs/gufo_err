@@ -1,6 +1,6 @@
 # Gufo Err Example: Global Hook
 
-Lets install the error handling as the global python
+Let's install the error handling as the global python
 exception hook.
 
 ```  py title="global.py" linenums="1"
@@ -20,7 +20,7 @@ so we need to import it first.
 --8<-- "examples/global.py"
 ```
 
-`err.setup()` function must be called to initialize and confugure
+`err.setup()` function must be called to initialize and configure
 the error protection. `catch_all` argument set to true to replace
 the Python global error handling.
 See [Err.setup()](../reference/gufo/err/err.md#gufo.err.err.Err.setup) for
@@ -30,7 +30,7 @@ details.
 --8<-- "examples/global.py"
 ```
 
-Lets define the function which will intentionally fail.
+Let's define the function which will intentionally fail.
 
 ```  py title="global.py" linenums="1" hl_lines="10"
 --8<-- "examples/global.py"
@@ -63,7 +63,7 @@ format by default to mimic Python's default behavior. But note the first string.
 `39dc9706-9550-5959-9c67-e702d036d4f9` is the error fingerprint - the unique
 error discriminator.
 
-Lets run our example again and check the output:
+Let's run our example again and check the output:
 ```
 Error: 39dc9706-9550-5959-9c67-e702d036d4f9
 Traceback (most recent call last):

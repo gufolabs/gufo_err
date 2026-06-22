@@ -1,7 +1,7 @@
 # Gufo Err Example: Global Hook, Expanded Dump.
 
-Lets modify our [global.py](global.md) example to
-get more information beyound default error traceback.
+Let's modify our [global.py](global.md) example to
+get more information beyond default error traceback.
 
 ```  py title="globalextend.py" linenums="1"
 --8<-- "examples/globalextend.py"
@@ -20,7 +20,7 @@ so we need to import it first.
 --8<-- "examples/globalextend.py"
 ```
 
-`err.setup()` function must be called to initialize and confugure
+`err.setup()` function must be called to initialize and configure
 the error protection. `catch_all` argument set to true to replace
 the Python global error handling. `format` argument sets
 traceback format to extended version.
@@ -31,7 +31,7 @@ details.
 --8<-- "examples/globalextend.py"
 ```
 
-Lets define the function which will intentionally fail. We define
+Let's define the function which will intentionally fail. We define
 the `x` variable to catch it in the trace later.
 
 ```  py title="globalextend.py" linenums="1" hl_lines="12"
@@ -94,6 +94,4 @@ Locals:
 -------------------------------------------------------------------------------
 ```
 
-Wow, much more details. Note, the fingerprint is differs. We also got a
-source code context and local variables for each frame. Such great improvement
-to analysis.
+Note that the fingerprint differs. We also got source code context and local variables for each frame. Such a great improvement to analysis.

@@ -2,20 +2,20 @@
 
 Errors may be unrecoverable. Application should be stopped
 as soon as possible to minimise the possible damage.
-Lets implement the simple fail-fast behavior. Consider
+Let's implement the simple fail-fast behavior. Consider
 the `RuntimeError` is fatal.
 
 ```  py title="failfast.py" linenums="1"
 --8<-- "examples/failfast.py"
 ```
 
-Lets see.
+Let's see.
 
 ```  py title="failfast.py" linenums="1" hl_lines="1 2"
 --8<-- "examples/failfast.py"
 ```
 
-Type hints is the great help, so lets import the necessary
+Type hints is the great help, so let's import the necessary
 types.
 
 
@@ -31,7 +31,7 @@ class to implement our handler.
 --8<-- "examples/failfast.py"
 ```
 
-Lets define our fail-fast handler. It must be derived
+Let's define our fail-fast handler. It must be derived
 from `BaseFailFast`.
 
 ```  py title="failfast.py" linenums="1" hl_lines="7"
@@ -52,7 +52,7 @@ may be broken with future update.
 --8<-- "examples/failfast.py"
 ```
 
-Lets store our configuration as `exc_type` argument.
+Let's store our configuration as `exc_type` argument.
 
 ```  py title="failfast.py" linenums="1" hl_lines="11 12 13"
 --8<-- "examples/failfast.py"
@@ -77,7 +77,7 @@ with configured one - we must fail.
 --8<-- "examples/failfast.py"
 ```
 
-`err.setup()` function must be called to initialize and confugure
+`err.setup()` function must be called to initialize and configure
 the error protection. None, we pass to the `fail_fast` argument
 a list of configured fail-fast handler instances, not a classes.
 `fail_fast_code` parameter is optional and sets the exit code
@@ -90,13 +90,13 @@ details.
 --8<-- "examples/failfast.py"
 ```
 
-Lets define the function which will intentionally fail.
+Let's define the function which will intentionally fail.
 
 ```  py title="failfast.py" linenums="1" hl_lines="24 26"
 --8<-- "examples/failfast.py"
 ```
 
-Lets wrap our error domain.
+Let's wrap our error domain.
 
 ```  py title="failfast.py" linenums="1" hl_lines="25"
 --8<-- "examples/failfast.py"
