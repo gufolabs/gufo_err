@@ -11,7 +11,7 @@ the `RuntimeError` is fatal.
 
 Let's see.
 
-```  py title="failfast.py" linenums="1" hl_lines="1 2"
+```  py title="failfast.py" linenums="1" hl_lines="1"
 --8<-- "examples/failfast.py"
 ```
 

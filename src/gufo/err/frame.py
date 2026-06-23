@@ -1,17 +1,18 @@
 # ---------------------------------------------------------------------
 # Gufo Err: Frame Extraction
 # ---------------------------------------------------------------------
-# Copyright (C) 2022-25, Gufo Labs
+# Copyright (C) 2022-26, Gufo Labs
 # ---------------------------------------------------------------------
 """FrameInfo structure."""
 
 # Python modules
 import ast
 import sys
+from collections.abc import Iterable
 from importlib.abc import InspectLoader
 from itertools import islice
 from types import CodeType, TracebackType
-from typing import Iterable, Optional, cast
+from typing import cast
 
 # Gufo Labs modules
 from .types import Anchor, CodePosition, FrameInfo, SourceInfo
@@ -48,7 +49,7 @@ def iter_frames(
         Iterable of FrameInfo, starting from top of the
         stack (current code position).
     """
-    current: Optional[TracebackType] = tb
+    current: TracebackType | None = tb
     while current is not None:
         frame = current.tb_frame
         src = __get_source_info(
@@ -71,14 +72,14 @@ def iter_frames(
 
 def __source_from_loader(
     loader: InspectLoader, module_name: str
-) -> Optional[str]:
+) -> str | None:
     try:
         return loader.get_source(module_name)
     except (AttributeError, ImportError, OSError):
         return None  # .get_source() not supported
 
 
-def __source_from_file(file_name: str) -> Optional[str]:
+def __source_from_file(file_name: str) -> str | None:
     try:
         with open(file_name) as f:
             return f.read()
@@ -87,11 +88,11 @@ def __source_from_file(file_name: str) -> Optional[str]:
 
 
 def __get_source(
-    file_name: Optional[str] = None,
-    loader: Optional[InspectLoader] = None,
-    module_name: Optional[str] = None,
-) -> Optional[str]:
-    src: Optional[str] = None
+    file_name: str | None = None,
+    loader: InspectLoader | None = None,
+    module_name: str | None = None,
+) -> str | None:
+    src: str | None = None
     if loader and module_name:
         src = __source_from_loader(loader, module_name)
     if not src and file_name:
@@ -104,10 +105,10 @@ def __get_source_info(
     context_lines: int,
     code: CodeType,
     inst_index: int,
-    file_name: Optional[str] = None,
-    loader: Optional[InspectLoader] = None,
-    module_name: Optional[str] = None,
-) -> Optional[SourceInfo]:
+    file_name: str | None = None,
+    loader: InspectLoader | None = None,
+    module_name: str | None = None,
+) -> SourceInfo | None:
     src = __get_source(
         file_name=file_name, loader=loader, module_name=module_name
     )
@@ -156,7 +157,7 @@ HAS_CODE_POSITION = __has_code_position()
 
 def __get_code_position(
     code: CodeType, inst_index: int, line: str
-) -> Optional[CodePosition]:
+) -> CodePosition | None:
     """Extract code range for current instruction.
 
     Args:
@@ -195,7 +196,7 @@ def __get_code_position(
     )
 
 
-def __get_anchor(segment: str, indent: int = 0) -> Optional[Anchor]:
+def __get_anchor(segment: str, indent: int = 0) -> Anchor | None:
     """Split code segment and try to get error anchors.
 
     Backport from Python 3.11

@@ -1,5 +1,4 @@
 from types import TracebackType
-from typing import Type
 
 from gufo.err import BaseFailFast, err
 
@@ -10,7 +9,7 @@ class FailOnType(BaseFailFast):
         self.exc_type = exc_type
 
     def must_die(
-        self, t: Type[BaseException], v: BaseException, tb: TracebackType
+        self, t: type[BaseException], v: BaseException, tb: TracebackType
     ) -> bool:
         return t == self.exc_type
 

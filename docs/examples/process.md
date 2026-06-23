@@ -31,14 +31,14 @@ exception and do not install the global hook.
 See [Err.setup()](../reference/gufo/err/err.md#gufo.err.err.Err.setup) for
 details.
 
-```  py title="process.py" linenums="1" hl_lines="6 7 8 9"
+```  py title="process.py" linenums="1" hl_lines="6 7 8 9 10"
 --8<-- "examples/process.py"
 ```
 
 Let's define the function which will intentionally fail. We define
 the `x` variable to catch it in the trace later.
 
-```  py title="process.py" linenums="1" hl_lines="12 14"
+```  py title="process.py" linenums="1" hl_lines="13 15"
 --8<-- "examples/process.py"
 ```
 
@@ -46,13 +46,13 @@ Unlike the [previous example](globalextend.md), we wrap our function directly
 in `try ... except` block. We do not know which exception
 we may catch, so `Exception` is the good start.
 
-```  py title="process.py" linenums="1" hl_lines="13"
+```  py title="process.py" linenums="1" hl_lines="14"
 --8<-- "examples/process.py"
 ```
 
 Let's call our function.
 
-```  py title="process.py" linenums="1" hl_lines="15"
+```  py title="process.py" linenums="1" hl_lines="16"
 --8<-- "examples/process.py"
 ```
 `err.process()` runs all error handling machinery, so just

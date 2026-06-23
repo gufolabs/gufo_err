@@ -8,7 +8,6 @@
 # Python modules
 import os
 from pathlib import Path
-from typing import Optional, Union
 
 # Gufo Labs modules
 from ..abc.middleware import BaseMiddleware
@@ -47,8 +46,8 @@ class ErrorInfoMiddleware(BaseMiddleware):
 
     def __init__(
         self,
-        path: Union[Path, str],
-        compress: Optional[str] = None,
+        path: Path | str,
+        compress: str | None = None,
     ) -> None:
         super().__init__()
         self.path = Path(path)

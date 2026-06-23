@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Gufo Err: err singleton
 # ---------------------------------------------------------------------
-# Copyright (C) 2022-23, Gufo Labs
+# Copyright (C) 2022-26, Gufo Labs
 # ---------------------------------------------------------------------
 """Define `Err` class and `err` singleton.
 
@@ -13,8 +13,8 @@ Attributes:
 import hashlib
 import os
 import sys
+from collections.abc import Callable, Iterable
 from types import TracebackType
-from typing import Callable, Iterable, List, Optional, Type
 from uuid import UUID
 
 from .abc.failfast import BaseFailFast
@@ -31,7 +31,7 @@ DEFAULT_HASH = "sha1"
 DEFAULT_EXIT_CODE = 1
 
 
-class Err(object):
+class Err:
     """Error handling singleton.
 
     Example:
@@ -47,16 +47,17 @@ class Err(object):
         self.__version = DEFAULT_VERSION
         self.__hash_fn = hashlib.sha1
         self.__initialized = False
-        self.__failfast_chain: List[BaseFailFast] = []
-        self.__middleware_chain: List[BaseMiddleware] = []
+        self.__failfast_chain: list[BaseFailFast] = []
+        self.__middleware_chain: list[BaseMiddleware] = []
         self.__failfast_code = DEFAULT_EXIT_CODE
-        self.__root_module: Optional[str] = None
-        self.__prev_exc_hook: Optional[
+        self.__root_module: str | None = None
+        self.__prev_exc_hook: (
             Callable[
-                [Type[BaseException], BaseException, Optional[TracebackType]],
+                [type[BaseException], BaseException, TracebackType | None],
                 None,
             ]
-        ] = None
+            | None
+        ) = None
 
     def __del__(self) -> None:
         """Cleanup."""
@@ -86,9 +87,9 @@ class Err(object):
 
     def __process(
         self,
-        t: Type[BaseException],
+        t: type[BaseException],
         v: BaseException,
-        tb: Optional[TracebackType] = None,
+        tb: TracebackType | None = None,
     ) -> None:
         """Process given exception context.
 
@@ -133,16 +134,16 @@ class Err(object):
         self,
         *,
         catch_all: bool = False,
-        root_module: Optional[str] = None,
+        root_module: str | None = None,
         name: str = DEFAULT_NAME,
         version: str = DEFAULT_VERSION,
         hash: str = DEFAULT_HASH,
-        fail_fast: Optional[Iterable[BaseFailFast]] = None,
+        fail_fast: Iterable[BaseFailFast] | None = None,
         fail_fast_code: int = DEFAULT_EXIT_CODE,
-        middleware: Optional[Iterable[BaseMiddleware]] = None,
-        format: Optional[str] = "terse",
-        error_info_path: Optional[str] = None,
-        error_info_compress: Optional[str] = None,
+        middleware: Iterable[BaseMiddleware] | None = None,
+        format: str | None = "terse",
+        error_info_path: str | None = None,
+        error_info_compress: str | None = None,
     ) -> "Err":
         """Setup error handling singleton.
 
@@ -233,7 +234,7 @@ class Err(object):
 
     def __must_die(
         self,
-        t: Type[BaseException],
+        t: type[BaseException],
         v: BaseException,
         tb: TracebackType,
     ) -> bool:
@@ -260,9 +261,9 @@ class Err(object):
 
     def iter_fingerprint_parts(
         self,
-        t: Type[BaseException],
+        t: type[BaseException],
         v: BaseException,
-        stack: List[FrameInfo],
+        stack: list[FrameInfo],
     ) -> Iterable[str]:
         """Iterate over the fingerprint parts.
 
@@ -308,9 +309,9 @@ class Err(object):
 
     def __fingerprint(
         self,
-        t: Type[BaseException],
+        t: type[BaseException],
         v: BaseException,
-        stack: List[FrameInfo],
+        stack: list[FrameInfo],
     ) -> UUID:
         """Calculate the error fingerprint.
 
@@ -364,10 +365,10 @@ class Err(object):
 
     def __default_middleware(
         self,
-        format: Optional[str] = None,
-        error_info_path: Optional[str] = None,
-        error_info_compress: Optional[str] = None,
-    ) -> List[BaseMiddleware]:
+        format: str | None = None,
+        error_info_path: str | None = None,
+        error_info_compress: str | None = None,
+    ) -> list[BaseMiddleware]:
         """Get default middleware chain.
 
         Args:
@@ -379,7 +380,7 @@ class Err(object):
             error_info_compress: Error info compression algorithm. Used along
                 with `error_info_path`.
         """
-        r: List[BaseMiddleware] = []
+        r: list[BaseMiddleware] = []
         if format is not None:
             from .middleware.traceback import TracebackMiddleware
 

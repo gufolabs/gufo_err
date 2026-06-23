@@ -7,7 +7,6 @@
 
 # Python modules
 from types import TracebackType
-from typing import Dict, Optional, Type, Union
 
 # Gufo Labs modules
 from ..abc.failfast import BaseFailFast
@@ -62,23 +61,23 @@ class TypeMatchFailFast(BaseFailFast):
 
     def __init__(
         self,
-        exc: Optional[Union[str, Type[BaseException]]] = None,
+        exc: str | type[BaseException] | None = None,
         *,
-        match: Optional[str] = None,
-        msg: Optional[str] = None,
+        match: str | None = None,
+        msg: str | None = None,
     ) -> None:
         super().__init__()
         # exc name -> match -> msg
-        self.__map: Dict[str, Dict[Optional[str], Optional[str]]] = {}
+        self.__map: dict[str, dict[str | None, str | None]] = {}
         if exc:
             self.add_match(exc, match=match, msg=msg)
 
     def add_match(
         self,
-        exc: Union[str, Type[BaseException]],
+        exc: str | type[BaseException],
         *,
-        match: Optional[str] = None,
-        msg: Optional[str] = None,
+        match: str | None = None,
+        msg: str | None = None,
     ) -> "TypeMatchFailFast":
         """Add new exception type for the fail-fast.
 
@@ -112,7 +111,7 @@ class TypeMatchFailFast(BaseFailFast):
         return self
 
     @staticmethod
-    def __exc_to_str(t: Type[BaseException]) -> str:
+    def __exc_to_str(t: type[BaseException]) -> str:
         """Convert exception instance to string class name.
 
         Args:
@@ -125,7 +124,7 @@ class TypeMatchFailFast(BaseFailFast):
 
     def must_die(
         self,
-        t: Type[BaseException],
+        t: type[BaseException],
         v: BaseException,
         tb: TracebackType,
     ) -> bool:
@@ -135,7 +134,7 @@ class TypeMatchFailFast(BaseFailFast):
         Check if exception class matches given substrings.
         """
 
-        def msg(s: Optional[str]) -> None:
+        def msg(s: str | None) -> None:
             if not s:
                 return
             if "%s" in s:

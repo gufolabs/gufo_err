@@ -5,7 +5,7 @@ Traceback (most recent call last):
 File: /workspaces/gufo_err/tests/test_traceback_samples.py (line 67)
    60         ],
    61     )
-   62     def test_format(cfg: Dict[str, Any]) -> None:
+   62     def test_format(cfg: dict[str, Any]) -> None:
    63         fmt = cfg.get("format", "terse")
    64         err = Err().setup(**cfg)
    65         cfg = {}  # Reset local vars
@@ -22,8 +22,8 @@ File: /workspaces/gufo_err/tests/test_traceback_samples.py (line 67)
 Locals:
                  cfg = {}
                  fmt = 'extend'
-                 err = <gufo.err.err.Err object at 0x7f16e9c18c10>
-              buffer = <_io.StringIO object at 0x7f16e9be4a60>
+                 err = <gufo.err.err.Err object at 0xffffa6c228a0>
+              buffer = <_io.StringIO object at 0xffffa6d5f400>
 -------------------------------------------------------------------------------
 File: /workspaces/gufo_err/tests/sample/trace.py (line 15)
     8         x += 1

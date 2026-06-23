@@ -8,12 +8,12 @@
 # Python modules
 import datetime
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 from uuid import UUID
 
 
 @dataclass
-class Anchor(object):
+class Anchor:
     """Exact problem position (Python 3.11+).
 
     Denotes operator of subscript which causes the problem.
@@ -28,7 +28,7 @@ class Anchor(object):
 
 
 @dataclass
-class CodePosition(object):
+class CodePosition:
     """Exact code position for Python 3.11+.
 
     Args:
@@ -43,11 +43,11 @@ class CodePosition(object):
     end_line: int
     start_col: int
     end_col: int
-    anchor: Optional[Anchor]
+    anchor: Anchor | None
 
 
 @dataclass
-class SourceInfo(object):
+class SourceInfo:
     """Source context for frame.
 
     Args:
@@ -61,12 +61,12 @@ class SourceInfo(object):
     file_name: str
     first_line: int
     current_line: int
-    lines: List[str]
-    pos: Optional[CodePosition] = None
+    lines: list[str]
+    pos: CodePosition | None = None
 
 
 @dataclass
-class FrameInfo(object):
+class FrameInfo:
     """Execution frame.
 
     Args:
@@ -78,13 +78,13 @@ class FrameInfo(object):
     """
 
     name: str
-    source: Optional[SourceInfo]
-    locals: Dict[str, Any]
-    module: Optional[str] = None
+    source: SourceInfo | None
+    locals: dict[str, Any]
+    module: str | None = None
 
 
 @dataclass
-class ErrorInfo(object):
+class ErrorInfo:
     """Current execution frame information.
 
     Args:
@@ -103,12 +103,12 @@ class ErrorInfo(object):
     name: str
     version: str
     fingerprint: UUID
-    stack: List[FrameInfo]
+    stack: list[FrameInfo]
     exception: BaseException
-    timestamp: Optional[datetime.datetime] = None
-    root_module: Optional[str] = None
+    timestamp: datetime.datetime | None = None
+    root_module: str | None = None
 
-    def get_app_top_frame(self) -> Optional[FrameInfo]:
+    def get_app_top_frame(self) -> FrameInfo | None:
         """Get application's top stack frame.
 
         Find top stack frame belonging to the application,
@@ -139,7 +139,7 @@ class ExceptionStub(Exception):
         args: Exception arguments
     """
 
-    def __init__(self, kls: str, args: Tuple[Any, ...]) -> None:
+    def __init__(self, kls: str, args: tuple[Any, ...]) -> None:
         self.kls = kls
         self.args = args
 

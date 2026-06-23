@@ -1,16 +1,16 @@
 # ---------------------------------------------------------------------
 # Gufo Err: ErrorInfoMiddleware
 # ---------------------------------------------------------------------
-# Copyright (C) 2022-23, Gufo Labs
+# Copyright (C) 2022-26, Gufo Labs
 # ---------------------------------------------------------------------
 """Compressor."""
 
 # Python modules
 import os
-from typing import Callable, Dict, Optional, Tuple, Type
+from collections.abc import Callable
 
 
-class Compressor(object):
+class Compressor:
     """Compressor/decompressor class.
 
     Use .encode() to compress data and .decode() to decompress.
@@ -27,12 +27,12 @@ class Compressor(object):
         ValueError: If format is not supported.
     """
 
-    FORMATS: Dict[
-        Optional[str],
-        Tuple[Callable[[bytes], bytes], Callable[[bytes], bytes]],
+    FORMATS: dict[
+        str | None,
+        tuple[Callable[[bytes], bytes], Callable[[bytes], bytes]],
     ]
 
-    def __init__(self, format: Optional[str] = None) -> None:
+    def __init__(self, format: str | None = None) -> None:
         try:
             self.encode, self.decode = self.FORMATS[format]
         except KeyError as e:
@@ -44,7 +44,7 @@ class Compressor(object):
             self.suffix = f".{format}"
 
     @classmethod
-    def autodetect(cls: Type["Compressor"], path: str) -> "Compressor":
+    def autodetect(cls: type["Compressor"], path: str) -> "Compressor":
         """Returns Compressor instance for given format.
 
         Args:
@@ -56,7 +56,7 @@ class Compressor(object):
         return Compressor(format=cls.get_format(path))
 
     @classmethod
-    def get_format(cls: Type["Compressor"], path: str) -> Optional[str]:
+    def get_format(cls: type["Compressor"], path: str) -> str | None:
         """Auto-detect format from path.
 
         Args:

@@ -27,14 +27,14 @@ traceback format to extended version.
 See [Err.setup()](../reference/gufo/err/err.md#gufo.err.err.Err.setup) for
 details.
 
-```  py title="globalextend.py" linenums="1" hl_lines="6 7 8 9"
+```  py title="globalextend.py" linenums="1" hl_lines="6 7 8 9 10"
 --8<-- "examples/globalextend.py"
 ```
 
 Let's define the function which will intentionally fail. We define
 the `x` variable to catch it in the trace later.
 
-```  py title="globalextend.py" linenums="1" hl_lines="12"
+```  py title="globalextend.py" linenums="1" hl_lines="13"
 --8<-- "examples/globalextend.py"
 ```
 

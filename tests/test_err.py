@@ -1,13 +1,13 @@
 # ---------------------------------------------------------------------
 # Gufo Err: Err tests
 # ---------------------------------------------------------------------
-# Copyright (C) 2022-23, Gufo Labs
+# Copyright (C) 2022-26, Gufo Labs
 # ---------------------------------------------------------------------
 
 # Python modules
 import os
 import sys
-from typing import Iterable, List, Type
+from collections.abc import Iterable
 from uuid import UUID
 
 # Third-party modules
@@ -74,9 +74,9 @@ def test_hash(hash, data, expected):
     class ZeroHashErr(Err):
         def iter_fingerprint_parts(
             self,
-            t: Type[BaseException],
+            t: type[BaseException],
             v: BaseException,
-            stack: List[FrameInfo],
+            stack: list[FrameInfo],
         ) -> Iterable[str]:
             yield from data
 
@@ -295,7 +295,7 @@ def test_catch_all():
 
 
 @pytest.mark.parametrize("exc_class", [SystemExit, KeyboardInterrupt])
-def test_process_excluded_exc(exc_class: Type[BaseException]):
+def test_process_excluded_exc(exc_class: type[BaseException]):
     err = Err()
     err.setup()
     try:

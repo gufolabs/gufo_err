@@ -7,7 +7,7 @@
 
 # Python modules
 from abc import ABC, abstractmethod
-from typing import Iterable
+from collections.abc import Iterable
 
 # GufoLabs modules
 from ..types import CodePosition, ErrorInfo, ExceptionStub, FrameInfo

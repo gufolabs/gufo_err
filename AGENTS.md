@@ -2,7 +2,7 @@
 
 ## Project overview
 
-Gufo Err is a Python error handling framework providing structured exception processing, fingerprinting, and human-readable error reporting. It supports Python 3.9-3.14 (current version 0.6.0).
+Gufo Err is a Python error handling framework providing structured exception processing, fingerprinting, and human-readable error reporting. It supports Python 3.10-3.14 (current version 0.6.0).
 
 Package name: `gufo_err`, importable as `from gufo.err import ...`.
 
@@ -194,7 +194,7 @@ The `man/err.md` file fills the "Exit Status" section explicitly — keep it up 
 
 ## CI pipeline
 
-The project runs GitHub Actions (ubuntu-24.04, Python 3.14 for linting, matrix of 3.9-3.14 for tests). Lint job must pass before test job. Publish triggers on git tags. Codecov integration enabled.
+The project runs GitHub Actions (ubuntu-24.04, Python 3.14 for linting, matrix of 3.10-3.14 for tests). Lint job must pass before test job. Publish triggers on git tags. Codecov integration enabled.
 
 Workflow files live in `.github/workflows/` -- py-tests.yml is the critical one.
 

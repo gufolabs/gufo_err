@@ -9,7 +9,7 @@
 import datetime
 import json
 import uuid
-from typing import Any, Dict, Union
+from typing import Any
 
 # Gufo Labs modules
 from .types import ErrorInfo, ExceptionStub, FrameInfo, SourceInfo
@@ -34,7 +34,7 @@ def __q_x_class(e: BaseException) -> str:
     return f"{mod}.{ncls}"
 
 
-def __q_var(x: Any) -> Union[str, int, float]:  # noqa: ANN401
+def __q_var(x: Any) -> str | int | float:  # noqa: ANN401
     """Convert variable to the JSON-encodable form.
 
     Args:
@@ -48,7 +48,7 @@ def __q_var(x: Any) -> Union[str, int, float]:  # noqa: ANN401
     return str(x)
 
 
-def __q_frame_info(fi: FrameInfo) -> Dict[str, Any]:
+def __q_frame_info(fi: FrameInfo) -> dict[str, Any]:
     """Convert FrameInfo into JSON-serializeable form.
 
     Args:
@@ -67,7 +67,7 @@ def __q_frame_info(fi: FrameInfo) -> Dict[str, Any]:
     return r
 
 
-def __q_source(si: SourceInfo) -> Dict[str, Any]:
+def __q_source(si: SourceInfo) -> dict[str, Any]:
     """Convert SourceInfo into JSON-serializeable form.
 
     Args:
@@ -84,7 +84,7 @@ def __q_source(si: SourceInfo) -> Dict[str, Any]:
     }
 
 
-def __q_exception(e: BaseException) -> Dict[str, Any]:
+def __q_exception(e: BaseException) -> dict[str, Any]:
     """
     Convert exception into JSON-serializeable form.
 
@@ -100,7 +100,7 @@ def __q_exception(e: BaseException) -> Dict[str, Any]:
     }
 
 
-def to_dict(info: ErrorInfo) -> Dict[str, Any]:
+def to_dict(info: ErrorInfo) -> dict[str, Any]:
     """Serialize ErrorInfo to a dict of primitive types.
 
     Args:
@@ -137,7 +137,7 @@ def to_json(info: ErrorInfo) -> str:
     return json.dumps(to_dict(info))
 
 
-def from_dict(data: Dict[str, Any]) -> ErrorInfo:
+def from_dict(data: dict[str, Any]) -> ErrorInfo:
     """Deserialize Dict to ErrorInfo.
 
     Args:
@@ -150,7 +150,7 @@ def from_dict(data: Dict[str, Any]) -> ErrorInfo:
         ValueError: if required key is missed.
     """
 
-    def get(d: Dict[str, Any], name: str) -> Any:  # noqa: ANN401
+    def get(d: dict[str, Any], name: str) -> Any:  # noqa: ANN401
         """Get the key's value from the dictionary.
 
         Args:
@@ -169,7 +169,7 @@ def from_dict(data: Dict[str, Any]) -> ErrorInfo:
             raise ValueError(msg)
         return x
 
-    def get_fi(d: Dict[str, Any]) -> FrameInfo:
+    def get_fi(d: dict[str, Any]) -> FrameInfo:
         source = get_si(d["source"]) if d.get("source") else None
         return FrameInfo(
             name=get(d, "name"),
@@ -178,7 +178,7 @@ def from_dict(data: Dict[str, Any]) -> ErrorInfo:
             source=source,
         )
 
-    def get_si(d: Dict[str, Any]) -> SourceInfo:
+    def get_si(d: dict[str, Any]) -> SourceInfo:
         return SourceInfo(
             file_name=get(d, "file_name"),
             first_line=get(d, "first_line"),

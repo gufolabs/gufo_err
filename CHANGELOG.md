@@ -26,6 +26,10 @@ To see unreleased changes, please see the [CHANGELOG on the master branch](https
 * Remove unnecessary `self` type hints.
 * Updated docs.
 
+### Removed
+
+* Python 3.9 support.
+
 ### Infrastructure
 
 * ruff 0.16.18
