@@ -109,6 +109,20 @@ err.setup(name="service", version="1.0", format=None)
 
 This is useful when you only need file persistence without any console noise.
 
+## Support and License
+
+### What is the license of Gufo Err?
+
+Gufo Err is released under the [3-clause BSD License](LICENSE.md).
+
+### Where can I get support?
+
+Please use GitHub Issues for bugs or Discussions for feature requests.
+
+### Can I help the Gufo Err project financially?
+
+Yes, you can support our work via [GitHub Sponsors](https://github.com/sponsors/gufolabs) or [Buy Me a Coffee](https://www.buymeacoffee.com/dvolodin). Your contributions help us continue developing and maintaining NOC as a high-quality open-source project.
+
 ## What is "Gufo"?
 
 *Gufo* means *the Owl* in Italian.
