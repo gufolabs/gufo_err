@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Gufo Err: __source_from tests
 # ---------------------------------------------------------------------
-# Copyright (C) 2022-23, Gufo Labs
+# Copyright (C) 2022-26, Gufo Labs
 # ---------------------------------------------------------------------
 
 # Python modules
@@ -55,7 +55,7 @@ def test_source_from_loader_miss(loader: InspectLoader) -> None:
 
 
 def test_source_from_broken_loader() -> None:
-    class BrokenLoader(object): ...
+    class BrokenLoader: ...
 
     assert __source_from_loader(BrokenLoader(), "invalidmodule") is None
 

@@ -12,10 +12,10 @@ import os
 import re
 import sys
 import uuid
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from enum import IntEnum
 from operator import attrgetter
-from typing import Callable, Dict, Iterable, List, Optional, Set
 
 # Gufo Err modules
 from . import __version__
@@ -26,7 +26,7 @@ from .types import ErrorInfo
 
 
 @dataclass
-class ListItem(object):
+class ListItem:
     """Data structure for `err list`.
 
     Attributes:
@@ -68,7 +68,7 @@ ELLIPSIS = "..."
 L_ELLIPSIS = len(ELLIPSIS)
 
 
-class Cli(object):
+class Cli:
     """`err` utility class."""
 
     rx_fn = re.compile(
@@ -199,7 +199,7 @@ class Cli(object):
         # Build index
         index = self.get_index(prefix)
         # Read files
-        r: List[ListItem] = []
+        r: list[ListItem] = []
         faults = 0
         default_ts = datetime.datetime.now()
         for fp in fingerprints:
@@ -273,7 +273,7 @@ class Cli(object):
         return ExitCode.OK if not faults else ExitCode.CANNOT_READ
 
     @staticmethod
-    def iter_fingerprints(items: List[str], prefix: str) -> Iterable[str]:
+    def iter_fingerprints(items: list[str], prefix: str) -> Iterable[str]:
         """Resolve fingerprint expressions and iterate result.
 
         Fingerprint expressions is a list user-defined expressions
@@ -323,13 +323,13 @@ class Cli(object):
                 # Invalid fingerprint
                 raise SyntaxError(expr)
 
-        seen: Set[str] = set()
+        seen: set[str] = set()
         for expr in items:
             seen.update(iter_resolve(expr))
         yield from seen
 
     @staticmethod
-    def get_index(prefix: str) -> Dict[str, str]:
+    def get_index(prefix: str) -> dict[str, str]:
         """Get fingerprint index.
 
         Args:
@@ -439,7 +439,7 @@ class Cli(object):
         return ExitCode.OK if not faults else ExitCode.CANNOT_READ
 
     @staticmethod
-    def read_info(path: str) -> Optional[ErrorInfo]:
+    def read_info(path: str) -> ErrorInfo | None:
         """Read error info file.
 
         Args:
@@ -478,7 +478,7 @@ class Cli(object):
         )
         return h
 
-    def run(self, args: List[str]) -> ExitCode:
+    def run(self, args: list[str]) -> ExitCode:
         """Main dispatcher function.
 
         Args:

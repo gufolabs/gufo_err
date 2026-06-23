@@ -1,13 +1,13 @@
 # ---------------------------------------------------------------------
 # Gufo Err: TypesFailFast
 # ---------------------------------------------------------------------
-# Copyright (C) 2022-23, Gufo Labs
+# Copyright (C) 2022-26, Gufo Labs
 # ---------------------------------------------------------------------
 """TypesFailFast."""
 
 # Python modules
+from collections.abc import Iterable
 from types import TracebackType
-from typing import Iterable, Type
 
 # Gufo Labs modules
 from ..abc.failfast import BaseFailFast
@@ -28,13 +28,13 @@ class TypesFailFast(BaseFailFast):
         ```
     """
 
-    def __init__(self, types: Iterable[Type[Exception]]) -> None:
+    def __init__(self, types: Iterable[type[Exception]]) -> None:
         super().__init__()
         self.types = set(types)
 
     def must_die(
         self,
-        t: Type[BaseException],
+        t: type[BaseException],
         v: BaseException,
         tb: TracebackType,
     ) -> bool:

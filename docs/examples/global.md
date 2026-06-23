@@ -26,13 +26,13 @@ the Python global error handling.
 See [Err.setup()](../reference/gufo/err/err.md#gufo.err.err.Err.setup) for
 details.
 
-```  py title="global.py" linenums="1" hl_lines="6 7"
+```  py title="global.py" linenums="1" hl_lines="6 7 8"
 --8<-- "examples/global.py"
 ```
 
 Let's define the function which will intentionally fail.
 
-```  py title="global.py" linenums="1" hl_lines="10"
+```  py title="global.py" linenums="1" hl_lines="11"
 --8<-- "examples/global.py"
 ```
 

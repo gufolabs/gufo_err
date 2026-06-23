@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Gufo Labs: CI test
 # ---------------------------------------------------------------------
-# Copyright (C) 2022-23, Gufo Labs
+# Copyright (C) 2022-26, Gufo Labs
 # See LICENSE.md for details
 # ---------------------------------------------------------------------
 
@@ -9,8 +9,8 @@
 import inspect
 import os
 import sys
+from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Iterable
 
 # Third-party modules
 import pytest
@@ -34,7 +34,7 @@ VERSIONS = [
 
 
 @dataclass
-class Action(object):
+class Action:
     path: str
     job: str
     step: str

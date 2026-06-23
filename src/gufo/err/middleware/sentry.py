@@ -1,14 +1,15 @@
 # ---------------------------------------------------------------------
 # Gufo Err: SentryMiddleware
 # ---------------------------------------------------------------------
-# Copyright (C) 2022-23, Gufo Labs
+# Copyright (C) 2022-26, Gufo Labs
 # ---------------------------------------------------------------------
 """Sentry integration middleware."""
 
 # Python modules
+from collections.abc import Callable, Generator
 from contextlib import contextmanager
 from contextvars import ContextVar
-from typing import TYPE_CHECKING, Any, Callable, Dict, Generator, Optional
+from typing import TYPE_CHECKING, Any
 
 # Third-party modules
 import sentry_sdk
@@ -17,12 +18,12 @@ import sentry_sdk
 from ..abc.middleware import BaseMiddleware
 from ..types import ErrorInfo
 
-_current_err = ContextVar[Optional[ErrorInfo]]("current_err", default=None)
+_current_err = ContextVar[ErrorInfo | None]("current_err", default=None)
 
 if TYPE_CHECKING:
     Event = sentry_sdk._types.Event
 else:
-    Event = Dict[str, Any]
+    Event = dict[str, Any]
 
 
 @contextmanager
@@ -73,17 +74,13 @@ class SentryMiddleware(BaseMiddleware):
 
     def __init__(
         self,
-        dsn: Optional[str] = None,
+        dsn: str | None = None,
         debug: bool = False,
-        release: Optional[str] = None,
-        before_send: Optional[
-            Callable[
-                [Event, Dict[str, Any]],
-                Optional[Event],
-            ]
-        ] = None,
+        release: str | None = None,
+        before_send: Callable[[Event, dict[str, Any]], Event | None]
+        | None = None,
         disable_integrations: bool = False,
-        **kwargs: Dict[str, Any],
+        **kwargs: dict[str, Any],
     ) -> None:
         super().__init__()
         self.__user_before_send = before_send
@@ -104,8 +101,8 @@ class SentryMiddleware(BaseMiddleware):
     def __before_send(
         self,
         event: Event,
-        hint: Dict[str, Any],
-    ) -> Optional[Event]:
+        hint: dict[str, Any],
+    ) -> Event | None:
         """Enrich event with user-defined information and fingerprint.
 
         Call user-defined `before_send` and add additional

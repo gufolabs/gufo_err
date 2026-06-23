@@ -6,8 +6,8 @@
 """ExtendFormatter."""
 
 # Python modules
+from collections.abc import Iterable
 from pprint import pformat
-from typing import Iterable, Tuple
 
 # Gufo Err modules
 from ..abc.formatter import BaseFormatter
@@ -69,7 +69,7 @@ class ExtendFormatter(BaseFormatter):
                         yield f"{var_name:>20s} = {var_value}"
         yield self.SEP
 
-    def iter_vars(self, fi: FrameInfo) -> Iterable[Tuple[str, str]]:
+    def iter_vars(self, fi: FrameInfo) -> Iterable[tuple[str, str]]:
         """Iterate frame variables and convert them to the readable form.
 
         Args:

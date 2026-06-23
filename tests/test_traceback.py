@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Gufo Err: test TracebackMiddleware
 # ---------------------------------------------------------------------
-# Copyright (C) 2022-23, Gufo Labs
+# Copyright (C) 2022-26, Gufo Labs
 # ---------------------------------------------------------------------
 
 # Third-party modules
@@ -37,7 +37,7 @@ def test_long_var() -> None:
 
 
 def test_repr_failed() -> None:
-    class FailedRepr(object):
+    class FailedRepr:
         def __repr__(self) -> str:
             msg = "Invalid repr"
             raise ValueError(msg)

@@ -1,14 +1,13 @@
 # ---------------------------------------------------------------------
 # Gufo Err: BaseFailFast method
 # ---------------------------------------------------------------------
-# Copyright (C) 2022-23, Gufo Labs
+# Copyright (C) 2022-26, Gufo Labs
 # ---------------------------------------------------------------------
 """BaseFailFast."""
 
 # Python modules
 from abc import ABC, abstractmethod
 from types import TracebackType
-from typing import Type
 
 
 class BaseFailFast(ABC):
@@ -22,7 +21,7 @@ class BaseFailFast(ABC):
     @abstractmethod
     def must_die(
         self,
-        t: Type[BaseException],
+        t: type[BaseException],
         v: BaseException,
         tb: TracebackType,
     ) -> bool:

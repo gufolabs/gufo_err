@@ -1,14 +1,14 @@
 # ---------------------------------------------------------------------
 # Gufo Err: testing utilities
 # ---------------------------------------------------------------------
-# Copyright (C) 2022-23, Gufo Labs
+# Copyright (C) 2022-26, Gufo Labs
 # ---------------------------------------------------------------------
 
 # Python modules
+from collections.abc import Generator
 from contextlib import contextmanager
 from io import StringIO
 from logging import StreamHandler
-from typing import Generator
 
 # Gufolabs modules
 from gufo.err import logger

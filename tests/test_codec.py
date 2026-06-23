@@ -1,14 +1,14 @@
 # ---------------------------------------------------------------------
 # Gufo Err: serde tests
 # ---------------------------------------------------------------------
-# Copyright (C) 2022-23, Gufo Labs
+# Copyright (C) 2022-26, Gufo Labs
 # ---------------------------------------------------------------------
 
 # Python modules
 import datetime
 import os
 import uuid
-from typing import Any, Dict
+from typing import Any
 
 # Third-party modules
 import pytest
@@ -129,7 +129,7 @@ SAMPLE = ErrorInfo(
     ],
 )
 
-SAMPLE_DICT: Dict[str, Any] = {
+SAMPLE_DICT: dict[str, Any] = {
     "$type": "errorinfo",
     "$version": "1.0",
     "fingerprint": "be8ccd86-3661-434c-8569-40dd65d9860a",

@@ -1,13 +1,13 @@
 # ---------------------------------------------------------------------
 # Gufo Err: test TracebackResponse
 # ---------------------------------------------------------------------
-# Copyright (C) 2022-23, Gufo Labs
+# Copyright (C) 2022-26, Gufo Labs
 # ---------------------------------------------------------------------
 
 # Python modules
 import os
 import re
-from typing import Any, Dict
+from typing import Any
 
 # Third-party modules
 import pytest
@@ -59,7 +59,7 @@ def test_ci_resample() -> None:
         {"format": "extend"},
     ],
 )
-def test_format(cfg: Dict[str, Any]) -> None:
+def test_format(cfg: dict[str, Any]) -> None:
     fmt = cfg.get("format", "terse")
     err = Err().setup(**cfg)
     cfg = {}  # Reset local vars

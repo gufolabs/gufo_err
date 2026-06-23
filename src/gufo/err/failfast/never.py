@@ -1,13 +1,12 @@
 # ---------------------------------------------------------------------
 # Gufo Err: NeverFailFast
 # ---------------------------------------------------------------------
-# Copyright (C) 2022-23, Gufo Labs
+# Copyright (C) 2022-26, Gufo Labs
 # ---------------------------------------------------------------------
 """NeverFailFast."""
 
 # Python modules
 from types import TracebackType
-from typing import Type
 
 # Gufo Labs modules
 from ..abc.failfast import BaseFailFast
@@ -26,7 +25,7 @@ class NeverFailFast(BaseFailFast):
 
     def must_die(
         self,
-        t: Type[BaseException],
+        t: type[BaseException],
         v: BaseException,
         tb: TracebackType,
     ) -> bool:

@@ -1,12 +1,11 @@
 # ---------------------------------------------------------------------
 # Gufo Err: iter_frames tests
 # ---------------------------------------------------------------------
-# Copyright (C) 2022-23, Gufo Labs
+# Copyright (C) 2022-26, Gufo Labs
 # ---------------------------------------------------------------------
 
 # Python modules
 import os
-from typing import Optional
 
 # Gufo Labs modules
 from gufo.err import (
@@ -29,9 +28,9 @@ def MaybeCodePosition(
     end_line: int,
     start_col: int,
     end_col: int,
-    anchor_left: Optional[int] = None,
-    anchor_right: Optional[int] = None,
-) -> Optional[CodePosition]:
+    anchor_left: int | None = None,
+    anchor_right: int | None = None,
+) -> CodePosition | None:
     if HAS_CODE_POSITION:
         if anchor_left is None or anchor_right is None:
             anchor = None
