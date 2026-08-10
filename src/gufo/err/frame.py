@@ -15,7 +15,7 @@ from types import CodeType, TracebackType
 from typing import cast
 
 # Gufo Labs modules
-from .types import Anchor, CodePosition, FrameInfo, SourceInfo
+from .types import Anchor, ChainInfo, CodePosition, FrameInfo, SourceInfo
 
 PY_3 = 3
 PY_3_11 = (3, 11)
@@ -31,6 +31,42 @@ def exc_traceback() -> TracebackType:
         Top-level exception frame.
     """
     return cast(TracebackType, sys.exc_info()[2])
+
+
+def iter_chains(
+    tb: TracebackType,
+    v: BaseException,
+    context_lines: int = 7,
+) -> Iterable[ChainInfo]:
+    """Iterate over exception traceback chains.
+
+    Args:
+        tb: Traceback of the current exception.
+        v: Exception value.
+        context_lines: Source code context to extract.
+
+    Returns:
+        Iterable of ChainInfo objects, one for each exception
+        in the exception chain.
+    """
+    current = v
+    current_tb: TracebackType | None = tb
+    while current_tb is not None:
+        yield ChainInfo(
+            exception=current,
+            stack=list(iter_frames(current_tb, context_lines=context_lines)),
+        )
+        if current.__cause__ is not None:
+            current = current.__cause__
+            current_tb = current.__traceback__
+        elif (
+            current.__context__ is not None
+            and not current.__suppress_context__
+        ):
+            current = current.__context__
+            current_tb = current.__traceback__
+        else:
+            break
 
 
 def iter_frames(

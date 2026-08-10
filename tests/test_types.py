@@ -9,7 +9,7 @@ import os
 import uuid
 
 # Gufo Err modules
-from gufo.err import ErrorInfo, FrameInfo, SourceInfo
+from gufo.err import ChainInfo, ErrorInfo, FrameInfo, SourceInfo
 
 SAMPLE_STACK = [
     FrameInfo(
@@ -111,8 +111,7 @@ def test_app_top_empty_stack():
         name="unknown",
         version="unknown",
         fingerprint=uuid.uuid4(),
-        stack=[],
-        exception=ValueError(),
+        chains=[ChainInfo(exception=ValueError(), stack=[])],
     )
     top = info.get_app_top_frame()
     assert top is None
@@ -123,8 +122,7 @@ def test_app_top_no_root_module():
         name="unknown",
         version="unknown",
         fingerprint=uuid.uuid4(),
-        stack=SAMPLE_STACK,
-        exception=ValueError(),
+        chains=[ChainInfo(exception=ValueError(), stack=SAMPLE_STACK)],
     )
     top = info.get_app_top_frame()
     assert top == info.stack[0]
@@ -135,8 +133,7 @@ def test_app_top_root_module():
         name="unknown",
         version="unknown",
         fingerprint=uuid.uuid4(),
-        stack=SAMPLE_STACK,
-        exception=ValueError(),
+        chains=[ChainInfo(exception=ValueError(), stack=SAMPLE_STACK)],
         root_module="tests.sample",
     )
     top = info.get_app_top_frame()

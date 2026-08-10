@@ -12,10 +12,10 @@ import uuid
 from typing import Any
 
 # Gufo Labs modules
-from .types import ErrorInfo, ExceptionStub, FrameInfo, SourceInfo
+from .types import ChainInfo, ErrorInfo, ExceptionStub, FrameInfo, SourceInfo
 
 CODEC_TYPE = "errorinfo"
-CURRENT_VERSION = "1.0"
+CURRENT_VERSION = "2.0"
 
 
 def __q_x_class(e: BaseException) -> str:
@@ -115,8 +115,13 @@ def to_dict(info: ErrorInfo) -> dict[str, Any]:
         "name": info.name,
         "version": info.version,
         "fingerprint": str(info.fingerprint),
-        "exception": __q_exception(info.exception),
-        "stack": [__q_frame_info(x) for x in info.stack],
+        "chains": [
+            {
+                "exception": __q_exception(chain.exception),
+                "stack": [__q_frame_info(x) for x in chain.stack],
+            }
+            for chain in info.chains
+        ],
     }
     if info.timestamp:
         r["timestamp"] = info.timestamp.isoformat()
@@ -197,24 +202,30 @@ def from_dict(data: dict[str, Any]) -> ErrorInfo:
         raise ValueError(msg)
     # Check version
     ci_version = get(data, "$version")
-    if ci_version != CURRENT_VERSION:
+    if ci_version == "1.0":
+        data["chains"] = [data.pop("stack", [])]
+    elif ci_version != CURRENT_VERSION:
         msg = "Unknown $version"
         raise ValueError(msg)
     # Process timestamp
     src_ts = data.get("timestamp")
     ts = datetime.datetime.fromisoformat(src_ts) if src_ts else None
-    # Exception
-    exc = get(data, "exception")
-    # Stack
-    stack = [get_fi(x) for x in get(data, "stack")]
     # Set exception stub
     return ErrorInfo(
         name=get(data, "name"),
         version=get(data, "version"),
         fingerprint=uuid.UUID(get(data, "fingerprint")),
         timestamp=ts,
-        stack=stack,
-        exception=ExceptionStub(kls=exc["class"], args=exc["args"]),
+        chains=[
+            ChainInfo(
+                exception=ExceptionStub(
+                    kls=chain["exception"]["class"],
+                    args=chain["exception"]["args"],
+                ),
+                stack=[get_fi(x) for x in chain["stack"]],
+            )
+            for chain in get(data, "chains")
+        ],
         root_module=data.get("root_module"),
     )
 

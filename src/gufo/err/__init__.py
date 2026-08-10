@@ -19,6 +19,7 @@ from .frame import HAS_CODE_POSITION, exc_traceback, iter_frames
 from .logger import logger
 from .types import (
     Anchor,
+    ChainInfo,
     CodePosition,
     ErrorInfo,
     FrameInfo,
@@ -31,6 +32,7 @@ __all__ = [
     "Anchor",
     "BaseFailFast",
     "BaseMiddleware",
+    "ChainInfo",
     "CodePosition",
     "Err",
     "ErrorInfo",

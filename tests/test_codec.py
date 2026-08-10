@@ -23,213 +23,221 @@ from gufo.err.codec import (
 )
 
 # Gufo Labs modules
-from gufo.err.types import ErrorInfo, FrameInfo, SourceInfo
+from gufo.err.types import ChainInfo, ErrorInfo, FrameInfo, SourceInfo
 
 TZ = datetime.timezone(datetime.timedelta(hours=1), "CEST")
 
 SAMPLE = ErrorInfo(
     name="oops",
-    version="1.0",
+    version="2.0",
     fingerprint=uuid.UUID("be8ccd86-3661-434c-8569-40dd65d9860a"),
-    exception=RuntimeError("oops"),
     timestamp=datetime.datetime(2022, 3, 22, 7, 21, 29, 215827, tzinfo=TZ),
     root_module="tests",
-    stack=[
-        FrameInfo(
-            name="test_iter_frames",
-            module="tests.test_frames",
-            source=SourceInfo(
-                file_name=os.path.join("tests", "test_frames.py"),
-                current_line=125,
-                first_line=118,
-                lines=[
-                    "",
-                    "",
-                    "def test_iter_frames():",
-                    '    """',
-                    "    Call the function which raises an exception",
-                    '    """',
-                    "    try:",
-                    "        entry()",
-                    '        assert False, "No trace"',
-                    "    except RuntimeError:",
-                    "        frames = list(iter_frames(exc_traceback()))",
-                    "        assert frames == SAMPLE_FRAMES",
-                ],
-            ),
-            locals={},
-        ),
-        FrameInfo(
-            name="entry",
-            module="tests.sample.trace",
-            source=SourceInfo(
-                file_name=os.path.join("tests", "sample", "trace.py"),
-                current_line=14,
-                first_line=7,
-                lines=[
-                    "    x += 1",
-                    "    oops()",
-                    "",
-                    "",
-                    "def entry():",
-                    "    s = 2",
-                    "    s += 1",
-                    "    to_oops()",
-                ],
-            ),
-            locals={"s": 3},
-        ),
-        FrameInfo(
-            name="to_oops",
-            module="tests.sample.trace",
-            source=SourceInfo(
-                file_name=os.path.join("tests", "sample", "trace.py"),
-                current_line=8,
-                first_line=1,
-                lines=[
-                    "def oops():",
-                    '    raise RuntimeError("oops")',
-                    "",
-                    "",
-                    "def to_oops():",
-                    "    x = 1",
-                    "    x += 1",
-                    "    oops()",
-                    "",
-                    "",
-                    "def entry():",
-                    "    s = 2",
-                    "    s += 1",
-                    "    to_oops()",
-                ],
-            ),
-            locals={"x": 2},
-        ),
-        FrameInfo(
-            name="oops",
-            module="tests.sample.trace",
-            source=SourceInfo(
-                file_name=os.path.join("tests", "sample", "trace.py"),
-                current_line=2,
-                first_line=1,
-                lines=[
-                    "def oops():",
-                    '    raise RuntimeError("oops")',
-                    "",
-                    "",
-                    "def to_oops():",
-                    "    x = 1",
-                    "    x += 1",
-                    "    oops()",
-                    "",
-                ],
-            ),
-            locals={},
+    chains=[
+        ChainInfo(
+            exception=RuntimeError("oops"),
+            stack=[
+                FrameInfo(
+                    name="test_iter_frames",
+                    module="tests.test_frames",
+                    source=SourceInfo(
+                        file_name=os.path.join("tests", "test_frames.py"),
+                        current_line=125,
+                        first_line=118,
+                        lines=[
+                            "",
+                            "",
+                            "def test_iter_frames():",
+                            '    """',
+                            "    Call the function which raises an exception",
+                            '    """',
+                            "    try:",
+                            "        entry()",
+                            '        assert False, "No trace"',
+                            "    except RuntimeError:",
+                            "        frames = list(iter_frames(exc_traceback()))",
+                            "        assert frames == SAMPLE_FRAMES",
+                        ],
+                    ),
+                    locals={},
+                ),
+                FrameInfo(
+                    name="entry",
+                    module="tests.sample.trace",
+                    source=SourceInfo(
+                        file_name=os.path.join("tests", "sample", "trace.py"),
+                        current_line=14,
+                        first_line=7,
+                        lines=[
+                            "    x += 1",
+                            "    oops()",
+                            "",
+                            "",
+                            "def entry():",
+                            "    s = 2",
+                            "    s += 1",
+                            "    to_oops()",
+                        ],
+                    ),
+                    locals={"s": 3},
+                ),
+                FrameInfo(
+                    name="to_oops",
+                    module="tests.sample.trace",
+                    source=SourceInfo(
+                        file_name=os.path.join("tests", "sample", "trace.py"),
+                        current_line=8,
+                        first_line=1,
+                        lines=[
+                            "def oops():",
+                            '    raise RuntimeError("oops")',
+                            "",
+                            "",
+                            "def to_oops():",
+                            "    x = 1",
+                            "    x += 1",
+                            "    oops()",
+                            "",
+                            "",
+                            "def entry():",
+                            "    s = 2",
+                            "    s += 1",
+                            "    to_oops()",
+                        ],
+                    ),
+                    locals={"x": 2},
+                ),
+                FrameInfo(
+                    name="oops",
+                    module="tests.sample.trace",
+                    source=SourceInfo(
+                        file_name=os.path.join("tests", "sample", "trace.py"),
+                        current_line=2,
+                        first_line=1,
+                        lines=[
+                            "def oops():",
+                            '    raise RuntimeError("oops")',
+                            "",
+                            "",
+                            "def to_oops():",
+                            "    x = 1",
+                            "    x += 1",
+                            "    oops()",
+                            "",
+                        ],
+                    ),
+                    locals={},
+                ),
+            ],
         ),
     ],
 )
 
 SAMPLE_DICT: dict[str, Any] = {
     "$type": "errorinfo",
-    "$version": "1.0",
+    "$version": "2.0",
     "fingerprint": "be8ccd86-3661-434c-8569-40dd65d9860a",
     "name": "oops",
     "timestamp": "2022-03-22T07:21:29.215827+01:00",
-    "version": "1.0",
+    "version": "2.0",
     "root_module": "tests",
-    "exception": {"class": "RuntimeError", "args": ["oops"]},
-    "stack": [
+    "chains": [
         {
-            "name": "test_iter_frames",
-            "module": "tests.test_frames",
-            "locals": {},
-            "source": {
-                "file_name": "tests/test_frames.py",
-                "current_line": 125,
-                "first_line": 118,
-                "lines": [
-                    "",
-                    "",
-                    "def test_iter_frames():",
-                    '    """',
-                    "    Call the function which raises an exception",
-                    '    """',
-                    "    try:",
-                    "        entry()",
-                    '        assert False, "No trace"',
-                    "    except RuntimeError:",
-                    "        frames = list(iter_frames(exc_traceback()))",
-                    "        assert frames == SAMPLE_FRAMES",
-                ],
-            },
-        },
-        {
-            "name": "entry",
-            "module": "tests.sample.trace",
-            "locals": {"s": 3},
-            "source": {
-                "file_name": "tests/sample/trace.py",
-                "current_line": 14,
-                "first_line": 7,
-                "lines": [
-                    "    x += 1",
-                    "    oops()",
-                    "",
-                    "",
-                    "def entry():",
-                    "    s = 2",
-                    "    s += 1",
-                    "    to_oops()",
-                ],
-            },
-        },
-        {
-            "name": "to_oops",
-            "module": "tests.sample.trace",
-            "locals": {"x": 2},
-            "source": {
-                "file_name": "tests/sample/trace.py",
-                "current_line": 8,
-                "first_line": 1,
-                "lines": [
-                    "def oops():",
-                    '    raise RuntimeError("oops")',
-                    "",
-                    "",
-                    "def to_oops():",
-                    "    x = 1",
-                    "    x += 1",
-                    "    oops()",
-                    "",
-                    "",
-                    "def entry():",
-                    "    s = 2",
-                    "    s += 1",
-                    "    to_oops()",
-                ],
-            },
-        },
-        {
-            "name": "oops",
-            "module": "tests.sample.trace",
-            "locals": {},
-            "source": {
-                "file_name": "tests/sample/trace.py",
-                "current_line": 2,
-                "first_line": 1,
-                "lines": [
-                    "def oops():",
-                    '    raise RuntimeError("oops")',
-                    "",
-                    "",
-                    "def to_oops():",
-                    "    x = 1",
-                    "    x += 1",
-                    "    oops()",
-                    "",
-                ],
-            },
-        },
+            "exception": {"class": "RuntimeError", "args": ["oops"]},
+            "stack": [
+                {
+                    "name": "test_iter_frames",
+                    "module": "tests.test_frames",
+                    "locals": {},
+                    "source": {
+                        "file_name": "tests/test_frames.py",
+                        "current_line": 125,
+                        "first_line": 118,
+                        "lines": [
+                            "",
+                            "",
+                            "def test_iter_frames():",
+                            '    """',
+                            "    Call the function which raises an exception",
+                            '    """',
+                            "    try:",
+                            "        entry()",
+                            '        assert False, "No trace"',
+                            "    except RuntimeError:",
+                            "        frames = list(iter_frames(exc_traceback()))",
+                            "        assert frames == SAMPLE_FRAMES",
+                        ],
+                    },
+                },
+                {
+                    "name": "entry",
+                    "module": "tests.sample.trace",
+                    "locals": {"s": 3},
+                    "source": {
+                        "file_name": "tests/sample/trace.py",
+                        "current_line": 14,
+                        "first_line": 7,
+                        "lines": [
+                            "    x += 1",
+                            "    oops()",
+                            "",
+                            "",
+                            "def entry():",
+                            "    s = 2",
+                            "    s += 1",
+                            "    to_oops()",
+                        ],
+                    },
+                },
+                {
+                    "name": "to_oops",
+                    "module": "tests.sample.trace",
+                    "locals": {"x": 2},
+                    "source": {
+                        "file_name": "tests/sample/trace.py",
+                        "current_line": 8,
+                        "first_line": 1,
+                        "lines": [
+                            "def oops():",
+                            '    raise RuntimeError("oops")',
+                            "",
+                            "",
+                            "def to_oops():",
+                            "    x = 1",
+                            "    x += 1",
+                            "    oops()",
+                            "",
+                            "",
+                            "def entry():",
+                            "    s = 2",
+                            "    s += 1",
+                            "    to_oops()",
+                        ],
+                    },
+                },
+                {
+                    "name": "oops",
+                    "module": "tests.sample.trace",
+                    "locals": {},
+                    "source": {
+                        "file_name": "tests/sample/trace.py",
+                        "current_line": 2,
+                        "first_line": 1,
+                        "lines": [
+                            "def oops():",
+                            '    raise RuntimeError("oops")',
+                            "",
+                            "",
+                            "def to_oops():",
+                            "    x = 1",
+                            "    x += 1",
+                            "    oops()",
+                            "",
+                        ],
+                    },
+                },
+            ],
+        }
     ],
 }
 
@@ -249,7 +257,7 @@ def test_from_dict():
     assert isinstance(out.exception, ExceptionStub)
     assert out.exception.kls == "RuntimeError"
     assert out.exception.args == ("oops",)
-    out.exception = SAMPLE.exception
+    out.chains[0].exception = SAMPLE.exception
     assert out == SAMPLE
 
 
@@ -259,7 +267,7 @@ def test_from_json():
     assert isinstance(out.exception, ExceptionStub)
     assert out.exception.kls == "RuntimeError"
     assert out.exception.args == ("oops",)
-    out.exception = SAMPLE.exception
+    out.chains[0].exception = SAMPLE.exception
     assert out == SAMPLE
 
 

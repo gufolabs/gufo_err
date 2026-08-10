@@ -13,7 +13,7 @@ import uuid
 import pytest
 
 # Gufo Err modules
-from gufo.err import CodePosition, ErrorInfo, FrameInfo, SourceInfo
+from gufo.err import ChainInfo, CodePosition, ErrorInfo, FrameInfo, SourceInfo
 from gufo.err.formatter.extend import ExtendFormatter
 from gufo.err.formatter.loader import get_formatter
 from gufo.err.formatter.terse import TerseFormatter
@@ -23,137 +23,141 @@ SAMPLE_ERR = ErrorInfo(
     version="3.14",
     fingerprint=uuid.UUID("be8ccd86-3661-434c-8569-40dd65d9860a"),
     timestamp=datetime.datetime(2023, 9, 1, 6, 31, 16, 79222),
-    exception=RuntimeError("oops"),
-    stack=[
-        FrameInfo(
-            name="test_iter_frames",
-            source=SourceInfo(
-                file_name=os.path.join(
-                    os.sep, "app", "tests", "test_frames.py"
+    chains=[
+        ChainInfo(
+            exception=RuntimeError("oops"),
+            stack=[
+                FrameInfo(
+                    name="test_iter_frames",
+                    source=SourceInfo(
+                        file_name=os.path.join(
+                            os.sep, "app", "tests", "test_frames.py"
+                        ),
+                        first_line=167,
+                        current_line=174,
+                        lines=[
+                            "    ),",
+                            "]",
+                            "",
+                            "",
+                            "def test_iter_frames():",
+                            '    """Call the function which raises an exception."""',
+                            "    try:",
+                            "        entry()",
+                            '        msg = "No trace"',
+                            "        raise AssertionError(msg)",
+                            "    except RuntimeError:",
+                            "        frames = list(iter_frames(exc_traceback()))",
+                            "        assert frames == SAMPLE_FRAMES",
+                        ],
+                        pos=CodePosition(
+                            start_line=174,
+                            end_line=174,
+                            start_col=8,
+                            end_col=15,
+                            anchor=None,
+                        ),
+                    ),
+                    locals={},
+                    module="tests.test_frames",
                 ),
-                first_line=167,
-                current_line=174,
-                lines=[
-                    "    ),",
-                    "]",
-                    "",
-                    "",
-                    "def test_iter_frames():",
-                    '    """Call the function which raises an exception."""',
-                    "    try:",
-                    "        entry()",
-                    '        msg = "No trace"',
-                    "        raise AssertionError(msg)",
-                    "    except RuntimeError:",
-                    "        frames = list(iter_frames(exc_traceback()))",
-                    "        assert frames == SAMPLE_FRAMES",
-                ],
-                pos=CodePosition(
-                    start_line=174,
-                    end_line=174,
-                    start_col=8,
-                    end_col=15,
-                    anchor=None,
+                FrameInfo(
+                    name="entry",
+                    source=SourceInfo(
+                        file_name=os.path.join(
+                            os.sep, "app", "tests", "sample", "trace.py"
+                        ),
+                        first_line=8,
+                        current_line=15,
+                        lines=[
+                            "    x += 1",
+                            "    oops()",
+                            "",
+                            "",
+                            "def entry():",
+                            "    s = 2",
+                            "    s += 1",
+                            "    to_oops()",
+                        ],
+                        pos=CodePosition(
+                            start_line=15,
+                            end_line=15,
+                            start_col=4,
+                            end_col=13,
+                            anchor=None,
+                        ),
+                    ),
+                    locals={"s": 3},
+                    module="tests.sample.trace",
                 ),
-            ),
-            locals={},
-            module="tests.test_frames",
-        ),
-        FrameInfo(
-            name="entry",
-            source=SourceInfo(
-                file_name=os.path.join(
-                    os.sep, "app", "tests", "sample", "trace.py"
+                FrameInfo(
+                    name="to_oops",
+                    source=SourceInfo(
+                        file_name=os.path.join(
+                            os.sep, "app", "tests", "sample", "trace.py"
+                        ),
+                        first_line=2,
+                        current_line=9,
+                        lines=[
+                            '    msg = "oops"',
+                            "    raise RuntimeError(msg)",
+                            "",
+                            "",
+                            "def to_oops():",
+                            "    x = 1",
+                            "    x += 1",
+                            "    oops()",
+                            "",
+                            "",
+                            "def entry():",
+                            "    s = 2",
+                            "    s += 1",
+                            "    to_oops()",
+                        ],
+                        pos=CodePosition(
+                            start_line=9,
+                            end_line=9,
+                            start_col=4,
+                            end_col=10,
+                            anchor=None,
+                        ),
+                    ),
+                    locals={"x": 2},
+                    module="tests.sample.trace",
                 ),
-                first_line=8,
-                current_line=15,
-                lines=[
-                    "    x += 1",
-                    "    oops()",
-                    "",
-                    "",
-                    "def entry():",
-                    "    s = 2",
-                    "    s += 1",
-                    "    to_oops()",
-                ],
-                pos=CodePosition(
-                    start_line=15,
-                    end_line=15,
-                    start_col=4,
-                    end_col=13,
-                    anchor=None,
+                FrameInfo(
+                    name="oops",
+                    source=SourceInfo(
+                        file_name=os.path.join(
+                            os.sep, "app", "tests", "sample", "trace.py"
+                        ),
+                        first_line=1,
+                        current_line=3,
+                        lines=[
+                            "def oops():",
+                            '    msg = "oops"',
+                            "    raise RuntimeError(msg)",
+                            "",
+                            "",
+                            "def to_oops():",
+                            "    x = 1",
+                            "    x += 1",
+                            "    oops()",
+                            "",
+                        ],
+                        pos=CodePosition(
+                            start_line=3,
+                            end_line=3,
+                            start_col=4,
+                            end_col=27,
+                            anchor=None,
+                        ),
+                    ),
+                    locals={"msg": "oops"},
+                    module="tests.sample.trace",
                 ),
-            ),
-            locals={"s": 3},
-            module="tests.sample.trace",
-        ),
-        FrameInfo(
-            name="to_oops",
-            source=SourceInfo(
-                file_name=os.path.join(
-                    os.sep, "app", "tests", "sample", "trace.py"
-                ),
-                first_line=2,
-                current_line=9,
-                lines=[
-                    '    msg = "oops"',
-                    "    raise RuntimeError(msg)",
-                    "",
-                    "",
-                    "def to_oops():",
-                    "    x = 1",
-                    "    x += 1",
-                    "    oops()",
-                    "",
-                    "",
-                    "def entry():",
-                    "    s = 2",
-                    "    s += 1",
-                    "    to_oops()",
-                ],
-                pos=CodePosition(
-                    start_line=9,
-                    end_line=9,
-                    start_col=4,
-                    end_col=10,
-                    anchor=None,
-                ),
-            ),
-            locals={"x": 2},
-            module="tests.sample.trace",
-        ),
-        FrameInfo(
-            name="oops",
-            source=SourceInfo(
-                file_name=os.path.join(
-                    os.sep, "app", "tests", "sample", "trace.py"
-                ),
-                first_line=1,
-                current_line=3,
-                lines=[
-                    "def oops():",
-                    '    msg = "oops"',
-                    "    raise RuntimeError(msg)",
-                    "",
-                    "",
-                    "def to_oops():",
-                    "    x = 1",
-                    "    x += 1",
-                    "    oops()",
-                    "",
-                ],
-                pos=CodePosition(
-                    start_line=3,
-                    end_line=3,
-                    start_col=4,
-                    end_col=27,
-                    anchor=None,
-                ),
-            ),
-            locals={"msg": "oops"},
-            module="tests.sample.trace",
-        ),
+            ],
+        )
     ],
 )
 

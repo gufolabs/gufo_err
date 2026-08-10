@@ -1,29 +1,30 @@
-Error: e0de436d-414e-594c-b834-c3f61fb0dcfe
+Error: c79817f6-5225-5859-90a9-fb71064300f3
 RuntimeError: oops
 Traceback (most recent call last):
 -------------------------------------------------------------------------------
-File: /workspaces/gufo_err/tests/test_traceback_samples.py (line 67)
-   60         ],
-   61     )
-   62     def test_format(cfg: dict[str, Any]) -> None:
-   63         fmt = cfg.get("format", "terse")
-   64         err = Err().setup(**cfg)
-   65         cfg = {}  # Reset local vars
-   66         try:
-   67 ==>         entry()
-                  ^^^^^^^
-   68         except Exception:
-   69             with log_capture() as buffer:
-   70                 err.process()
-   71                 output = buffer.getvalue()
-   72         if RESAMPLE:
-   73             set_sample(fmt, output)
-   74         assert clean_config(output) == clean_config(get_sample(fmt))
+File: /workspaces/gufo_err/tests/test_traceback_samples.py (line 70)
+   63         ],
+   64     )
+   65     def test_format(cfg: dict[str, Any], chain: bool) -> None:
+   66         fmt = cfg.get("format", "terse")
+   67         err = Err().setup(**cfg)
+   68         cfg = {}  # Reset local vars
+   69         try:
+   70 ==>         entry_chain() if chain else entry()
+                                              ^^^^^^^
+   71         except Exception:
+   72             with log_capture() as buffer:
+   73                 err.process()
+   74                 output = buffer.getvalue()
+   75         if RESAMPLE:
+   76             set_sample(fmt, chain, output)
+   77         assert clean_config(output) == clean_config(get_sample(fmt, chain))
 Locals:
                  cfg = {}
+               chain = False
                  fmt = 'extend'
-                 err = <gufo.err.err.Err object at 0xffffa6c228a0>
-              buffer = <_io.StringIO object at 0xffffa6d5f400>
+                 err = <gufo.err.err.Err object at 0xffff8e3b59a0>
+              buffer = <_io.StringIO object at 0xffff8e592d40>
 -------------------------------------------------------------------------------
 File: /workspaces/gufo_err/tests/sample/trace.py (line 15)
     8         x += 1

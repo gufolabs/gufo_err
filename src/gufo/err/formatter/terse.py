@@ -31,33 +31,36 @@ class TerseFormatter(BaseFormatter):
         """
         yield f"Error: {err.fingerprint}"
         yield self.traceback_message()
-        for fi in self.iter_stack(err):
-            if fi.source:
-                yield (
-                    f'  File "{fi.source.file_name}", '
-                    f"line {fi.source.current_line}, in {fi.name}"
-                )
-                if (
-                    fi.source.pos
-                    and fi.source.pos.start_line == fi.source.pos.end_line
-                ):
-                    # Exact position, single line
-                    pos = fi.source.pos
-                    current_line = fi.source.lines[
-                        pos.start_line - fi.source.first_line
-                    ]
-                    line = current_line.lstrip()
-                    yield f"    {line}"
-                    # Show caret
-                    yield self.get_caret(
-                        current_line, pos, 4, len(current_line) - len(line)
+        for n, chain in enumerate(err.chains):
+            if n:
+                yield self.chain_message()
+            for fi in chain.stack:
+                if fi.source:
+                    yield (
+                        f'  File "{fi.source.file_name}", '
+                        f"line {fi.source.current_line}, in {fi.name}"
                     )
+                    if (
+                        fi.source.pos
+                        and fi.source.pos.start_line == fi.source.pos.end_line
+                    ):
+                        # Exact position, single line
+                        pos = fi.source.pos
+                        current_line = fi.source.lines[
+                            pos.start_line - fi.source.first_line
+                        ]
+                        line = current_line.lstrip()
+                        yield f"    {line}"
+                        # Show caret
+                        yield self.get_caret(
+                            current_line, pos, 4, len(current_line) - len(line)
+                        )
+                    else:
+                        # No position, show current line
+                        line = fi.source.lines[
+                            fi.source.current_line - fi.source.first_line
+                        ].lstrip()
+                        yield f"    {line}"
                 else:
-                    # No position, show current line
-                    line = fi.source.lines[
-                        fi.source.current_line - fi.source.first_line
-                    ].lstrip()
-                    yield f"    {line}"
-            else:
-                yield '  File "<stdin>", line ??? in <module>'
-        yield self.get_exception_summary(err.exception)
+                    yield '  File "<stdin>", line ??? in <module>'
+            yield self.get_exception_summary(chain.exception)
