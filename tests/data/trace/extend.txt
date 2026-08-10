@@ -23,8 +23,8 @@ Locals:
                  cfg = {}
                chain = False
                  fmt = 'extend'
-                 err = <gufo.err.err.Err object at 0xffff8cdd1010>
-              buffer = <_io.StringIO object at 0xffff8cea79a0>
+                 err = <gufo.err.err.Err object at 0xffff8e3b59a0>
+              buffer = <_io.StringIO object at 0xffff8e592d40>
 -------------------------------------------------------------------------------
 File: /workspaces/gufo_err/tests/sample/trace.py (line 15)
     8         x += 1

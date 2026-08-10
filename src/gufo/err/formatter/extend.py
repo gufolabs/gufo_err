@@ -37,11 +37,11 @@ class ExtendFormatter(BaseFormatter):
             Iterator yieldig formatted lines.
         """
         yield f"Error: {err.fingerprint}"
-        yield self.get_exception_summary(err.exception)
-        yield self.traceback_message()
-        for nn, chain in enumerate(reversed(err.chains)):
+        for nn, chain in enumerate(err.chains):
             if nn:
                 yield self.chain_message()
+            yield self.get_exception_summary(chain.exception)
+            yield self.traceback_message()
             for fi in chain.stack:
                 yield self.SEP
                 if fi.source:

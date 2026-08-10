@@ -46,7 +46,7 @@ def iter_chains(
         context_lines: Source code context to extract.
 
     Returns:
-        Iterable of frame iterables, one for each exception
+        Iterable of ChainInfo objects, one for each exception
         in the exception chain.
     """
     current = v

@@ -31,7 +31,7 @@ class TerseFormatter(BaseFormatter):
         """
         yield f"Error: {err.fingerprint}"
         yield self.traceback_message()
-        for n, chain in enumerate(reversed(err.chains)):
+        for n, chain in enumerate(err.chains):
             if n:
                 yield self.chain_message()
             for fi in chain.stack:
