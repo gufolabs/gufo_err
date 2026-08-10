@@ -9,7 +9,7 @@ Traceback (most recent call last):
   File "/workspaces/gufo_err/tests/sample/trace_chain.py", line 3, in oops1
     raise KeyError(msg)
     ^^^^^^^^^^^^^^^^^^^
-RuntimeError: reraised
+KeyError: 'oops'
 
 The above exception was the direct cause of the following exception:
 

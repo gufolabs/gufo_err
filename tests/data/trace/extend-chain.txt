@@ -82,8 +82,8 @@ Locals:
                  cfg = {}
                chain = True
                  fmt = 'extend'
-                 err = <gufo.err.err.Err object at 0xffff80fe4e20>
-              buffer = <_io.StringIO object at 0xffff81113880>
+                 err = <gufo.err.err.Err object at 0xffff8cd7cf30>
+              buffer = <_io.StringIO object at 0xffff8cea79a0>
 -------------------------------------------------------------------------------
 File: /workspaces/gufo_err/tests/sample/trace_chain.py (line 25)
    18             msg = "reraised"

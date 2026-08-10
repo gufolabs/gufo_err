@@ -53,7 +53,7 @@ def iter_chains(
     current_tb: TracebackType | None = tb
     while current_tb is not None:
         yield ChainInfo(
-            exception=v,
+            exception=current,
             stack=list(iter_frames(current_tb, context_lines=context_lines)),
         )
         if current.__cause__ is not None:
