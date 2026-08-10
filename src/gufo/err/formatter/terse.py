@@ -34,7 +34,7 @@ class TerseFormatter(BaseFormatter):
         for n, chain in enumerate(reversed(err.chains)):
             if n:
                 yield self.chain_message()
-            for fi in chain:
+            for fi in chain.stack:
                 if fi.source:
                     yield (
                         f'  File "{fi.source.file_name}", '
@@ -63,4 +63,4 @@ class TerseFormatter(BaseFormatter):
                         yield f"    {line}"
                 else:
                     yield '  File "<stdin>", line ??? in <module>'
-            yield self.get_exception_summary(err.exception)
+            yield self.get_exception_summary(chain.exception)

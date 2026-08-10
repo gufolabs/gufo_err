@@ -115,8 +115,8 @@ class Err:
             os._exit(self.__failfast_code)  # Fatal error, die quickly
         # Collect stack frames
         # @todo: separate handling of endless recursion
-        chains = [list(chain) for chain in iter_chains(tb, v)]
-        stack = chains[0] if chains else []
+        chains = list(iter_chains(tb, v))
+        stack = chains[0].stack if chains else []
         # Calculate error fingerprint
         fp = self.__fingerprint(t, v, stack)
         # Build stack info
@@ -125,7 +125,6 @@ class Err:
             version=self.__version,
             fingerprint=fp,
             chains=chains,
-            exception=v,
             root_module=self.__root_module,
         )
         # Process the response

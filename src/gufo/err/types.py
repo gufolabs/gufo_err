@@ -84,6 +84,20 @@ class FrameInfo:
 
 
 @dataclass
+class ChainInfo:
+    """Exception traceback chain information.
+
+    Args:
+        exception: Exception instance.
+        stack: List of `FrameInfo` for the exception traceback.
+            Current execution frame is first.
+    """
+
+    exception: BaseException
+    stack: list[FrameInfo]
+
+
+@dataclass
 class ErrorInfo:
     """Current execution frame information.
 
@@ -93,10 +107,9 @@ class ErrorInfo:
         version: Application or service version, as set by
             [setup()][gufo.err.Err.setup]
         fingerprint: Error fingerprint.
-        chains: Exception traceback chains. Each item contains the
-            frames of one exception in the chain. The first item is
-            equivalent to `stack`.
-        exception: Exception instance, if caught.
+        chains: Exception traceback chains. Each item contains
+            exception information and its traceback frames.
+            The first item corresponds to `exception` and `stack`.
         timestamp: Error timestamp.
         root_module: Optional root module, as set by
             [setup()][gufo.err.Err.setup]
@@ -105,15 +118,22 @@ class ErrorInfo:
     name: str
     version: str
     fingerprint: UUID
-    chains: list[list[FrameInfo]]
-    exception: BaseException
+    chains: list[ChainInfo]
     timestamp: datetime.datetime | None = None
     root_module: str | None = None
 
     @property
+    def exception(self) -> BaseException:
+        """Exception instance from the first traceback chain."""
+        return self.chains[0].exception
+
+    @property
     def stack(self) -> list[FrameInfo]:
-        """List of `FrameInfo`. Current execution frame is first."""
-        return self.chains[0] if self.chains else []
+        """List of `FrameInfo` from the first traceback chain.
+
+        Current execution frame is first.
+        """
+        return self.chains[0].stack if self.chains else []
 
     def get_app_top_frame(self) -> FrameInfo | None:
         """Get application's top stack frame.

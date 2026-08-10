@@ -42,7 +42,7 @@ class ExtendFormatter(BaseFormatter):
         for nn, chain in enumerate(reversed(err.chains)):
             if nn:
                 yield self.chain_message()
-            for fi in chain:
+            for fi in chain.stack:
                 yield self.SEP
                 if fi.source:
                     yield (

@@ -15,7 +15,7 @@ from types import CodeType, TracebackType
 from typing import cast
 
 # Gufo Labs modules
-from .types import Anchor, CodePosition, FrameInfo, SourceInfo
+from .types import Anchor, ChainInfo, CodePosition, FrameInfo, SourceInfo
 
 PY_3 = 3
 PY_3_11 = (3, 11)
@@ -37,7 +37,7 @@ def iter_chains(
     tb: TracebackType,
     v: BaseException,
     context_lines: int = 7,
-) -> Iterable[Iterable[FrameInfo]]:
+) -> Iterable[ChainInfo]:
     """Iterate over exception traceback chains.
 
     Args:
@@ -52,9 +52,9 @@ def iter_chains(
     current = v
     current_tb: TracebackType | None = tb
     while current_tb is not None:
-        yield iter_frames(
-            current_tb,
-            context_lines=context_lines,
+        yield ChainInfo(
+            exception=v,
+            stack=list(iter_frames(current_tb, context_lines=context_lines)),
         )
         if current.__cause__ is not None:
             current = current.__cause__

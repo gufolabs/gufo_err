@@ -12,7 +12,7 @@ import uuid
 from typing import Any
 
 # Gufo Labs modules
-from .types import ErrorInfo, ExceptionStub, FrameInfo, SourceInfo
+from .types import ChainInfo, ErrorInfo, ExceptionStub, FrameInfo, SourceInfo
 
 CODEC_TYPE = "errorinfo"
 CURRENT_VERSION = "2.0"
@@ -115,9 +115,12 @@ def to_dict(info: ErrorInfo) -> dict[str, Any]:
         "name": info.name,
         "version": info.version,
         "fingerprint": str(info.fingerprint),
-        "exception": __q_exception(info.exception),
         "chains": [
-            [__q_frame_info(x) for x in chain] for chain in info.chains
+            {
+                "exception": __q_exception(chain.exception),
+                "stack": [__q_frame_info(x) for x in chain.stack],
+            }
+            for chain in info.chains
         ],
     }
     if info.timestamp:
@@ -207,16 +210,22 @@ def from_dict(data: dict[str, Any]) -> ErrorInfo:
     # Process timestamp
     src_ts = data.get("timestamp")
     ts = datetime.datetime.fromisoformat(src_ts) if src_ts else None
-    # Exception
-    exc = get(data, "exception")
     # Set exception stub
     return ErrorInfo(
         name=get(data, "name"),
         version=get(data, "version"),
         fingerprint=uuid.UUID(get(data, "fingerprint")),
         timestamp=ts,
-        chains=[[get_fi(x) for x in chain] for chain in get(data, "chains")],
-        exception=ExceptionStub(kls=exc["class"], args=exc["args"]),
+        chains=[
+            ChainInfo(
+                exception=ExceptionStub(
+                    kls=chain["exception"]["class"],
+                    args=chain["exception"]["args"],
+                ),
+                stack=[get_fi(x) for x in chain["stack"]],
+            )
+            for chain in get(data, "chains")
+        ],
         root_module=data.get("root_module"),
     )
 
