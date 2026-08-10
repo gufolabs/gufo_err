@@ -97,6 +97,7 @@ max-complexity = 10
   "D102", # Missing docstring in public method
   "D103", # Missing docstring in public function
   "D104", # Missing docstring in public package
+  "E501", # Line too long (81 > 79)
   "S101", # Use of assert detected
   "S307", # Use of possibly insecure function; consider using `ast.literal_eval`
   "S603", # `subprocess` call: check for execution of untrusted input

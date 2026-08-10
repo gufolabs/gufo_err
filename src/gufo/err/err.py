@@ -19,7 +19,7 @@ from uuid import UUID
 
 from .abc.failfast import BaseFailFast
 from .abc.middleware import BaseMiddleware
-from .frame import iter_frames
+from .frame import iter_chains
 from .logger import logger
 
 # Gufo Labs modules
@@ -115,7 +115,8 @@ class Err:
             os._exit(self.__failfast_code)  # Fatal error, die quickly
         # Collect stack frames
         # @todo: separate handling of endless recursion
-        stack = list(iter_frames(tb))
+        chains = [list(chain) for chain in iter_chains(tb, v)]
+        stack = chains[0] if chains else []
         # Calculate error fingerprint
         fp = self.__fingerprint(t, v, stack)
         # Build stack info
@@ -123,7 +124,7 @@ class Err:
             name=self.__name,
             version=self.__version,
             fingerprint=fp,
-            stack=stack,
+            chains=chains,
             exception=v,
             root_module=self.__root_module,
         )

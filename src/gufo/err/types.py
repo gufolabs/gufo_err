@@ -93,7 +93,9 @@ class ErrorInfo:
         version: Application or service version, as set by
             [setup()][gufo.err.Err.setup]
         fingerprint: Error fingerprint.
-        stack: List of `FrameInfo`. Current execution frame is first.
+        chains: Exception traceback chains. Each item contains the
+            frames of one exception in the chain. The first item is
+            equivalent to `stack`.
         exception: Exception instance, if caught.
         timestamp: Error timestamp.
         root_module: Optional root module, as set by
@@ -103,10 +105,15 @@ class ErrorInfo:
     name: str
     version: str
     fingerprint: UUID
-    stack: list[FrameInfo]
+    chains: list[list[FrameInfo]]
     exception: BaseException
     timestamp: datetime.datetime | None = None
     root_module: str | None = None
+
+    @property
+    def stack(self) -> list[FrameInfo]:
+        """List of `FrameInfo`. Current execution frame is first."""
+        return self.chains[0] if self.chains else []
 
     def get_app_top_frame(self) -> FrameInfo | None:
         """Get application's top stack frame.

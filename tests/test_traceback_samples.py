@@ -7,6 +7,7 @@
 # Python modules
 import os
 import re
+from pathlib import Path
 from typing import Any
 
 # Third-party modules
@@ -16,6 +17,7 @@ import pytest
 from gufo.err import Err
 
 from .sample.trace import entry
+from .sample.trace_chain import entry_chain
 from .util import log_capture
 
 RESAMPLE = False  # Change to True to rewrite sample files
@@ -32,18 +34,18 @@ def clean_config(src: str) -> str:
     return rx_caret.sub("", src)
 
 
-def get_sample_path(fmt: str) -> str:
-    return os.path.join("tests", "data", "trace", f"{fmt}.txt")
+def get_sample_path(fmt: str, chain: bool) -> Path:
+    if chain:
+        return Path("tests", "data", "trace", f"{fmt}-chain.txt")
+    return Path("tests", "data", "trace", f"{fmt}.txt")
 
 
-def get_sample(fmt: str) -> str:
-    with open(get_sample_path(fmt)) as f:
-        return f.read()
+def get_sample(fmt: str, chain: bool) -> str:
+    return get_sample_path(fmt, chain).read_text()
 
 
-def set_sample(fmt: str, sample: str) -> None:
-    with open(get_sample_path(fmt), "w") as f:
-        f.write(sample)
+def set_sample(fmt: str, chain: bool, sample: str) -> None:
+    get_sample_path(fmt, chain).write_text(sample)
 
 
 def test_ci_resample() -> None:
@@ -51,6 +53,7 @@ def test_ci_resample() -> None:
         assert "CI" not in os.environ, "RESAMPLE must not be set for CI"
 
 
+@pytest.mark.parametrize("chain", [False, True])
 @pytest.mark.parametrize(
     "cfg",
     [
@@ -59,16 +62,16 @@ def test_ci_resample() -> None:
         {"format": "extend"},
     ],
 )
-def test_format(cfg: dict[str, Any]) -> None:
+def test_format(cfg: dict[str, Any], chain: bool) -> None:
     fmt = cfg.get("format", "terse")
     err = Err().setup(**cfg)
     cfg = {}  # Reset local vars
     try:
-        entry()
+        entry_chain() if chain else entry()
     except Exception:
         with log_capture() as buffer:
             err.process()
             output = buffer.getvalue()
     if RESAMPLE:
-        set_sample(fmt, output)
-    assert clean_config(output) == clean_config(get_sample(fmt))
+        set_sample(fmt, chain, output)
+    assert clean_config(output) == clean_config(get_sample(fmt, chain))

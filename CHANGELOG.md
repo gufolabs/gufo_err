@@ -18,13 +18,17 @@ To see unreleased changes, please see the [CHANGELOG on the master branch](https
 
 ### Added
 
+* Chained exceptions support.
 * `Err.is_initialized` property.
 * SentryMiddleware: `disable_integrations` flag.
+* `ErrInfo` chains for exception chain handling.
 
 ### Changed
 
 * Remove unnecessary `self` type hints.
 * Updated docs.
+* `ErrInfo.stack` now is a property.
+* `ErrInfo.chains` replaces `ErrInfo.stack`.
 
 ### Removed
 

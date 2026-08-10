@@ -10,7 +10,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Iterable
 
 # GufoLabs modules
-from ..types import CodePosition, ErrorInfo, ExceptionStub, FrameInfo
+from ..types import CodePosition, ErrorInfo, ExceptionStub
 
 DEFAULT_PRIMARY_CHAR = "~"
 DEFAULT_SECONDARY_CHAR = "^"
@@ -70,16 +70,16 @@ class BaseFormatter(ABC):
         """
         return "Traceback (most recent call last):"
 
-    def iter_stack(self, err: ErrorInfo) -> Iterable[FrameInfo]:
-        """Iterate stack according to direction.
-
-        Args:
-            err: ErrorInfo instance.
+    def chain_message(self) -> str:
+        """Get traceback chain message.
 
         Returns:
-            Iterable of FrameInfo
+            String like: The above exception was the direct cause ...
         """
-        yield from err.stack
+        return (
+            "\nThe above exception was the direct cause "
+            "of the following exception:\n"
+        )
 
     def get_caret(
         self,

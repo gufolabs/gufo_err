@@ -39,34 +39,38 @@ class ExtendFormatter(BaseFormatter):
         yield f"Error: {err.fingerprint}"
         yield self.get_exception_summary(err.exception)
         yield self.traceback_message()
-        for fi in self.iter_stack(err):
-            yield self.SEP
-            if fi.source:
-                yield (
-                    f"File: {fi.source.file_name} "
-                    f"(line {fi.source.current_line})"
-                )
-                for n, line in enumerate(
-                    fi.source.lines, start=fi.source.first_line
-                ):
-                    sign = "==>" if n == fi.source.current_line else "   "
-                    yield f"{n:5d} {sign} {line}"
-                    if (
-                        n == fi.source.current_line
-                        and fi.source.pos
-                        and fi.source.pos.start_line == fi.source.pos.end_line
+        for nn, chain in enumerate(reversed(err.chains)):
+            if nn:
+                yield self.chain_message()
+            for fi in chain:
+                yield self.SEP
+                if fi.source:
+                    yield (
+                        f"File: {fi.source.file_name} "
+                        f"(line {fi.source.current_line})"
+                    )
+                    for n, line in enumerate(
+                        fi.source.lines, start=fi.source.first_line
                     ):
-                        # Show caret
-                        yield self.get_caret(line, fi.source.pos, 10)
-            else:
-                yield "File: <stdin> (line ???)"
-            if fi.locals:
-                yield "Locals:"
-                for var_name, var_value in self.iter_vars(fi):
-                    if len(var_value) > self.MAX_VAR_LEN:
-                        yield f"{var_name:>20s} |\n{var_value}"
-                    else:
-                        yield f"{var_name:>20s} = {var_value}"
+                        sign = "==>" if n == fi.source.current_line else "   "
+                        yield f"{n:5d} {sign} {line}"
+                        if (
+                            n == fi.source.current_line
+                            and fi.source.pos
+                            and fi.source.pos.start_line
+                            == fi.source.pos.end_line
+                        ):
+                            # Show caret
+                            yield self.get_caret(line, fi.source.pos, 10)
+                else:
+                    yield "File: <stdin> (line ???)"
+                if fi.locals:
+                    yield "Locals:"
+                    for var_name, var_value in self.iter_vars(fi):
+                        if len(var_value) > self.MAX_VAR_LEN:
+                            yield f"{var_name:>20s} |\n{var_value}"
+                        else:
+                            yield f"{var_name:>20s} = {var_value}"
         yield self.SEP
 
     def iter_vars(self, fi: FrameInfo) -> Iterable[tuple[str, str]]:

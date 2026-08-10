@@ -33,6 +33,42 @@ def exc_traceback() -> TracebackType:
     return cast(TracebackType, sys.exc_info()[2])
 
 
+def iter_chains(
+    tb: TracebackType,
+    v: BaseException,
+    context_lines: int = 7,
+) -> Iterable[Iterable[FrameInfo]]:
+    """Iterate over exception traceback chains.
+
+    Args:
+        tb: Traceback of the current exception.
+        v: Exception value.
+        context_lines: Source code context to extract.
+
+    Returns:
+        Iterable of frame iterables, one for each exception
+        in the exception chain.
+    """
+    current = v
+    current_tb: TracebackType | None = tb
+    while current_tb is not None:
+        yield iter_frames(
+            current_tb,
+            context_lines=context_lines,
+        )
+        if current.__cause__ is not None:
+            current = current.__cause__
+            current_tb = current.__traceback__
+        elif (
+            current.__context__ is not None
+            and not current.__suppress_context__
+        ):
+            current = current.__context__
+            current_tb = current.__traceback__
+        else:
+            break
+
+
 def iter_frames(
     tb: TracebackType, context_lines: int = 7
 ) -> Iterable[FrameInfo]:

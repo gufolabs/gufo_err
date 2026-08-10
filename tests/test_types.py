@@ -111,7 +111,7 @@ def test_app_top_empty_stack():
         name="unknown",
         version="unknown",
         fingerprint=uuid.uuid4(),
-        stack=[],
+        chains=[],
         exception=ValueError(),
     )
     top = info.get_app_top_frame()
@@ -123,7 +123,7 @@ def test_app_top_no_root_module():
         name="unknown",
         version="unknown",
         fingerprint=uuid.uuid4(),
-        stack=SAMPLE_STACK,
+        chains=[SAMPLE_STACK],
         exception=ValueError(),
     )
     top = info.get_app_top_frame()
@@ -135,7 +135,7 @@ def test_app_top_root_module():
         name="unknown",
         version="unknown",
         fingerprint=uuid.uuid4(),
-        stack=SAMPLE_STACK,
+        chains=[SAMPLE_STACK],
         exception=ValueError(),
         root_module="tests.sample",
     )
